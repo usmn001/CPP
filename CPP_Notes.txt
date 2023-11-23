@@ -1,0 +1,277 @@
+*******************************Object Oriented Data Structures*****************************************
+
+             ***********************Week 1 **********************
+
+C++ just like C is a strongly typed language meaning that every variable has a type name,value and location in memory i.e. data_type var_name = assigned_value; The C compiler assigns memory to variable after when it´s defined and assigned value.
+
+In c++ there is also a keyword auto used when we want the compiler to decide the data type of varaible through the assigned value for e.g. 
+like in this variable declaration auto n{64} the compiler is has assumed that n is a integer variable as assigned value to variable n is of int data type.
+
+C++ Types/Dat Types : In C++ we have two main types of variables defining contents of it i.e. 
+
+Primitive : char,int,bool,float,double,void. (Exactly like we have in C)
+To avoid garbage random value to be assigned at the time of compilation to variables we should initialze our variable like this : 
+int n=0 or int n{}, we can say that data_type var_name{} or data_type var_name=0,
+
+User Defined : An unlimited number of user defined types which we can create by ourselves are available.
+Two of the most common user-defined types are : 
+std::string , a string (squence of characters).
+std::vector, a dynamically-growing array.
+Here std means standard library however it´s implementation depends upon creators of Operating systems and compilers that´s why here it was referred as standard library. It´s built in same way that we can define our own complex types and libraries.
+
+C++ Build process involves : Preprocessing done by preprocessor, Compilation done by compiler and linking done by linker just like it´s done with case of C Program Build Process.
+
+endl keyword is used with cout command for moving to the next line and it also flushes the output moreover we can also use \n for performing the same operation depending upon our team coding style.
+
+iostream library header file containing cout and cin definitions.
+
+Unlike C library header files in C++ don´t require .h suffix after their name in case of standard and system header files when including them using preprocessor directive include for e.g.
+
+#include <iostream>
+
+For using user defined we use .h notation after header file name.
+
+.cpp and .cc are common extensions used alongwith names c++ files.
+
+To compile c++ program from command line or linux terminal we use gcc compiler
+and to do it we use command  "g++ codefilename.cpp" then we get executable file with .out
+extension. We can also use a flag while compiling for defining name of output executable file
+and we do it by using -o flag as g++ -o executable_name source_code.cpp
+
+The relational operators == , != returns true or false depending upon whether the condition is satisfied or not and these return values are defined are in bool.h header file.
+
+Variable Declaration in c++ is similar to c where we had char, int, float, double,long,short data types for storing a certain value.
+
+
+--------------------C++ Classes-----------------
+
+In C++ both data and functions are encapuslated into a class with access specifiers public and private.
+We refer both data and functions residing in a class as it´s members.
+
+Public Members(Data & Functions) can be accessed by client code i.e. outside of class.
+Private Members(Data & Functions) cannot be accessed by client code , can only be accessed within class.
+
+In C++ just like C we have our header file where we function prototypes i.e. declaration of member functions and declaration of all member variables shared among other source files.
+Simiarly we have our include guards in the header file just like C to make sure header file is only included once i.e. #ifndef _HeaderFileName_
+                   #define _HeaderFileName_       
+                   ....
+                   ....
+                   #endif
+
+We can also use #pragma once (pre processor directive) to make sure that our class header file is included only once.  
+
+General Format of Creating A Class File .h and Declaring Functions In It is : 
+
+Class_name.h  : 
+// Include guards or #pragma once 
+
+Class class_name{
+
+access_specifier :                                   Note : Where access specifier can be public or private similar to static and extern storage classes in C language
+         return_type func_name();
+         data_type var_name;
+access_specifier : 
+        return_type func_name();
+        struct name{
+
+        };
+}
+
+
+Format for Class Implementation file .cpp containing class function definitions
+
+Class_name.cpp : 
+
+#include "Class_name.h"
+
+return_data_type Class_name::func_name(){                Note : This return data type can be void just like in C.
+           // Function Implementation                    Note : Class Private Variables are accessed by in Client Code by Setters and Getters Functions of Class.  
+}                                                        Note : Private Variables of class are defined or accessed only in client code.  
+
+Example : 
+Implementation of functions are in .cpp file similarly to .c file for C.
+
+Example : Class and implementation files of a geometric structure cube
+
+Class file : Cube.h
+
+#pragma once
+
+class Cube {
+
+public : 
+        double getVolume();
+        double getSurfaceArea();
+        void setLength(double length);
+
+private : double length_; 
+
+};
+
+Class Implementation file : Cube.cpp
+#include "Cube.h"
+
+  double Cube::getVolume(){            // Where double is return type of function  getVolume previously declared in Cube.h header file
+   return length_*length_*length_;
+}
+
+  double Cube::getSurfaceArea(){
+    return 6*length_*length_;
+ } 
+   
+  void Cube::setLength(double length){
+     length_= length;  
+   }
+
+
+Main Thread : 
+
+#include "Cube.h"
+using namespace std;
+int main(){
+Cube c;
+c.setlength(3.48);
+double volume = c.getvolume();
+cout<<"Volume : "<<volume<<endl;
+return 0;
+}
+
+----------------------C++ Standard Library (std)-------------------------------
+
+C++ standard library (STD) provides us a set of commonly used functionality and data structures to build upon. The C++ standard library is also known as Standard Template Library (STL)
+
+The C++ standard library is organized into many separate sub-libraries that can be #included in any C++ program. iostream sub library is also part of this std library.
+
+All functionality used from the standard library will be part of std namespace.
+Namespaces allow us to avoid name conflicts for commonly used names.
+If a feature from a namespace is used often, it can be imported into the global space with "using" :
+using std ::cout; this line of code will allow us to use cout without prefix of std::
+
+------Using the uiuc Namespace---------
+
+As our class Cube is generic and from that we can create hundreds of Cube based data structures so to specify our Cube class within uiuc namespace in this way : 
+
+A cube is rather generic name and hundreds of cube based data structures exist and we want to be specific
+about our Cube and specify that our Cube is within uiuc namespace.
+
+Example 3 : Class Header file and Implementation file using namespace
+
+Class Header file : Cube.h
+
+#pragma once
+namespace uiuc{          ------ Class cube encapsulation in uiuc namespace start here-----
+
+class Cube {
+
+public : 
+        double getVolume();
+        double getSurfaceArea();
+        void setLength(double length);
+
+private : double length_; 
+
+};
+
+}                         ------- Class cube encapsulation in uiuc namespace ends--------
+
+Class Implementation file : Cube.cpp
+
+#include "Cube.h"
+
+namespace uiuc{                   ------ Class cube encapsulation in uiuc namespace start here-----
+
+  double Cube::getVolume(){
+   return length_*length_*length_;
+}
+
+  double Cube::getSurfaceArea(){
+    return 6*length_*length_;
+ } 
+   
+  void Cube::setLength(double length){
+     length_= length;  
+   }
+
+}                                   ------- Class cube encapsulation in uiuc namespace ends--------
+
+Main source code : 
+#include <iostream>
+#include "Cube.h"
+using std::cout;
+using std::endl;
+
+int main(){
+uiuc::Cube c;
+c.setlength(3.48);
+double volume = c.getvolume();
+cout<<"Volume : "<<volume<<endl;
+double surfaceArea = c.getSurfaceArea();
+cout<<"Surface Area : "<< surfaceArea << endl;
+return 0;
+}
+
+ 
+--------------------------------Week 2 : C++ Mmeory Model----------------------------
+
+All variables in C++ reside in stack memory just like C.
+
+C++ pointers are decalred in the same way just like we used to do with C. i.e. data_type * var_name; 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+-----------Clang compiler---------------
+clang is also a compiler apart from gnu g++ compiler it providing more diagnostics and also consuming less memory.
+
+To use clang compiler in terminal we similary execute following command in terminal : 
+clang++ source_code_filename.cpp 
+
+To use a specific standard or version of C++ we use -std flag and also with g++ compiler at the time of code
+compilation as :
+clang++ -std=c++11 code_file.cpp 
+g++ -std=c++11 code_file.cpp
+
+Just like we enable errors and diagnostics by using gcc compiler with Wall when compiling c code here in 
+case of c++ code we also do same i.e.
+clang++ -std=c++11 -Wall source_code.cpp
+g++ -std=c11 -Wall source_code.cpp
+
+And similarly for enabling the compilers clang++ and g++ to show more warning we use one extra flag that is 
+-Wextra at the time of compilation i.e.
+clang++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
+g++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
+
+
+
+
+
+
+
+ 
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
