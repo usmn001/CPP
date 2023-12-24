@@ -26,6 +26,7 @@ class Cube {
 
   private: // Private members:
     double length_new;
+    int *pa;
 };
 
 }

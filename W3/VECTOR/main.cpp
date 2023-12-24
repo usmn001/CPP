@@ -2,6 +2,7 @@
 #include <iostream>
 #include <stdlib.h>
 #include <stdint.h>
+#include <vector>
 #include "Cube.h"
 using std::cout;
 using std::endl;
@@ -46,6 +47,28 @@ int main() {
   //cout << "Cube c pointer address is : "<<&c<<endl;
  
   delete[] cn;                  // Destructor is invoked
+
+/**************Modern for loop *************/
+
+std::vector<int> list={0,1,2,3};   // The vector is a generic data structure in C++ provided to us by STL.
+                                   // Similar to an array.
+
+for(int lval : list){              // We are copying values of list elements to lval variable one by one.
+cout<<"List Element = "<<lval<<endl;  
+}
+
+
+list.push_back(100);               // Adding value 100 to list
+list.push_back(101);               // Adding value 101 to list
+list.pop_back();
+for(int lval : list){              // We are copying values of list elements to lval variable one by one.
+cout<<"After Push Operations List Elements Are : "<<lval<<endl;     
+}
+
+cout<<"Sizeof list = "<<list.size()<<endl;                // This is similatr to sizeof(arr) operator in C
+
+
+
 
   return 0;
 }
