@@ -217,6 +217,187 @@ All variables in C++ reside in stack memory just like C.
 
 C++ pointers are decalred in the same way just like we used to do with C. i.e. data_type * var_name; 
 
+C++ follows exacty the same memory model as we found in C language both for data and code memory.
+
+Heap is defined by new keyword in C++ and released by delete[] heap_ptr statement. 
+
+Heap memory is accessed by pointer.
+
+Example : heap_ptr=new data_type(size to be allocated); 
+
+
+----------------------------------------------------Week 3 :  Developing C++ Classes---------------------------------------------------------- 
+
+--------------------------------------Lec : 1,2,3,5 -------------------------------------
+
+
+In C++ class constructors are used to initialize member variables, copy one object to another object (copy class constructors), assign entire one object to another 
+(copy assignment operator), free memroy(stack,heap) occupied by class object (class destructor). 
+By default c++ compiler provides us free default constructor, copy class constructor, class assignment operator,Class Destructor even if we don´t define any.
+
+
+Example 1 : 
+
+Class Cube.h Header File (Declaration File)
+#include <stdint.h>
+#pragma once
+
+// A class is defined with the `class` keyword, the name
+// of the class, curly braces, and a required semicolon
+// at the end:
+namespace uiuc {
+
+class Cube {
+  public:  // Public members:
+    Cube();                                  // Custom Default Constructor
+    Cube(const Cube &obj);                   // Custom Copy Constructor
+    ~Cube();                                 // Custom Class Destructor
+    Cube & operator=(const Cube &obj);       // Custom Copy Assignment Operator
+    double getVolume();
+    double getSurfaceArea();
+    void setLength(uint8_t length);
+
+  private: // Private members:
+    double length_new;
+    int *pa;
+};
+
+}
+Class Cube.cpp Definition File
+
+#include "Cube.h"
+#include <stdint.h>
+#include <iostream>
+#include<math.h>
+using std::cout;
+using std::endl;
+
+namespace uiuc{
+
+ Cube::Cube(){                                  // Custom Default Constructor
+  length_new = 1;
+  cout<<"Default Constructor Is Invoked"<<endl;
+ }
+
+ 
+ Cube::Cube(const Cube &obj){                  // Custom Copy Constructor
+  length_new = obj.length_new;
+  cout<<"Copy Constructor Is Invoked"<<endl;
+ }
+
+Cube::~Cube(){                                 // Custom Class Destructor
+  cout<<"Destructor Is Invoked"<<endl;
+}
+
+Cube & Cube::operator=(const Cube &obj){       // Custom Copy Assignment Operator
+  length_new = obj.length_new;
+  cout<<"Copy Assignment Operator Is Invoked"<<endl;
+  return *this;
+ }
+
+double Cube::getVolume() {
+  return pow(length_new,3);
+}
+
+double Cube::getSurfaceArea() {
+  return 6 * pow(length_new,2);
+}
+
+void Cube::setLength(uint8_t length) {
+  length_new = length;
+}
+
+}
+
+
+Main Source File Code : 
+
+int main() {
+  Cube c;                          // Default Constructor is invoked.
+  Cube d ;                         // Default Constructor is invoked.
+  d=c;                             // Assignment operator is invoked.                 
+  Cube * cn = CreateUnitCube(c);   // Passing argument to function by value, Copy Class Constructor Invoked 
+                                   // Two times First At Passing Value to a function and then returning from it.
+
+}
+
+----------------------Lec 4 : Variable Storage--------------------
+
+In C++ we can also pass data to a function through reference , it´s called pass by reference, enabling us to access same memory location, a bit similar to pointers.
+To create a reference we follow the syntax : data_type & ref_var_name = var_name; 
+
+Example : Pass By Reference. 
+
+void add(Cube &al){
+al.setLength(8);
+cout<<"Alias used";
+}
+
+int main() {
+Cube c;                          // Default Constructor is invoked.
+Cube & alc = c;                  // Default constructor is already invoked for object as here we have only alias for object c.
+add(alc);
+}  
+
+
+-----------Modern Range Base For Loop, Vector Template Type----------------
+
+
+Example : Showing Use Of Vector and Modern Range Based For Loop
+
+#include <vector>
+
+int main()
+{
+
+// Vector
+
+std::vector<int> list={0,1,2,3};   // The vector is a generic data structure in C++ provided to us by STL.
+                                   // Similar to an array.
+
+// Range Based For Loop
+
+for(int lval : list){              // We are copying values of list elements to lval variable one by one.
+cout<<"List Element = "<<lval<<endl;  
+}
+
+
+list.push_back(100);               // Adding value 100 to list
+list.push_back(101);               // Adding value 101 to list
+list.pop_back();
+for(int lval : list){              // We are copying values of list elements to lval variable one by one.
+cout<<"After Push Operations List Elements Are : "<<lval<<endl;     
+}
+
+return 0;
+}
+
+
+---------------------------------------Week 4 : Template Types---------------------------------------------
+
+
+In C++ template type is a special type that can take on different types when type is initialized.
+A bit simlar to typedef user defined types of C. 
+
+STD/STL library of C++ provides us vector a standard library class providing the functionlaity of 
+dynamically growing array with a templated type. This is :-
+
+Defined in              : #include <vector>
+Initializiation         : std::vector<T> v;
+Add to (back) of array  : v.push_back(T);
+Subtraction from back   : v.pop_back(T);
+Access specific element : v.[0] = val_to_assign ; 
+                          v.[0] 
+Number of elements      : v.size(); 
+
+
+
+
+
+
+
+
+
 
 
 

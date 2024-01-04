@@ -48,10 +48,11 @@ int main() {
  
   delete[] cn;                  // Destructor is invoked
 
-/**************Modern for loop *************/
+/**************Modern for loop, Vector Using Template Types *************/
 
 std::vector<int> list={0,1,2,3};   // The vector is a generic data structure in C++ provided to us by STL.
                                    // Similar to an array.
+
 
 for(int lval : list){              // We are copying values of list elements to lval variable one by one.
 cout<<"List Element = "<<lval<<endl;  
