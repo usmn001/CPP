@@ -13,14 +13,25 @@
 #include <iostream>
 using std::cout;
 using std::endl;
+using uiuc::Cube;
 
 // Solves the Tower of Hanoi puzzle.
+
+
+void Game::move(uint8_t index1,uint8_t index2){
+Cube cube = stacks_[index1].removeTop();
+stacks_[index2].push_back(cube);
+}
+
+
 // (Feel free to call "helper functions" to help you solve the puzzle.)
 void Game::solve() {
   // Prints out the state of the game:
   cout << *this << endl;
 
   // @TODO -- Finish solving the game!
+
+//cout<<stacks_[0].peekTop().getLength();
 }
 
 // Default constructor to create the initial state:

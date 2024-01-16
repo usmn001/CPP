@@ -6,6 +6,7 @@
 #include "Cube.h"
 using std::cout;
 using std::endl;
+using std::vector;
 
 using uiuc::Cube;
 
