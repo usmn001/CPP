@@ -1,0 +1,15 @@
+{
+    "makefile.makefilePath": "/mnt/c/OODS_CPP/Final Project/Makefile",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/mnt/c/OODS_CPP/Final Project",
+            "binaryPath": "/mnt/c/OODS_CPP/Final Project/ImageTransform",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/mnt/c/OODS_CPP/Final Project",
+            "binaryPath": "/mnt/c/OODS_CPP/Final Project/test",
+            "binaryArgs": []
+        }
+    ]
+}
