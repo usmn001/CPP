@@ -237,17 +237,34 @@ By default c++ compiler provides us free default constructor, copy class constru
 
 Syntax Of Declaring Copy Constructor, Copy Assignment Operator In Class Header File : 
 
-                         class_name(const class_name &obj)               // Copy Constructor, Where const class_name means that we have a constant class passed by reference object.
-                         class_name & operator=(const class_name &obj)   // Copy Assignment Operator, Where const class_name means that we have a constant class passed by reference object.                                    
+                         Class_Name()                                    // Custom Class Constructor. 
+                         Class_Name(const class_name &obj)               // Copy Constructor, Where const class_name means that we have a constant class passed by reference object.
+                         Class_Name & operator=(const class_name &obj)   // Copy Assignment Operator, Where const class_name means that we have a constant class passed by reference object.                                    
+                        ~Class_Name();                                   // Class Destructor.
+     
+Syntax of Defining Copy Constructor, Copy Assignment Operator, Class Destructor In Class Definition File :
 
-Syntax of Defining Copy Constructor, Copy Assignment Operator In Class Definition File :
+                         Class_Name::Class_Name()                                            // Custom Class Constructor
+                         {
+                               //Custom Class Constructor
+                         }
+			  
+                         Class_Name::Class_Name(const Class_Name &obj)                      // Custom Copy Constructor , Inoked Upon : Passing an object to function.
+                                                                                                                                        Returning an Object from a function.    
+                         {                                                                                                              Initializing a new object.
+  		          // Copy Constructor Body                                                         
+ 			 }
 
-			  Class_Name::Class_Name(const Class_Name &obj){                      // Custom Copy Constructor
-  			   // Copy Constructor Body                                                         
- 			  }
-                          Class_Name & Class_Name::operator=(const Class_Name &obj){          // Custom Copy Assignment Operator
-  			   // Assignment Operator                                                         
- 			  }                                                
+                         Class_Name & Class_Name::operator=(const Class_Name &obj)          // Custom Copy Assignment Operator, Assigns a value to an existing object
+  			 { 
+                         // Assignment Operator                                                         
+ 			 }
+
+                         Class_Name::~Class_Name()                                          // Custom Class Destructor
+                         {  
+                          
+                          }
+                                                                           
 
 Example 1 : 
 
@@ -337,7 +354,7 @@ int main() {
 ----------------------Lec 4 : Variable Storage--------------------
 
 In C++ we can also pass data to a function through reference , it´s called pass by reference, enabling us to access same memory location, a bit similar to pointers.
-To create a reference we follow the syntax : data_type & ref_var_name = var_name; 
+To create a reference we follow the syntax : data_type & ref_var_name = var_name; Where data_type can also be a class.
 
 Example : Pass By Reference. 
 
@@ -647,26 +664,7 @@ double Shape::getWidth() const {
 
 
 
------------Clang compiler---------------
-clang is also a compiler apart from gnu g++ compiler it providing more diagnostics and also consuming less memory.
 
-To use clang compiler in terminal we similary execute following command in terminal : 
-clang++ source_code_filename.cpp 
-
-To use a specific standard or version of C++ we use -std flag and also with g++ compiler at the time of code
-compilation as :
-clang++ -std=c++11 code_file.cpp 
-g++ -std=c++11 code_file.cpp
-
-Just like we enable errors and diagnostics by using gcc compiler with Wall when compiling c code here in 
-case of c++ code we also do same i.e.
-clang++ -std=c++11 -Wall source_code.cpp
-g++ -std=c11 -Wall source_code.cpp
-
-And similarly for enabling the compilers clang++ and g++ to show more warning we use one extra flag that is 
--Wextra at the time of compilation i.e.
-clang++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
-g++ -std=c++11 -Wall -Wextra -o executable_name source_code.cpp
 
 
 
