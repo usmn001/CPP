@@ -1,4 +1,4 @@
-*******************************Object Oriented Data Structures*****************************************
+***************Object Oriented Data Structures In C++**************************
 
              ***********************Week 1 **********************
 
@@ -655,33 +655,284 @@ double Shape::getWidth() const {
 
 
 
+******************Course 2 : Ordered Data Structures In C++********************
 
 
+--------------------Week 1-----------------------
+
+-----------------Lec 1 : Arrays------------------ 
+
+In both C,C++ arrays are continous memory locations and have a fixed size and length.
+
+To know the offset in bytes between two array indexes do offset = (long) (&arr[index2]) - (long) &(arr[index1]); // Here we are subtracting two addresses of two array elements stored at
+                                                                                                                 // certain memory locations 
 
 
+Similar to an array in C++ we have vector which shares all the properties of an array except that it can grow dynamically but at a time it will also have fixed size.
+This vector is similar to heap memory which can be resized using realloc(heap_ptr,new_size).
+
+If we have a array of fixed size then to increase it´s capactity we will need to copy entire elements of it to another array, or if we want to add another element.
+
+In case of a vector we can increase the capacity by performing a push back operation on vector i.e. 
+
+std::vector<data_type> vect_name { element1,...};
+vect_name.push_back(data);
+
+We can also iterate over a vector using a for loop similar to an array.
+
+-------------Lec 2 : Linked Memory---------------------
+
+Just like in C where we used to have a linked list structure i.e. struct Node {
+                                                                       struct Node *next;  // next pointer points to next memory allocation, this pointer is actually a heap memory pointer.
+                                                                       data_type data;
+                                                                   };
+
+Similar in C++ we also have linked list linking memory locations together through next pointer. 
+
+C++ Linked List Node Class :       // Very similar to Linked list Node structure found in C.
+
+template <typename T>
+class ListNode {
+public : 
+   	T & data;                                       // Reference Template Type.
+	ListNode *next;                          
+	ListNode(T & data) : data(data) , next(NULL);   // Where reference variable data is initialized to data and next pointer to NULL
+};
 
 
+List.h Header file :
+
+#pragma once
+
+template <typename T>
+class List {
+public : 
+  const T & operator[](unisgned index);   // This operator ampersand is C++ syntax of mentioning that we can access a List <int> l as l[index]; Where l[index] will be calling this 
+                                          // Function.   , const T is indicating function is returing a const template type.                                        
+  void insertAtFront(const T & data);     // Inserting element in list
+
+private : 
+ class ListNode {
+public : 
+   	T & data;                                       // Reference Template Type.
+	ListNode *next;                          
+	ListNode(T & data) : data(data) , next(NULL);   // Where reference variable data is initialized to data and next pointer to NULL
+};
+
+ListNode *head_;                         // The head pointer points to the start of list i.e. first node.
+
+};
+
+In the above header file we have a class within a class similar to struct within a struct or union within a union and so on.
+
+To iterate over linked list in C++ we define function const T & operator[](unisgned index) as :
+
+--------Method : const T & operator[](unisgned index) Implementation -------------- 
+
+template <typename T>
+const T & List<T> operator[](unisgned index){          //Here at this line const T & means that this method is returning a reference to const template type. 
+
+ListNode *thru = head_;
+
+while(index > 0 && thru->next !=nullptr)
+{
+thru = thru->next;
+index --;
+}
+
+return thru->data;
+
+}
+
+List RunTime : It´s more than a array because here we need to pass through n numer of next pointers for accessing a certain node and it´s not fixed unlike an array, as the 
+               list can grow at any time depending upon requirement.
 
 
+To Insert an element in list we define method/function void insertAtFront(const T & data) as : 
 
+--------Method : void List<T>::insertAtFront(const T & data) Implementation --------------
+ 
+template <typename T>
+void List<T>::insertAtFront(const T & data){
 
+ListNode *new_node = new ListNode(data);
 
+new_node->next = head_;    // new node next pointer points to current node
 
+head_=new_node;            // The current head pointer is updated with new_node address.
 
-
-
-
-
+}
  
 
+----------Lec 3 : Run Time Analysis----------
+
+Run Time Analysis : Allows us to formalize a method of comparing the speed of an algorithm as the size of input grows.
+
+In a array of length l , size s, we can access a given index by : sizeof(index) * index; where sizeof(index) is the number of bytes occupied by a element at that index.
+                                                                  This equation actually tells us the required offset in Bytes i.e. if array is of uint8_t type then to 
+                                                                  access 5 location it will takes us 8 * 5 = 40 bytes offset.  
+
+In a linked list as the list grows we will need more time to access a given element.
+
+Run time analysis allows us to formalize a method of comparing the speed of an algorithm as the size of input grows.
+
+We summarize the runtime in Big O Notation , leaving only the term that dominates the growth :
+- O(1) , constant time
+- O(n) , linear time.
+- 0(n^2) , polynomial time.
+
+
+---------------Lec 4 : Array and List Operations---------------- 
+
+
+------Run Times For Finding A Data In Array, Linked List ------- 
+
+Unsorted Array : O(n) 
+                 Requires searching up to the full array, one-by-one, to find a match.
+
+Sorted Array : O(log(n))
+               Using Binary search, Run Time on an array becomes logarithmic.
+
+All Lists : O(n) 
+            Requires searching up to the full list, one listNode at a time, to find a match even
+            if the list is sorted.
+
+---------Run Time On Inserting A Element In Array, List----------
+
+In A Array If Element or Data is Inserted In Middle : O(n)
+In A List It´s Just : O(1) Because we just needed to update two nodes next pointers i.e.
+                      the node after which we want to insert new node, new node next pointer 
+                      poiniting to next successive node.
+                
+                   Nodes :  a b c
+To insert a new node e in between b and c we do : b->next = e;
+                                                  e->next = c;
+
+  
+------Run Time To Delete An Element After---------
+
+In Array : O(n)  As we will need to search the entire array of n elements.
+List : O(1) As we just need to update next pointers of two successive nodes i.e.
+                    
+                  Nodes : a b c.
+             To delete c from above linked list we do : b->next = null; // marking end of list.
+
+
+Arrays and lists are both ordered data collections having complex tradeofs between run time and
+flexibility.
 
 
 
 
+------------Lec 5 : Queue (Data Structure)-----------
+
+
+A structures  Abstract data type (ADT) is how data interacts with the structure, an ADT is not an implementation , it is a description.
+
+Queue is FIFO (First in First out) data structure. In C++ queue is available to us in std/stl library. Queue also supports template type.
+
+We need to support operations of create, push, pop and empty for our queue where : 
+create 	: Creates an empty queue.
+push 	: Adds data to the back of queue.
+pop 	: Removes data from front of queue.
+empty 	: Returns true if queue is empty.
+
+So we can implement a queue besides already provided one using arrays and linked list.
+
+Example 1 : Queue  
+
+#include <iostream>
+#include <queue>
+
+int main() {
+  // Create a std::queue:
+  std::queue<std::string> q;        // here we can also have  queue of integers i.e. std::queue<std::int> i;
+
+  // Add several strings to the queue:
+  q.push( "Orange" );
+  q.push( "Blue" );
+  q.push( "Illinois" );
+
+  // Print the front of the queue out and pop it off:
+  std::cout << "First pop(): " << q.front() << std::endl;
+  q.pop();
+
+  // Add another string and then print ouf the front of the queue:
+  q.push( "Illini" );
+  std::cout << "Second pop(): " << q.front() << std::endl;
+
+  return 0;
+}
+
+We can easily implement a queue using an array by just keeping track of array_index and counter_variable.
+
+
+If we want to implement a queue using a linked list then we can implement it easily using a head pointer ( to insert/delete elements at front) and a tail pointer(for insert/removing elements from back) in order to do that the list will need to have back pointer besides next pointer.
+
+
+Create,Push, Pop, Empty operations have a run time of O(1) for both cases of queue implementation using an array and linked list.
 
 
 
+--------------------Lec 6 : Stack--------------------
 
+Similar to a queue we also have stack that is a Last in First Out Data Structure. Stack is also ADT (Abstract Data Structure).
+
+Stack ADT supports following operations similar to a queue that is :-
+create  : Create a stack either using array or linked list. 
+push    : Push a element on top of stack.
+pop     : Removes a element from top of stack. 
+empty   : Returns true if stack is empty.
+
+Stack implementation is also provided us in C++ std/stl library and similar to queue , stack also supports template type.
+
+
+Example : Stack
+
+#include <iostream>
+#include <stack>
+
+int main() {
+  // Create a std::stack:
+  std::stack<std::string> s;
+
+  // Add several strings to the stack:
+  s.push( "Orange" );
+  s.push( "Blue" );
+  s.push( "Illinois" );
+
+  // Print the front of the stack out and pop it off:
+  std::cout << "First pop(): " << s.top() << std::endl;
+  s.pop();
+
+  // Add another string and then print ouf the front of the stack:
+  s.push( "Illini" );
+  std::cout << "Second pop(): " << s.top() << std::endl;
+
+  return 0;
+}
+
+When we have array based implementation of stack then we will be pushing or inserting first element at last location of array and the last element at first position of array.
+We will also need to keep track of insert locations i.e. current index of array where we pushed an element.
+
+
+If our first array is full for example then we double the array as it takes O(log(n)) run time .
+
+
+Linked List based implementation of stack is very easy i.e. to remove an element from start we just update the head pointer i.e. head_ptr = head_ptr->next;
+To remove a element from last of linked list we update the tail pointer i.e. tail_ptr = tail_ptr->back;
+
+To add a element in the start of a linked list we do tmp_ptr = head_ptr->next;
+                                                     head_ptr->next = new_node;
+                                                     new_node->next = tmp_ptr;
+                                                
+                                                        a->b->c->d
+
+To insert e after a we do   a->e->b->c->d    i.e. tmp_ptr = a->next;
+                                                  a->next=e;
+                                                  e->next=tmp_ptr; where tmp_ptr contains address of node b;
+
+Similarly we will be using back pointer if we want to add or remove a item or element from end of a list.
 
 
 
