@@ -224,6 +224,8 @@ Heap is defined by new keyword in C++ and released by delete[] heap_ptr statemen
 Heap memory is accessed by pointer.
 
 Example : heap_ptr=new data_type(size to be allocated); 
+<<<<<<< HEAD
+=======
 
 
 -----------------------------------------------------------Week 3 :  Developing C++ Classes---------------------------------------------------------- 
@@ -286,6 +288,439 @@ class Cube {
     double getVolume();
     double getSurfaceArea();
     void setLength(uint8_t length);
+
+  private: // Private members:
+    double length_new;
+    int *pa;
+};
+
+}
+Class Cube.cpp Definition File
+
+#include "Cube.h"
+#include <stdint.h>
+#include <iostream>
+#include<math.h>
+using std::cout;
+using std::endl;
+
+namespace uiuc{
+
+ Cube::Cube(){                                  // Custom Default Constructor
+  length_new = 1;
+  cout<<"Default Constructor Is Invoked"<<endl;
+ }
+
+ 
+ Cube::Cube(const Cube &obj){                  // Custom Copy Constructor
+  length_new = obj.length_new;
+  cout<<"Copy Constructor Is Invoked"<<endl;
+ }
+
+Cube::~Cube(){                                 // Custom Class Destructor
+  cout<<"Destructor Is Invoked"<<endl;
+}
+
+Cube & Cube::operator=(const Cube &obj){       // Custom Copy Assignment Operator
+  length_new = obj.length_new;
+  cout<<"Copy Assignment Operator Is Invoked"<<endl;
+  return *this;
+ }
+
+double Cube::getVolume() {
+  return pow(length_new,3);
+}
+
+double Cube::getSurfaceArea() {
+  return 6 * pow(length_new,2);
+}
+
+void Cube::setLength(uint8_t length) {
+  length_new = length;
+}
+
+}
+
+
+Main Source File Code : 
+
+int main() {
+  Cube c;                          // Default Constructor is invoked.
+  Cube d ;                         // Default Constructor is invoked.
+  d=c;                             // Assignment operator is invoked.                 
+  Cube * cn = CreateUnitCube(c);   // Passing argument to function by value, Copy Class Constructor Invoked 
+                                   // Two times First At Passing Value to a function and then returning from it.
+
+}
+
+----------------------Lec 4 : Variable Storage--------------------
+
+In C++ we can also pass data to a function through reference , it´s called pass by reference, enabling us to access same memory location, a bit similar to pointers.
+To create a reference we follow the syntax : data_type & ref_var_name = var_name; Where data_type can also be a class.
+
+Example : Pass By Reference. 
+
+void add(Cube &al){
+al.setLength(8);
+cout<<"Alias used";
+}
+
+int main() {
+Cube c;                          // Default Constructor is invoked.
+Cube & alc = c;                  // Default constructor is already invoked for object as here we have only alias for object c.
+add(alc);
+}  
+
+
+-----------Modern Range Base For Loop, Vector Template Type----------------
+
+
+Example : Showing Use Of Vector and Modern Range Based For Loop
+
+#include <vector>
+
+int main()
+{
+
+// Vector
+
+std::vector<int> list={0,1,2,3};   // The vector is a generic data structure in C++ provided to us by STL.
+                                   // Similar to an array.
+
+// Range Based For Loop
+
+for(int lval : list){              // We are copying values of list elements to lval variable one by one.
+cout<<"List Element = "<<lval<<endl;  
+}
+
+
+list.push_back(100);               // Adding value 100 to list
+list.push_back(101);               // Adding value 101 to list
+list.pop_back();
+for(int lval : list){              // We are copying values of list elements to lval variable one by one.
+cout<<"After Push Operations List Elements Are : "<<lval<<endl;     
+}
+
+return 0;
+}
+
+
+-----------------------------------------------Week 4 : Engineering C++ Software Solutions--------------------------------------------------------
+
+
+--------------------Lec 1 : Template Types-----------------------
+
+
+In C++ template type is a special type that can take on different types when type is initialized.
+A bit simlar to typedef user defined types of C. 
+
+STD/STL library of C++ provides us vector a standard library class providing the functionlaity of 
+dynamically growing array with a templated type. This is :-
+
+Defined in       	                :		 #include <vector>
+Initializiation         		:		 std::vector<T> v;
+Add Element to (back) of array  	:		 v.push_back(T);
+Adding Class Object To Back Of Array    :                v[location].push_back(T); // Where T is object and location is index of vector
+                                                 
+Subtraction from back   		: 		 v.pop_back(T);
+Access specific element                 :		 v.[0] = val_to_assign ; 
+                          				 v.[0] 
+Number of elements      		:                v.size(); 
+
+
+Example : This statement is pushing stackOfCubes objects onto the vector stacks.
+ for (int i = 0; i < 3; i++) {
+    Stack stackOfCubes;
+    stacks_.push_back( stackOfCubes );
+  }
+
+When we push an object on stack then we can perform all supported operations (functions defined in class) on that object by accessing it through the index of vector.
+
+
+---------------------Lec 5 : Templates and Classes--------------------------
+
+C++ allows us to use the power of templates in building our own classes.
+
+Templates in C++ are similar to variadic functions or typedef of C. 
+
+Templates allow us to pass paramters of any type to functions or declare a variable with a template type.
+
+Data type of a template variable is defined at compile time.
+
+A Template variable is defined at the begining of a class or function.
+
+A function can also return a template type.
+
+Template variables are checked at compile time, allowing errors to be caught at compile time before running the program.
+
+Syntax of Declaring a Template variable : template <typename T>
+
+----------Example 1 : Templated Class---------- 
+
+template <typename T>
+
+class class_name{
+
+
+private : T data_;   // where data_ is a template variable.
+};
+
+---------Example 2 : Templated Function-----------
+
+template <template T>
+int max (T a, T b) //where a and b are template variables, their data type will be defined automatically at compile time.
+{
+if(a > b) {return a ;}
+return b;
+}
+  
+----------------Example 3 : ----------------------
+
+#include <iostream>
+#include <string>
+using std::cout;
+using std::endl;
+
+#include "Cube.h"
+using uiuc::Cube;
+
+// We'll call this my_max to avoid conflicts with the "max" in the
+// standard libraries.
+template <typename T>
+T my_max(T a, T b) {             // Here function is returning a template type.
+  if (a > b) { return a; }
+  return b;
+}
+
+int main() {
+  cout << "my_max(3, 5): " << my_max(3, 5) << endl;
+  cout << "my_max('a', 'd'): " << my_max('a', 'd') << endl;
+  
+  // Here we construct std::string objects from the literal strings in
+  // quotation marks, because the std::string object already implements
+  // the ">" operator to do alphabetical ordering. A plain string literal
+  // is an array of const char, which wouldn't support that correctly.
+  // (Instead, it would just compare the addresses of the arrays.)
+  cout << "my_max(std::string(\"Hello\"), std::string(\"World\")): "
+       << my_max(std::string("Hello"), std::string("World")) << endl;
+
+  // You need to finish implementing the ">" operator for Cube to get the
+  // next line to work!
+  // cout << "my_max( Cube(3), Cube(6) ): " << my_max( Cube(3), Cube(6) ) << endl;
+
+  return 0;
+}
+
+
+Note : In C++ when we use const keyword with a function definition inside a class that means it´s denied permission to change values of data members of their class.
+
+
+---------------------Lec 5 : Inheritance-------------------
+
+In C++ and other object oriented programming languages, Inheritance allows a derived class to 
+inherit all the member functions and variables of a base class. 
+
+To derived properties from base class into a derived class we append a colon (:) in derived class header file i.e. 
+                                                                          
+                                                                          class derived_class_name : public or private base_class_name {          
+                                                                          
+                                                                          // Class member functions or variables.   
+                                                                                                                        
+                                                                          };
+                                               
+We also need to include base class header file in derived class header/declaration file.
+
+As we already know that to use a class we need to first initialize it by calling it´s constructor, 
+Similarly to use a base class inside a derived class we will first need to initialize it through it´s constructor. It should be noted that we need to first initialize base class . 
+
+The constructor for base class is called inside derived class definition file.
+
+Base Class Shape Header file Shape.h : 
+
+class Shape {
+  public:
+    Shape();
+    Shape(double width);
+    double getWidth() const;
+
+  private:
+    double width_;
+};
+
+Base Class Shape Definition File Shape.cpp :
+ 
+#include "Shape.h"
+
+Shape::Shape() : Shape(1) { // Here default constructor is calling constructor with a parameter
+  // Nothing.
+}
+
+Shape::Shape(double width) : width_(width) {
+  // Nothing.
+}
+
+double Shape::getWidth() const {
+  return width_;
+}
+
+
+Example 1 : 
+
+Derived class Cube.h header file & Definition File Cube.cpp  
+
+Cube.h Header file : 
+
+#include "Shape.h"                          // Where Shape is our base class
+#include "HSLAPixel.h"
+
+namespace uiuc {
+  class Cube : public Shape {             // Here we are inheriting all the member functions and variables from base class named as Shape.
+    public:
+      Cube(double width, uiuc::HSLAPixel color);
+      double getVolume() const;
+
+    private:
+      uiuc::HSLAPixel color_;
+  };
+}
+
+Cube.cpp File : 
+
+#include "Cube.h"
+#include "Shape.h"
+
+namespace uiuc {
+  Cube::Cube(double width, uiuc::HSLAPixel color) : Shape(width) {             // Here we are constructing base class by calling it´s custom default constructor.
+    color_ = color;
+  }
+
+  double Cube::getVolume() const {
+    // Cannot access Shape::width_ due to it being `private`
+    // ...instead we use the public Shape::getWidth(), a public function
+
+    return getWidth() * getWidth() * getWidth();
+  }
+}
+
+
+------Access Control---------------
+
+When a base class is inherited, the derived class : 
+Can access all public members of base class.
+Can not access private members of base class.
+
+
+----------------Initializer List---------------------
+                                                                                                                 
+Syntax to initialize a base class is called initializer list and can be used for several purposes i.e. : 
+
+Initialize a base class .
+Initialize current class using another constructor.
+Initialize default values of member variables.
+
+
+The above initialization steps are shown in the class definition of base class Shape.cpp : 
+
+
+Base Class Shape Header File Shape.h : 
+
+#pragma once
+
+class Shape {
+  public:
+    Shape();
+    Shape(double width);
+    double getWidth() const;
+
+  private:
+    double width_;
+}; 
+
+
+Base Class Shape Definition File Shape.cpp :
+ 
+#include "Shape.h"
+
+Shape::Shape() : Shape(1) { // Here default constructor is calling constructor with a parameter(Shape double width) i.e. this defalut 
+                            // constructor is using the logic of default constructor to initialize our object.
+  // Nothing.
+}
+
+Shape::Shape(double width) : width_(width) {   // Here default constructor with a parameter is initializaing private member variable width.
+                                               // Where width_ is private member variable of base class defined in it´s definition file Shape.cpp   
+  // Nothing.
+}
+
+double Shape::getWidth() const {
+  return width_;
+}
+>>>>>>> main
+
+
+-----------------------------------------------------------Week 3 :  Developing C++ Classes---------------------------------------------------------- 
+
+------------------------------Lec : 1,2,3,5 -------------------------------------
+
+
+In C++ class constructors are used to initialize member variables, copy one object to another object (copy class constructors), assign entire one object to another 
+(copy assignment operator), free memroy(stack,heap) occupied by class object (class destructor). 
+By default c++ compiler provides us free default constructor, copy class constructor, class assignment operator,Class Destructor even if we don´t define any.
+
+Syntax Of Declaring Copy Constructor, Copy Assignment Operator In Class Header File : 
+
+                         Class_Name()                                    // Custom Class Constructor. 
+                         Class_Name(const class_name &obj)               // Copy Constructor, Where const class_name means that we have a constant class passed by reference object.
+                         Class_Name & operator=(const class_name &obj)   // Copy Assignment Operator, Where const class_name means that we have a constant class passed by reference object.                                    
+                        ~Class_Name();                                   // Class Destructor.
+     
+Syntax of Defining Copy Constructor, Copy Assignment Operator, Class Destructor In Class Definition File :
+
+                         Class_Name::Class_Name()                                            // Custom Class Constructor
+                         {
+                               //Custom Class Constructor
+                         }
+			  
+                         Class_Name::Class_Name(const Class_Name &obj)                      // Custom Copy Constructor , Inoked Upon : Passing an object to function.
+                                                                                                                                        Returning an Object from a function.    
+                         {                                                                                                              Initializing a new object.
+  		          // Copy Constructor Body                                                         
+ 			 }
+
+                         Class_Name & Class_Name::operator=(const Class_Name &obj)          // Custom Copy Assignment Operator, Assigns a value to an existing object
+  			 { 
+                         // Assignment Operator                                                         
+ 			 }
+
+                         Class_Name::~Class_Name()                                          // Custom Class Destructor
+                         {  
+                          
+                          }
+                                                                           
+
+Example 1 : 
+
+Class Cube.h Header File (Declaration File)
+#include <stdint.h>
+#pragma once
+
+// A class is defined with the `class` keyword, the name
+// of the class, curly braces, and a required semicolon
+// at the end:
+namespace uiuc {
+
+<<<<<<< HEAD
+class Cube {
+  public:  // Public members:
+    Cube();                                  // Custom Default Constructor
+    Cube(const Cube &obj);                   // Custom Copy Constructor
+    ~Cube();                                 // Custom Class Destructor
+    Cube & operator=(const Cube &obj);       // Custom Copy Assignment Operator
+    double getVolume();
+    double getSurfaceArea();
+    void setLength(uint8_t length);
+=======
+
+>>>>>>> main
 
   private: // Private members:
     double length_new;
