@@ -34,6 +34,8 @@
 #include <string>
 
 #include "LinkedList.h"
+using std::cout;
+using std::endl;
 
 /********************************************************************
   Exercise 1: insertOrdered
@@ -127,8 +129,46 @@ void LinkedList<T>::insertOrdered(const T& newData) {
   // they don't handle the null pointer at the tail properly. Be careful
   // to update all next, prev, head_, and tail_ pointers as needed on your
   // new node or on those existing nodes that are adjacent to the new node.
+Node *new_node = new Node(newData);
+Node *hp = getHeadPtr();
+Node *tp = getTailPtr();
+Node *tmp = nullptr;
+Node *thru = hp;
+
+while(thru->next!=nullptr){
+
+tmp = thru->next;
+
+if(new_node->data>0 && thru->data<new_node->data && tmp->data>new_node->data){
+  thru->next=new_node;
+  new_node->next=tmp;
+  tmp->prev=new_node;
+  size_+=1;
+  break;
+}
+else if(new_node->data<thru->data){
+  new_node->next=thru;
+  thru->prev=new_node;
+  size_+=1;
+  break;
+  
+}
+
+thru=thru->next;    
 
 }
+
+
+
+
+
+
+}
+
+
+
+
+
 
 /********************************************************************
   Exercise 2: Linear-time Merge

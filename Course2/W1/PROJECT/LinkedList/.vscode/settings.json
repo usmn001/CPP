@@ -1,0 +1,15 @@
+{
+    "makefile.makefilePath": "/mnt/c/OODS_CPP/Course2/W1/PROJECT/LinkedList/Makefile",
+    "makefile.launchConfigurations": [
+        {
+            "cwd": "/mnt/c/OODS_CPP/Course2/W1/PROJECT/LinkedList",
+            "binaryPath": "/mnt/c/OODS_CPP/Course2/W1/PROJECT/LinkedList/main",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/mnt/c/OODS_CPP/Course2/W1/PROJECT/LinkedList",
+            "binaryPath": "/mnt/c/OODS_CPP/Course2/W1/PROJECT/LinkedList/test",
+            "binaryArgs": []
+        }
+    ]
+}
