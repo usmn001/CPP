@@ -664,7 +664,7 @@ double Shape::getWidth() const {
 
 In both C,C++ arrays are continous memory locations and have a fixed size and length.
 
-To know the offset in bytes between two array indexes do offset = (long) (&arr[index2]) - (long) &(arr[index1]); // Here we are subtracting two addresses of two array elements stored at
+To know the offset in bytes between two array indexes do offset = (long) (&arr[index2]) - (long) (&arr[index1]); // Here we are subtracting two addresses of two array elements stored at
                                                                                                                  // certain memory locations 
 
 
@@ -682,6 +682,9 @@ We can also iterate over a vector using a for loop similar to an array.
 
 -------------Lec 2 : Linked Memory---------------------
 
+In Linked List Head Pointer Points to first Node Address ,
+               Tail Pointer Points to Last Node Address.
+
 Just like in C where we used to have a linked list structure i.e. struct Node {
                                                                        struct Node *next;  // next pointer points to next memory allocation, this pointer is actually a heap memory pointer.
                                                                        data_type data;
@@ -696,7 +699,7 @@ class ListNode {
 public : 
    	T & data;                                       // Reference Template Type.
 	ListNode *next;                          
-	ListNode(T & data) : data(data) , next(NULL);   // Where reference variable data is initialized to data and next pointer to NULL
+	ListNode(T & data) : data(data) : next(NULL);   // Where reference variable data is initialized to data and next pointer to NULL
 };
 
 
@@ -730,7 +733,7 @@ To iterate over linked list in C++ we define function const T & operator[](unisg
 --------Method : const T & operator[](unisgned index) Implementation -------------- 
 
 template <typename T>
-const T & List<T> operator[](unisgned index){          //Here at this line const T & means that this method is returning a reference to const template type. 
+const T & List<T> operator[](unisgned index){          //Here at this line const T & means that this method is returning a reference to const template type T & data member of ListNode class inside List class.
 
 ListNode *thru = head_;
 
@@ -807,6 +810,13 @@ In A List It´s Just : O(1) Because we just needed to update two nodes next poin
                    Nodes :  a b c
 To insert a new node e in between b and c we do : b->next = e;
                                                   e->next = c;
+
+To Insert Node e in the start of list we do : Node *old_hptr = a;
+                                              e = a;
+                                              e->next = a;
+                                              a->prev = e;       (in case of doubly linked list)
+                                              a->next = b;  
+                                              
 
   
 ------Run Time To Delete An Element After---------
@@ -936,8 +946,13 @@ Similarly we will be using back pointer if we want to add or remove a item or el
 
 
 
+Note : Templated C++ code generally needs to be written entirely in header files; when we use templates, the compiler generates specific versions of the templated code at compile time, depending on how you tried to apply the template in your code. In order for the compiler to use the template, it first needs to know about the entire template, which is usually done by putting all the relevant parts in the header. 
 
 
+For checking if a pointer is null we use if statement as : 
+                           if(nullptr==ptr) or if(!ptr) Both statements check if ptr is null.
 
+For checking if a pointer is not null we use if statement as
+                           if(nullptr!=ptr) or if(ptr) Both statements  check if ptr is not null.  
 
 
