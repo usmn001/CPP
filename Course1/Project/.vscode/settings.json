@@ -1,5 +1,5 @@
 {
-    "makefile.makefilePath": "/mnt/c/OODS_CPP/Final Project/Makefile",
+    "makefile.makefilePath": "/home/musman/Desktop/CPP/Course1/Project/Makefile",
     "makefile.launchConfigurations": [
         {
             "cwd": "/mnt/c/OODS_CPP/Final Project",
@@ -9,6 +9,16 @@
         {
             "cwd": "/mnt/c/OODS_CPP/Final Project",
             "binaryPath": "/mnt/c/OODS_CPP/Final Project/test",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/musman/Desktop/CPP/Course1/Project",
+            "binaryPath": "/home/musman/Desktop/CPP/Course1/Project/ImageTransform",
+            "binaryArgs": []
+        },
+        {
+            "cwd": "/home/musman/Desktop/CPP/Course1/Project",
+            "binaryPath": "/home/musman/Desktop/CPP/Course1/Project/test",
             "binaryArgs": []
         }
     ]

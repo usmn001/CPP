@@ -1,4 +1,133 @@
-***************Object Oriented Data Structures In C++**************************
+
+*************************************************************************CPP Basics***********************************************************************
+
+
+------------Variables Initialization--------------------------
+
+type var_name (var_value);         // C++ constructor style initialization.
+type var_name {var_value};         // C++11 style initialization 
+
+We need to use second apart from constructors.
+
+
+-------------Namespaces-----------------
+
+To use a specific name (Name of a class member function or variable) and avoid naming conflicts we use namespaces and encapsulate our code in a name space.
+Names are given to parts of code to help reduce naming conflicts.
+Third party frameworks will have their own namespaces.
+We use scope resolution operator with a namespace :: 
+
+
+using std::endl;  // Informing compiler that we are using endl from std library.
+using std::cout;  // Informing compiler that we are using endl from std library.
+using std::cin;   // Informing compiler that we are using endl from std library.
+
+----------Using the sizeof operator----------------
+
+sizeof operator just like in c provides us information about a specific type size in bytes.
+To use sizeof operator on primitive data types like int,float,long,short,char first include these files climits and cfloat in your source code and then use sizeof operator on data types.
+
+Example 1 : 
+#include <climits>
+#include <iostream>
+
+int main(){
+cout<<sizeof(int);
+cout<<sizeof(float);
+cout<<INT_MAX;    // Showing maximum value for INT type.
+cout<<INT_MIN;    // Showing minimum value for INT type.
+}
+
+
+----------------------------constants in cpp-----------------------------------
+
+
+Character Literal Constants : \n (newline) , \r (return)  , \t (tab) , \b (backspace),  \'  - single quote,   \" doble quote , \\ backslash
+The character literal constants are used with cout statement.   
+
+Constant expressions : constexpr 
+
+Declared Constants : In c++ are decalred same to same like we used to do with C i.e. const var_name;
+
+We should avoid using #define pre processor directive
+
+---------------------------Vectors In Cpp----------------------------------------
+
+vector is a object orineted template class.
+vector is a container in c++ standard template library. 
+Itś an array that can grow and shrink in size at execution time.
+Provides bound checking.
+Can use functions like : sort,reverse,find and e.t.c.
+
+Whenever we use vector we are creating a object and we can perform several operations that are defined by vector class at : https://en.cppreference.com/w/cpp/header/vector
+
+
+Vector Declaration : vector<type> vector_name;     
+
+We can also initialize a vector just like arrays as : vector <type> vec_name (val1,val2);
+To specify the size of a vector for a specific type we can declare a vector as : vector <type> vec_name (5);  // Now our vector will have a length of 5.
+
+
+Example 1 : vector<int>   number {0,1,2,3};
+            vector<float> temp {0.1,0.2};
+
+
+------Accessing a vector element ----- 
+
+Method 1 : 
+To access a vector element then we can use the subscript notation [] with vector name i.e. vec_name[index] example temp[0] .
+In the above method now we won´t be having bound checking and we have to do it ourselves.
+
+Method 2 : vec_name.at(index) ;   Here we are using "at" method to access vector element at a index.
+
+----------push_back(element)----------
+
+vector method push_back will add a element at the end of vector just like a queue.
+
+temp.push_back(0.35);       // now temp vector object will become temp {0.1,0.2,0.35};
+
+
+-------vector inside a vector---------
+
+A vector can also contain another vector i.e. vector<vector<type>> vec_name;
+
+Example 2 : vector<vector<int>> movie_ratings 
+              {
+                  {0,1,2,3},
+                  {22,33,34},
+               }
+This is just like a matrices. To access a element we will use row and column apprach just like we used to do it in arrays.
+
+cout<<movie_ratings[0][0] ;    // now we won´t have bounds detection and we can get out of bounds error.
+
+cout<<movie_rating.at(0).at(1);
+
+
+
+------------------------------Range Based For Loop---------------------------------------
+
+
+Introduced in C++11 standard.
+Allows us to iterate over a vector,array, list or collection of elements without having to worry about length of collection incrementing,decrementing counter variable we do in a normal for loop. 
+
+Syntax : for(var_type var_name : sequence)     // we can also use "auto" in place of var_type and compiler finds out the exact type to use.
+        {
+            statements;
+
+        }
+
+Example 1 : for (auto c : "Hello Usman")
+            {
+
+             if(c==' ')
+                cout<<"\t";
+                else 
+               cout<<c;
+            }
+
+
+
+**************************************************************************Object Oriented Data Structures In C++*************************************************************
 
              ***********************Week 1 **********************
 

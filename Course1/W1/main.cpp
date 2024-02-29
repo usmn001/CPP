@@ -6,7 +6,7 @@
  *   Wade Fagen-Ulmschneider <waf@illinois.edu>
  */
 
-#include <iostream>
+#include <iostream.h>
 #include "Cube.h"
 using std::cout;
 using std::endl;
