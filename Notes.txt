@@ -127,6 +127,101 @@ Example 1 : for (auto c : "Hello Usman")
 
 
 
+---------------------Conditional Operator------------------------
+
+       (cond_expr) ? expr1 : expr2 
+
+ cond_expr evalauates to a boolean expression
+    if cond_expr is true then value of expr1 is returned.
+    if cond_expr is false then value of expr2 is returned.
+    
+Similar to if else construct
+Ternary operator
+very useful when used inline.     
+
+
+Example 1 : int a{10} , b{20};
+            int score{92};
+            int result {}
+            
+            result = (a>b) ? a:b;      // if a is greater than b then value of a is assigned to result, if not then value of b is assigned to result.
+            result = (a<b) ? (b-a) : (a-b);
+            result = (b!=0) ? (a/b) : 0;
+            cout<<((score>90) ? "Excellent" : "Good" );
+            
+            
+            
+            
+----------------------------------------Strings In C++------------------------------------
+
+https://en.cppreference.com/w/cpp/string/basic_string
+
+In C we used char arrays and char pointers for strings as there is not data type of string available to us in C.
+In order to use C-style string functions we must #include<cstring> header file in our C++ source code.
+
+
+C++ strings like C strings also start from index 0.
+
+In C++ we´ve string data type available to us through string object defined in string namespace of std\stl library of C++.
+C++ strings are : contigous in memory,
+                  dynamic in size,
+                  work with input and output streams
+                  have lots of useful functions
+                  can be easily converted to C style strings if needed
+                  safer. 
+
+On C++ strings objects we can perform all kinds of relational operations : == , !,  >  , < , >=   ,  <=
+The string objects will be compared character by character lexically i.e. according to their ASCII codes.
+
+Syntax :  string str_name1;
+          
+          string str_name2 {"str_value"};     // Here we have initialized string str_name2 with str_value
+          
+          string str_name3 {str_name2};       // Now string str_name3 contains string str_name2
+          
+          string str_name4 {"str_vale", num}  // Here we are only allocating num characters of string value str_vale to string str_name4
+          
+          string str_name5 { str_name3,0,2}   // Here we only assinging values of characters from index 0 to 2 of string str_name3 to string str_name5 
+          
+          string str_name6 { num, 'X' };      // now we can assign num times the character X to string str_name6
+
+Syntax For Extracting a substring from a string : object.substr(start_index,length)     // Where object is declared as string object
+                                                                                        // start index defining from where we start.
+                                                                                        // length defining how many characters to extract from string.
+
+Syntax For Searching a string or character inside a big string : object.find(search_string)    // The find method returns index of search string .
+
+
+Syntax to find length of a string : object.length()   // Where object is defined as string object;
+
+             
+Example 1 : 
+          string s1;
+          s1 = " M USMAN ";
+
+          string s2;
+          s2 = "MUS";
+           
+          string s3;
+          s3 = s1 + s2 ;   now s3 becomes M USMAN MUS 
+
+Example 2 : Extracting a substring from a string object
+
+        string s1 = {" M USMAN"};
+        cout<<s1.substr(0,2)<<"\n";
+        cout<<s1.substr(2,3)<<"\n";
+
+getline() : Method allows us to read a complete collection of strings and characters until a specific condition from cin input stream.
+
+Example 3 : string s1;
+            getline(cin,s1)      // Read entire line until \n
+            
+Example 4 : string s1;
+            getline(cin,s1,'x');  // Reads entire line from input stream cin until x character.
+            
+                        
+
+
 **************************************************************************Object Oriented Data Structures In C++*************************************************************
 
              ***********************Week 1 **********************
