@@ -9,11 +9,13 @@ using std::cout;
 using std::endl;
 using std::string;
 
+
 int main() {
 
 
-/*
-// Example 1 :
+
+//Example 1 :
+
 string s1 = {"M USMAN"};
 string s2 = {"& MEHWISH"};
 cout<<s1<<"\n";
@@ -52,7 +54,7 @@ cout<<"You Entered:"<<name<<"\n";
 
 getline(cin,name,'s');    // Here s delimiter here as soon as s i found the data till s will be discarded
 cout<<"You Entered:"<<name<<"\n";
-*/
+
 
 // Exercise 1 : 
    string unformatted_full_name {"StephenHawking"};
@@ -90,6 +92,56 @@ cout<<"You Entered:"<<name<<"\n";
     
     cout << journal_entry_1 << "\n" << journal_entry_2;
 
+// Section : Challenge Encryption and Decryption
+
+string alphabet {" abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ"};
+string key      {"1XZNLWEBGJHQDYVTKFUOMPCIASRxznlwebgjhqdyvtkfuompciasr"};
+int index {0};
+string message {};
+string encrypted_message {};
+string decrypted_message {};
+
+cout<<"Enter a Message :";
+getline(cin,message);
+
+cout<<"Encryption In Process  \n";
+
+for(auto c : message)
+{
+
+index = alphabet.find(c);
+char new_char {};
+if(index!=string::npos)
+{
+     new_char = {key.at(index)};
+     encrypted_message +=new_char;
+}
+else 
+    encrypted_message +=new_char;
+
+
+}
+
+cout<< "Encrypted Message : "<<encrypted_message<<"\n";
+
+cout<<"Decryption In Process  "<<"\n";
+
+for(auto d : encrypted_message)
+{
+
+index = key.find(d);
+char new_char {};
+if(index!=string::npos)
+{
+     char new_char = {alphabet.at(index)};
+     decrypted_message +=new_char;
+}
+else 
+  decrypted_message +=new_char;
+
+}
+
+cout<<"Decrypted Message :"<<decrypted_message<<"\n";
 
 
 return 0;    

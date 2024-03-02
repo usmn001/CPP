@@ -192,7 +192,9 @@ Syntax For Extracting a substring from a string : object.substr(start_index,leng
 Syntax For Searching a string or character inside a big string : object.find(search_string)    // The find method returns index of search string .
 
 
-Syntax to find length of a string : object.length()   // Where object is defined as string object;
+Syntax to find length of a string : object.length()   // Where object is defined as string object {};
+
+Syntax for accessing string element at particular index _ object.at(index)       // Where object is defined as string object {};
 
              
 Example 1 : 
