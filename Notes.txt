@@ -157,8 +157,11 @@ Example 1 : int a{10} , b{20};
 https://en.cppreference.com/w/cpp/string/basic_string
 
 In C we used char arrays and char pointers for strings as there is not data type of string available to us in C.
-In order to use C-style string functions we must #include<cstring> header file in our C++ source code.
 
+To use C-style string functions ( strcpy(),strcat(),strcmp() )we must #include<cstring> header file in our C++ source code.
+
+C Style string functions can only work with strings and characters terminated with null character \0.
+We can use C style string library cstlib.h to convert C-Style strings to integer,float,long types.
 
 C++ strings like C strings also start from index 0.
 
@@ -222,8 +225,153 @@ Example 4 : string s1;
             getline(cin,s1,'x');  // Reads entire line from input stream cin until x character.
             
                         
+-------------------------------------Function Overloading In C++-------------------------------------------
+
+Function Overloading means using the same function name for different types.
+
+In C++ we can have same functions name for different parameters, the compiler automatically figures out which function should be called according to the type of passed parameters.
+
+Characters are always promoted to integers by compilers and the called function if it have integer parameter then it will print itś ASCII code.
+
+Example 1 : 
+
+// Function Prototypes
+int find_area(int side_length);
+double find_area(double length,double width);
+
+// Function Definition
+int find_area(int side_length)
+{
+int area = side_length*side_length;    
+return area;    
+}
+
+double find_area(double length,double width){
+double area = length * width;    
+return area ;    
+}
+
+-----------------------------------Pass By Reference------------------------------------
+
+In C++ we can pass data through reference to any function.
+Pass By reference is just alias i.e. we just assign a new name to the already assigned memory address of a variable with a type.
+When we use const with reference then we inform the compiler that the value assigned cannot be changed itś similar to const qualifier.
+The const in C++ is similar to const in C, When used with a type makes it read only and is allocated code memory. sub segment .rodata.
 
 
+
+
+Example 1 : int height {98};
+            int h3 = &height;    // Assigning new name to height variable.
+
+Example 2: Passing A Variable By Reference To A function
+
+sum(height)           // Passing Height variable address to sum function , 
+
+void sum (int &h3)
+{
+
+
+}
+
+
+Example 3 : Using const with reference
+
+int main()   {
+vector<int> data{1,2,3};
+print(data);
+return 0;
+}
+
+void print(const vector<int> &ref) 
+{
+ref.at(0) = 200;   // This statement will result in error as we have made our pass type reference const
+
+
+
+}
+
+---------------------Function Calls---------------------
+
+Functions just like in C use stack to save their content during context switching or when returning back to a caller program.
+
+Functions use call stack : LIFO Structure, push and pop.
+
+Stack frame or Activation Record : 
+   Functions must return control to caller .
+   Each time a function is called we create a new activation record and push it on stack.
+   When a function terminates we pop the activation record and return.
+   Local variables and function parameters are allocated on the stack.
+
+
+--------------------Pointers--------------------------
+
+
+Pointer rules are same to same in C and C++.
+Array names are actually the address of first element.
+
+We can access elements of array through a pointer int *array_ptr = array;    
+                                                  *(array_ptr)           // can also be done array_ptr;
+                                                  *(array_ptr+1)         // can also be done array_ptr[1];  
+
+We can compare two pointers as if(ptr1==ptr2) Here we are comparing the addresses of two pointers checking whether they point to same memory location or not.
+                               if(*ptr1==*ptr2) Now we are comparing the data pointed out by pointers.  
+
+If we subtract two pointers of same type then we get the number of elements in between the two pointers.
+
+
+----------------------References------------------------------
+
+
+We can have a constant reference for e.g. 
+
+vector<string> stooges {"Larry","Mow", "Curly"};
+
+for( auto const &str : stooges}   // Now we will be iterating on same memory location of stooges, without reference operator we had copied every element from vector index to str.
+{
+cout<< str<<"\n";
+}
+
+-------------------L values and R-Values--------------------------
+
+L values are names that are addressable.
+L values can be modified if not not defined as constants.
+
+R values are non addressable and non assignable .
+  A value thatś not an l value.
+    Is on the right side of an assignment operation.
+    a literal.
+    a temporary which is intended to be non modifiable.
+    
+Example :     int x{100}; //    x is l value, 100 is r value
+              int y{0};
+              y = 100;
+              x = x+y;   // r-value is (x+y) assigned to l value x
+              
+              
+------------------------Classes and Objects------------------------------------              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
+              
 **************************************************************************Object Oriented Data Structures In C++*************************************************************
 
              ***********************Week 1 **********************
