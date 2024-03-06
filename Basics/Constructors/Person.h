@@ -12,8 +12,9 @@ class Person{
 
 public :
 uint8_t height{0};
-uint8_t waist {0};
+uint8_t waist {0}; 
 string name;
+
 
 /*
 
@@ -23,7 +24,7 @@ Person(uint8_t h,uint8_t w,string n); // Default Constructor with parameters
 */ 
 
 // Using One Constructor for initializing Object Parameters
-Person(uint8_t height=190,uint8_t waist = 0,string name="None");
+Person(uint8_t height=190,uint8_t waist = 0,string name="None",int num=0);
 
 
 // Copy Constructor

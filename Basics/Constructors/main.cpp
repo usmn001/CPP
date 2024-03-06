@@ -58,7 +58,6 @@ vec_name.push_back(p1);
 vec_name.push_back(p2);
 
 
-
 }
  // When we get out of scope destructors are called and we cannot access objects p1,p2,p3_ptr
 

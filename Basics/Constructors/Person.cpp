@@ -49,18 +49,20 @@ cout<<"Constructor With Argumentsis Callled \n";
 
 // Using One Constructor Instead of so many overloaded constructors
 
-Person::Person(uint8_t h,uint8_t w,string nam):height{h},waist{w},name{nam} {
+Person::Person(uint8_t h,uint8_t w,string nam,int num):height{h},waist{w},name{nam} 
+{
 cout<<"Constructor called with initializer list \n";
 }
 
 // Copy Constructor
+
 Person::Person(const Person &source):height{source.height},waist{source.waist},name{source.name}
 {
 cout<<"Copy Constructor is called \n";
 cout<<source.height<<"   "<<source.waist<<"     "<<source.name;
-
 }
 
+// Destructor
 Person::~Person(){
 cout<<"Destructor Called"<<"\n";
 }

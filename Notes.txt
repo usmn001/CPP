@@ -320,6 +320,28 @@ We can compare two pointers as if(ptr1==ptr2) Here we are comparing the addresse
 If we subtract two pointers of same type then we get the number of elements in between the two pointers.
 
 
+Dynamic Memory Allocation In C++ is done through new and delete which allocates and deallocates heap memory .
+new returns a void pointer similar to malloc() and we need to caste it accordingly.
+type *ptr {nullptr}; 
+ptr = new type;  
+ptr = new type [size];
+
+To deallocate memory we use delete keyword just like free we have in C.
+
+Example1 : int *ptr {nullptr};
+           ptr = new int;
+           delete ptr; 
+
+
+Example 2 : int *array_ptr{nullptr};
+            int size;
+            array_ptr = new int[size];
+            delete[] array_ptr;       // Used with delete [] because we have an array 
+
+
+
+
+
 ----------------------References------------------------------
 
 
@@ -351,27 +373,399 @@ Example :     int x{100}; //    x is l value, 100 is r value
               
 ------------------------Classes and Objects------------------------------------              
               
+We can perform similar operations on class objects as we do with variables like :  
+
+We can have a vector of a certain class objects :                           vector<class_name> vec_name;  // Then we can push and pop class objects on vector and perform other operations.
+
+We can have class object pointer.                                           Class_Name *object_ptr {nullptr};
+
+We can also have an array of a certain class objects :                      Class_Name arr_name[] {object1,object2};
+
+We can also assign heap address to a certain class object pointer:          Class *obj_ptr {nullptr};
+                                                                            obj_ptr = new (Class_Name);
+
+
+The above operations on class objects are exactly like we used to do with C structures.
+             
               
               
+-------------------Class Member Access Modifiers------------------------------
+
+The access modifiers are quite similar to static and extern storage class we have in C.              
+
+public : Methods/functions, Variables, Types are accessible everywhere i.e. any class client code can access them.
               
               
+private : Methods/Functions, Variables, Types are only accessible by members of class or friends of class.
+
+protected : Used with inheritance .             
+                                        
+Similar to a C module files .h and .c , In CPP a class also has declaration file .h and definition file  .cpp (containing class function/method implementations)
+  
+In Class definition file we follow this format when defining a function or method i.e return_type Class_Name::method_name{};
+In Class declaration filewe follow this format when defining a method or function i.e. return_type method_name{};           
+              
+We can also have class member methods implemented in class declaration files .h this way is called implicitly inline.              
               
               
+--------------------------------Constructors and Destructors-----------------------------------------
+
+Constructors : are invoked during object creation
+               Useful for initialization.
+               Have same name as of class.
+               No return type is specified.
+               can be overloaded i.e. can given paramters or arguments which can be used at the time of invokation. 
+
+Destructors :  Special Member method.
+               Same name as the class proceeded with a tilde (~).
+               Invoked automatically when an object is destroyed.
+               No return type and no paramters.
+               Only 1 destructor is allowed per class- cannot be overloaded.
+               Useful to release memory and other resources.  
+               
+Class destructor is called as soon as we get out of scope for an object similar to auto storage class variables of C programming.         
+Once we define ourselves a class constructor then C++ compiler will not generate a default constructor for us so we will need to provide it ourselves.         
+Classes can have as many constructors as necessary.
+Each constructor has a unique signatue.
+
+Note : Default Constructor with or without parameters is called when we create an object on heap with or without initializng it.
+       Example : Class *obj_ptr = new Class (param1,param2,param3);
+
+
+Always initialize object attributes through constructors otherwise they will contain garbage data and our object will be in a unknown state.      
+
+Class Constructors and destructors are similar to auto stroage class of C where local variables are pushed and popped out of stack as we call and return a function.                
+
+
+Example 1 : Class Player Default Constructors and Destructor Declaration
+            
+            class Player{
+            
+            private : 
+            string name;
+            int health;
+            int xp;
+            
+            public : 
+            Player();
+            Player(string name);
+            Player(string nam, int hea, int x)
+            {
+            name = nam;
+            health = hea;
+            xp = x,
+            
+            };
+            ~Player();  // Destructor 
+            }
+
+int main(){
+
+Player *enemy = new Player("Enemy",1000,0)    ; Here we have initialized our object on heap by the attributes. 
+return 0;
+}
+             
               
+--------------Constructor Initialization Lists------------------------
+
+Construction Initialization Lists allow us : 
+                     To initialize our object parameters more efficiently              
+                     Initialization List immediately follows the parameter list.
+                     Initializes the data members as the object is created.
+                     Order of initialization is the order of declaration in the class.
+
+Syntax : Constructor_Name::Constructor():Param1{Value},Param2{Value} 
+         {
+
+         };
+
+                     
+Example : class Person{
+
+public :
+uint8_t height{0};
+uint8_t waist {0};
+string name;
+Person()
+{
+
+cout<<"Constructor Called"<<"\n";
+
+};
+
+Person(uint8_t h,uint8_t w,string n):height{h}:waist{w}:name{n}
+{
+
+cout<<"Constructor with parameter called \n";
+};
+
+
+
+~Person(){cout<<"Destructor Called"<<"\n";};
+
+
+
+};
+                     
+----------Delegating Constructors--------------
+
+One constructor calls another constructor and pass itś arguments to it for object attributes initialization.
+
+Example 1 : Person::Person():Person{190,32,"Usman"}   // Now at first my delegated constructor will be call´d and then the calling constructor body will be executed.
+{
+
+};
+                     
+                     
+-----------Constructor Parameters and Default Values------------------------
+
+Sometimes we can use just one constructor instead of varying constructors with varying number of arguments enabling us to have less code.                      
+Just assign some default values to the object parameters at the time of constructor declaration thatś it and provide constructor definition with parameters list that can be passed to it.
+This type of constructor is useful when we don´t want to initialize each object attribute separately by each constructor.
+
+Example 1 : 
+
+In Class Declaration File : Person(uint8_t height=190,uint8_t waist = 0,string name="None");
+
+In Class Definition File : Person::Person(uint8_t h,uint8_t w,string nam):height{h},waist{w},name{nam} 
+			   {
+			   cout<<"Constructor called with initializer list";
+			   };
+
+--------------Copy Constructor-----------------------
+
+Copy Constructor is called when : 
+     passing an object by value as a parameter.
+     returing an object from a function by value.
+     constructing an object based on another of the same class.
               
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
-              
+Best practices : Provide a copy constructor when your class has a raw pointer members
+                 Provide the copy constructor with a const reference parameter.  
+                 Use STL classes as they already provide copy constructors.
+                 Avoid using raw pointer data members if possible.
+                 
+                 
+Copy Constructor Declaration Syntax : Class_Name(const Class_Name &source)
+
+Copy Constructor Definition :  Class_Name::Class_Name(const Class_Name &source) : Obj_param1{source.param1},Obj_param2{source.param2},Obj_param3{source.param3}
+                               {
+                               
+                               };   
+
+Copy Constructor is called like this : Class_Name Object1 {Object2};    // Here we are copying Object2 to Object1          
+
+---------------------------Shallow Copy & Deep Copy Constructors-------------------------
+
+The difference between Shallow Copy and Deep Copy is that in Shallow Copy we use the address of heap pointer and in deep copy we use value pointed out by that heap pointer.
+
+In Shallow copy if we copy address of a location and then when later on the passed object pointing to that location getś out of scope then destructor frees up that location 
+causing the object contaiing copied address to become unable to access that same memory location. This problem is similar to problem of dangling pointer of C language.
+
+This problem of Shallow copy only occurs when we have a pointer in our class, we create heap pointer in a constructor with paramter and then we try to copy a object in copy constructor 
+and use heap memory address which becomes later inaccessible when get out of scope.
+
+Just derefence heap pointer by derefencing the reference of object and access the pointer. i.e. *obj_reference.pointer_name;
+
+
+Example : Deep Copy 
+
+Class Person.h file : 
+
+Class Person{
+private :        // We can also have it declared as public 
+int *data{nullptr};
+
+public :
+void get_data_value();
+
+};
+
+
+Class Person.cpp file : 
+
+Person::Person(int d)
+{
+*data = new int;
+*data = d;
+}
+
+
+Person::Person(const &source):Person{*source.data}   // In Shallow constructor Is like this : Person::Person(const &source):Person{source.data}
+{
+
+}
+
+Person::get_data_value()
+{
+return *data;
+}
+
+Person::~Person(){
+
+delete data;
+
+}
+
+
+
+main.cpp file : 
+
+void display_func(Person p3)    // Copy Constructor is called automatically by compiler to copy the source object Obj_p1 to destination object p3
+{
+cout<<p3.get_data_value()<<"\n";
+}                               // Destructor is called heap memory pointed out by the object pointer data is freed i.e. p3.data is pointing to nothing
+                                // In shallow copy constructor case we propagate this issue towards all objects and our program then crashes as all objects contain same address of
+                                // heap location which is freed and becomes in accessible so value stored at that location is also lost.  
+
+
+int main()
+{
+
+Person Obj_p1{100};
+
+display_func(Obj_p1);          // 
+
+Person Obj_P2{obj_P1};         // Copy constructor is called and we copy the object obj_P1 attributes into Obj_P2 even though 
+
+return 0;
+
+}
+
+------------------------------Move Constructor---------------------------------------
+
+C++11 introduced move semantics and move constructor.
+Move constructor moves an object rather than copy it.
+Copy elision it happens when C++ may optimize copying away completely (RVO-Return Value optimization).
+
+We can only use move constructors for R values.
+
+R-value references : Used by constructor and move assignment operator to efficiently move an object rather than copy it
+                     R-value reference operator (&&).
+
+Examples 1 : R value references
+
+int &&r_ref = 200;
+r_ref = 300
+
+int &&r_ref = x ; // Compiler Error.
+
+Rvalue references i.e. types have && before i.e. &&type
+
+Example 2: void func(int &num);   // for l value
+           void func(int &&num);  // for r value
+           
+           func(x);      // Calling l value function
+           func(200) ;   // Calling R value function
+        
+We can have both L and R value functions in our code.                         
+
+Move constructor : moves the resource.
+                   Simply copies the address of resource from source to current object and nulls out the pointer in the source pointer 
+                   
+Hence Move constructor is very efficeint as compared to copy constructor as we move source object from one location to another leading to less memory consumption. 
+
+Move Constructor Syntax : 
+ In Class Declaration File : Class_Name(Class_Name &&source);
+ 
+ In Class Definition File Class_Name::Class_Name(Class_Name &&source):Obj_Param{source.data}
+                           {
+                          source.data = nullptr;      // Where source.data means that source object heap pointer data , very similar to copy constructor . 
+                          }                   
+                   
+Example 1 : 
+
+Class Declaration File : 
+
+// Move Constructor
+Person(Person &&source);
+
+
+Class Definition File : 
+
+// Move Constructor
+Person::Person(Person &&source):heap_ptr{source.heap_ptr},waist{source.waist}
+{
+cout<<"Move Constructor is called \n";
+source.heap_ptr=nullptr;
+}
+
+
+
+// Move Constructor 
+vector <Person> vec;
+vec.push_back(Person{10});
+
+-----------------The this pointer-----------------
+
+"this" is a reserved keyword.
+Contains address of the object in scope so itś a pointer to the object in scope.
+Can only be used in class scope.
+Can be used by programmer : 
+   To access data member and methods.
+   To determine if two objects are the same
+   Can be dereferenced through *this to yied current object address.
+
+---------------------------Using const with classes-----------------------------------
+
+The effect of const on a class objects is same as we used const qualifier in C language on types.
+
+When we use const with a class object declaration i.e. const Class Obj_Name , then that object attributes cannot be changed by any method nor it can be accessed .
+
+To access a const object attribute using a method we need to mention const after itś prototype name.
+
+
+Example 1 :
+
+In class declaration File : Class Person
+                            {
+                            public :
+                            int get_height() const;
+                            }
+In Class definition file : 
+                           // Class Member Method
+                           int Person::get_height() const   // If we don´t use const keyword then we cannot access object attribute
+                            {
+                            return height;  
+                           }
+                             
+-------------------------Static Class Members-----------------------
+
+static has same effect here on a class member variable.
+
+static class member function can only access and work on static variable or type. 
+
+
+In class declaration File : Class Person
+                            {
+                            public :
+                            int get_height() const;
+                            static int num;               // We cannot initialize static type here in class declaration
+                            static int get_num();         // Static member function for accessing static type, function is returning int type
+                            
+                            }
+
+In Class definition file :  int Person::num{0};          // Here we have initialized static member variable num to 0
+
+                             int get_num()
+                             {
+                             return num;
+                             }
+
+Here static is also a strogage class like in C and a class member static variable will have a lifetime more than the function.
+
+--------------------------------Structs vs Classes--------------------------------------
+
+Members of a struct are public by default.   Same struct we used in C language
+Members of a class are private by default.
+
+Struct : Use struct for passive objects.
+         Don´t declare methods in struct.
+         
+Class : Use class for active objects with private access.
+        Implement getters/setters as needed.
+        Implement member methods as needed.
+
+
 **************************************************************************Object Oriented Data Structures In C++*************************************************************
 
              ***********************Week 1 **********************
