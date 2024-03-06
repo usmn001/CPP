@@ -40,7 +40,8 @@ string new_str {};
 
 size_t str_len = str.size();
 
-const char *start = str.c_str();
+const char *start = str.c_str();   // .c_str() is returning an address in a c style string literal format so we can access individual characters
+                                   // just like we used to do with character pointers in C.
 const char *end =start+str_len-1;
 
 while(end>=start)

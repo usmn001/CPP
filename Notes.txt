@@ -371,7 +371,7 @@ Example :     int x{100}; //    x is l value, 100 is r value
               x = x+y;   // r-value is (x+y) assigned to l value x
               
               
-------------------------Classes and Objects------------------------------------              
+--------------------------------------------------Section 15 :Classes and Objects-------------------------------------------------------------              
               
 We can perform similar operations on class objects as we do with variables like :  
 
@@ -764,6 +764,61 @@ Struct : Use struct for passive objects.
 Class : Use class for active objects with private access.
         Implement getters/setters as needed.
         Implement member methods as needed.
+        
+--------------------------Friend of a class------------------------------
+
+Friend : A function or class that has access to private class member.
+         That function of or class is not a member of the class it is accessing.
+         
+Friend function   : Can be regular non-member functions.
+                    Can be member methods of another class.
+                                   
+Friend class :   Another class that can access to private class members.        
+
+Friendship is not symmetric . if A is a friend of B then B is not a friend of A.
+Friendship is not transitive. if A is a friend of B and B is a friend of C then A is not a friend of C.
+
+
+Scenarion 1 : When we have a non member function , we want to grant it access to class private variables, type we do :
+
+In Class declaration :             class Class_Name
+             				{
+        			     friend ret_type func_name(Class_Name &s);  // &s means that this function is using a reference to access class private members             
+                                     private : int data;
+                                        };
+In our source file .cpp : just put the definition of function and access or change class private members through reference.                                        
+
+Scenario 2 :        When function belongs to another class 
+In Class declaration :             class Class_Name
+             				{
+        			     friend ret_type Other_class::func_name(Class_Name &s);  // &s means that this function is using a reference to access class private members             
+                                     private : int data;
+                                        };
+                                        
+In our Other_class declaration file . h : 
+                                   Just put the definition of function and access or change class private members through reference.
+                                    class Other_class {
+                                    ....
+                                    public : 
+                                    friend ret_type func_name(Class_Name &s){           // Here Class_Name refers to the class of whom private members we are accessing and modifying
+                                    s.data=1;
+                                    
+                                    }
+                                    };
+                                     
+Scenario 3 :     Adding Another class as a friend
+                  
+In class declaration file :                  class Class_Name  
+                                               {
+                                            friend class Other_class;      // Now all methods of other class will have access to private members of this class
+                                            std::string name;
+                                            int health;
+                                            int xp;
+                                            private: int age;
+
+                                               };
+                      
+
 
 
 **************************************************************************Object Oriented Data Structures In C++*************************************************************
