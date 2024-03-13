@@ -590,7 +590,7 @@ Person::Person(int d)
 }
 
 
-Person::Person(const &source):Person{*source.data}   // In Shallow constructor Is like this : Person::Person(const &source):Person{source.data}
+Person::Person(const Person &source):Person{*source.data}   // In Shallow constructor Is like this : Person::Person(const &source):Person{source.data}
 {
 
 }
@@ -808,16 +808,380 @@ In our Other_class declaration file . h :
                                      
 Scenario 3 :     Adding Another class as a friend
                   
-In class declaration file :                  class Class_Name  
-                                               {
+In class declaration file :                class Class_Name  
+                                            {
                                             friend class Other_class;      // Now all methods of other class will have access to private members of this class
                                             std::string name;
                                             int health;
                                             int xp;
                                             private: int age;
-
-                                               };
+                                            };
                       
+----------------------------------------------Section : Operator Overloading--------------------------------------------------
+
+
+Operator Overloading allows us to use operators such as +,-,=,* to user defined types i.e. Class Objects.
+Bascially operator overloading allows to perform mathematical arithmetic operations on C++ objects.
+
+The operator overloading is not done automatically (except for assignment operator), they must be explicitly defined.
+
+We cannot use these operatos with C++ objects they are    :: ,  :?  ,    .*    ,   .  ,  sizeof.
+
+We can´t overload operators and expect same behavior with primitive C++ types i.e. int,double,e.t.c.
+
+We can´t create new operators.
+
+[] , () , -> and the assignment operator = must be declared as member methods.
+
+We can also declare other operators as member methods or global functions.
+
+When we overload operators for e.g like on Player class objects like : 
+ p1<p2
+ p1 == p2
+ std::cout<<p1;
+ 
+ Here we want to make sure that what does it means when we are comparing the two objects p1 and p2 i.e. are we comparing all of their attributes or only comparing one or few.
+
+---------------------Copy Assignment Operator--------------------
+
+Copy Assignment Operator is used when we want to assign one object to another
+Copy Assignment Operator is also used when we assign a r value to a object already created.
+
+Class_name obj1;
+Class_name obj2;
+obj1 = obj2;        // Here we want to use, 
+
+obj1 = "value";     // Now first we will create a temporary object by calling default constructor with parameter, and copy r value from passed parameter into the temporary object.
+                    // Then copy assignment operator is called to copy r value from temporary object to left side object obj1. 
+
+
+
+Declaration Syntax : Type &::operator=(const Type &rhs); 
+
+Definition : Type &Type::operator=(const Type &rhs) 
+               {
+                   if(this==rhs)
+                      return *this;
+                  
+                   this-param = rhs.param;
+                   return *this;
+
+                }
+
+Example :   Mystring &Mystring::operator=(const Mystring &rhs)
+            {
+                  if (this==&rhs)
+                     return *this;
+                  delete [] str;
+                  
+                  str = new char [std::strlen(rhs.str)+1];   
+                  std::strcpy(str,rhs.str);
+                  
+                  return *this;
+
+            }
+
+
+----------------------Move Assignment Operator --------------------------
+
+If we don´t provide move constructor then C++ compiler will assign copy constructor by default.
+
+Just like Move constructor itś called on r values. 
+The difference in between the two is that in move consructor we initialize the object with r value and in move assignment operator we assign a object the r value. 
+
+Invoked at : obj = Class_Name{"Value"};           //Move Assignment Operator is called
+             obj = "Value";                       //Move Assignment Operator.
+
+Declaration Syntax : Type &operator=(Type &&rhs);    // Where Type is Class_Name
+
+Definition :        Type & Type::operator=(Type &&rhs)
+                     {
+                        if(this==&rhs)
+                            return *this;
+                        delete [] ptr;        // In case class has a member cstyle pointer    
+                        ptr = rhs.ptr;        // Copied the address to destination object pointer.   
+                        rhs.ptr = nullptr;
+                     return *this;     
+                        
+                      }
+
+
+
+---------------------Unary Operators as member method (++,--,-,!)------------------
+
+Unary operators represent operations that are performed on one operand.
+
+The unary operators are ++,--,- & !. These operations are performed on objects and we need to implement methods for performing these operations on objects.
+
+We need to provide a defintion of these operatos in our code.
+
+Unary operators methods don´t accept any arguments.
+
+Declaration :    Returntype operatorOp();	              //  Where Op can be ++, -- , - , &, !,  Returntype can be a class_name or a normal type like bool,float, e.t.c
+                                                              //                                      
+    
+Definition :     Returntype Type::operatorOp() const          //  Where Op can be ++, -- ,- , & , !,  Returntype can be class_name or a normal type like bool,float, e.t.c                
+                 {                                                                                    Type is the name of class of which this method is member
+
+                 return type;
+                 }
+
+
+Example 1 : Number Number::operator-() const;     // This method is associated with a const object on which we are applying - operation.
+            Number Number::operator++();          // pre-increment
+            Number Number::operator++(int);       // post-increment
+            bool Number::operator!() const;          
+    
+        Number n1 {100};
+        Number n2 = -n1;
+        n2 = ++n1;
+        n2 = n1++;
+
+
+Example 2 : Mystring operator- make lowercase
+            
+            Mystring larry1{"LARRY"};     
+            Mystring larry2;
+            
+            larry1.display();      // LARRY
+            
+            larry2 = -larry1;       // larry1.operator-(), We need to implement this a member method of our class Mystring as mentioned in below.
+            
+            larry1.display();      // LARRY
+            larry2.display();      // Displays larry after we convert object1 attribute str to lower case in following method definition
+
+
+Operator method definition : 
+           Mystring Mystring::operator-() const {
+           
+           char *buff = new char [std::strlen(str) +1];
+           
+           std::strcpy(buff,str);
+           
+           for(size_t i = 0; i<std::strlen(buff) ; i++)
+              buff[i] = std::tolower
+           Mystring temp{buff};  // We have initialized temp object pointer through constructor 
+           delete[] buff;
+           return temp;          // returning object.
+           }
+       
+-------------------Binary Operatos(+,-,==,!=,>,< etc) As Member Methods----------------
+
+Binary operators (+,-,==,!=,>,< etc) are used to perform operation on two operands in our case they are two objects.
+
+Declartion Syntax :  ReturnType operatorOp(const Type &rhs) const;        // Where operatorOp can be (+,-,==,!=,>,< etc) , const can be used if our objects are const
+       
+Definition Syntax :  ReturnType Type::operatorOp(const Type &rhs) const        // Where operatorOp can be (+,-,==,!=,>,< etc) , const can be used if our objects are const 
+                     {                                                         // Where ReturnType can be anything , it can be bool or return object or e.t.c.
+                                                                               // Where Type is class_name of which this method is part of.
+                
+                     }      
+
+Example 1 :    
+             Number Number::operator-(const Number &rhs) const;  
+             Number Number::operator+(const Number &rhs) const;  
+             bool Number::operator==(const Number &rhs) const;  
+             bool Number::operator<(const Number &rhs) const;    // Here we are comparing two objects.
+
+            Number n1{100} , n2{200};       // Where n1 and n2 are two objects initialized to 100,200.
+            Number n3 = n1 + n2 ;           // n1.operator+(n2)
+            n3 = n1 - n2;                   // n1.operator-(n2)
+            if(n1==n2)                      // n1.operator==(n2), 
+            n1.str{"USMAN}, n2.str{"UMAR"};
+            if(n1==n2)                      // n1.operator==(n2) now we are comparing the attributes of objects in the following method as
+            
+            bool Number::operator==(const Number &rhs)
+            {
+            if(std::strcmp(str,rhs.str)==0 && num ==rhs.num)
+              return true;
+            else
+               return false;                      
+            }      
+     
+Example 2 : Mystring operator + (concatenation) 
+
+Just like string we have in c++ we can also concatenate object string parameters using + operator by providing a member method definition.
+We need to make sure that 1st parameter should be a object on left side in case of concatenating with cstyle strings.
+
+Example : 
+               Mystring larry {"Larry"};  
+               Mystring moe{"Moe"};  
+               Mystring stooges {is one of the"};
+            
+               Mystring result = larry + stooges; // We need to implement this functionality in a member method. 
+                                                  // larry.operator+(stooges)
+               
+               result = moe + "is also a stooge";   // moe.operator+("is also a stooge "), need to implement this functionality in a member method as follows
+            
+               result = "Moe" + stooges;  //  This statement will result in error.
+
+Implementation of concatenation operator for our class Mystring 
+                
+               Mystring Mystring::operator+(const Mystring &rhs) const
+               {
+               
+               size_t buff_size = strlen(str) + strlen(rhs.str) +1;
+               
+               char *buff = new char[buff_size];   //Instead of heap we could also have used an array
+               
+               strcpy(buff,str);
+               strcat(buff,rhs.str);
+               
+               Mystring temp{buff};     // Here we have created a temporary object, similar to like we used to create temp variables.
+               
+               delete [] buff;          // deleting allocated heap memory
+               return temp;             // returning the object.
+               
+               }
+
+------------------------Operator Overloading Using Global Functions---------------------------
+
+The global functions based operators perform the same functionality of member methods on objects.
+These global functions are declared as friends of a class instead as a member.
+
+
+ ----------Unary Global Operators---------------
+ 
+In case of Unary Operators global functions provide (++,--,-,!) functions .
+Unary global operators have only one object in their parameter list.
+Binary global operators have two objects in their parameter list.
+
+Declaration Syntax : Returntype operatorop(Type &obj);
+
+Examples 1 : Number operator-(const Number &obj)         // Where Number is the return type
+           Number operator++(Number &obj)              // pre-increment
+           Number operator++(Number &obj,int);         // post-increment
+           bool operator!(const Number &obj);        
+           
+           Number n1{100}:
+           Number n2 = -n1;
+           n2 = ++n1;
+           n2 = n1++;           
+
+Example 2 :    Mystring larry1 {"LARRY"};  
+               Mystring larry2;
+               
+               larry2 = -larry;    // operator-(larry1)     // Now we need to implement this functionlaity in our method as shown in the following defintion as: 
+
+           Mystring operator-(const Mystring &obj)  {       // Where Mystring is return type , // Passed parameter as Object are of class Mystring.
+           
+           char *buff = new char [std::strlen(str) +1];
+           
+           std::strcpy(buff,str);
+           
+           for(size_t i = 0; i<std::strlen(buff) ; i++)
+              buff[i] = std::tolower
+           Mystring temp{buff};  // We have initialized temp object pointer through constructor 
+           delete[] buff;
+           return temp;          // returning object.
+           }
+
+-------------------Binary Operators Global Functions--------------------------
+
+Binary operators as global functions perform operations of +,-,==,!=,<,>,e.t.c on two objects just like our Binary operators implemented as member functions.
+Binary operators as global functions takes two objects as parameters.
+
+Declaration Syntax : Returntype operatorOp(const Type &lhs,const Type &rhs)   // Where Return type can be a object or of primitive,derived and user defined type.
+
+Examples 1 :    Number operator-(const Number &lhs,const Number &rhs) const;  
+                Number operator+(const Number &lhs,const Number &rhs) const;  
+                bool   operator==(const Number &lhs,const Number &rhs) const;  
+                bool   operator<(const Number &lhs,const Number &rhs) const;    // Here we are comparing two objects.
+
+                Number n1{100}, n2{200};
+                Number n3 = n1 + n2;            // operator+(n1,n2), Now we will need to implement this functionality in our operator method definition
+                n3 = n1 - n2;                   // operator-(n1,n2)
+                if(n1==n2)                      // operator==(n1,n2)                   
+
+                bool operator==(const Mystring &lhs, const Mystring &rhs)  
+                {
+                if(std::strcmp(lhs.str,rhs.str)==0)
+                   return true;
+                else 
+                    return false;                   
+                }
+   Here in the above method definition we are only accessing str attribute of class becuase we have declared the method as friend of class otherwise we needed to use getter methods.
+
+
+Example 2 :    Mystring larry {"Larry"};  
+               Mystring moe{"Moe"};  
+               Mystring stooges {is one of the"};
+            
+               Mystring result = larry + stooges; // We need to implement this functionality in a member method. 
+                                                  // operator+(larry,stooges)
+               
+               result = moe + "is also a stooge";   // operator+(moe,"is also a stooge "), need to implement this functionality in a member method as follows
+            
+               result = "Moe" + stooges;  //  Okay with non member functions.
+
+Implementation of concatenation operator for our class Mystring 
+                
+               Mystring operator+(const Mystring &lhs,const Mystring &rhs) const
+               {
+               
+               size_t buff_size = strlen(lhs.str) + strlen(rhs.str) +1;
+               
+               char *buff = new char[buff_size];   //Instead of heap we could also have used an array
+                              
+               strcpy(buff,lhs.str);
+               strcat(buff,rhs.str);
+               Mystring temp{buff};     // Here we have created a temporary object, similar to like we used to create temp variables.
+               
+               delete [] buff;          // deleting allocated heap memory
+               return temp;             // returning the object.
+               
+               }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
