@@ -41,7 +41,7 @@ Person(uint8_t h,uint8_t w,string n); // Default Constructor with parameters
 Person();
 
 // Using One Constructor for initializing Object Parameters
-Person(int h=0,int w=0,char *s="");
+Person(int h=0,int w=0,char *s="None");
 
 // Copy Constructor
 Person(const Person &source);
@@ -54,6 +54,9 @@ Person & operator=(const Person &src);
 
 // Move Assignment Operator
 Person & operator=(Person &&src);
+
+
+/*************Overloading Operators Declarations As Member Methods******************/
 
 // Unary Operator Member Method Implementing Conversion of C Style String From Upper Case To Lower Case
 Person operator-();
@@ -69,6 +72,25 @@ Person operator+(const Person &rhs);
 
 // Binary Operator == Member Method 
 bool operator==(const Person &rhs);
+
+// Binary Operator != Member Method 
+bool operator!=(const Person &rhs);
+
+// Binary Operator > Member Method 
+bool operator>(const Person &rhs);
+
+// Binary Operator < Member Method 
+bool operator<(const Person &rhs);
+
+
+
+
+
+
+
+
+
+/*************Overloading Operators Declarations As Non Member Friend Methods******************/
 
 
 // Unary Operator Global Method Implementing Conversion of C Style String From Upper Case To Lower Case

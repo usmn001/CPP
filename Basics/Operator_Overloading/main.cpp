@@ -89,6 +89,15 @@ cout<< (p3==p1)<<"\n";    // This statement will call binary operator member met
 cout<< (p3>p1)<<"\n";     // This statement is calling Global Binary Operator Member method successfully because such method definition is not present
                           // In the class as member method.
 
+cout<<"\nPerson P3 : "<<p3; // Outputting Object P3 Parameters
+
+
+/********Insertion & Extraction Stream Operators Overloading**************/
+
+cout<<"\n Enter Data for object : ";
+cin>>p3;                  
+cout<<"After Getting Modified : "<<p3<<"\n";
+
 return 0;
 }
 

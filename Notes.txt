@@ -422,6 +422,7 @@ Destructors :  Special Member method.
                No return type and no paramters.
                Only 1 destructor is allowed per class- cannot be overloaded.
                Useful to release memory and other resources.  
+               Detructors are call´d in the reverse order i.e. most recent object gets popped out of the stack first.
                
 Class destructor is called as soon as we get out of scope for an object similar to auto storage class variables of C programming.         
 Once we define ourselves a class constructor then C++ compiler will not generate a default constructor for us so we will need to provide it ourselves.         
@@ -703,7 +704,7 @@ Can only be used in class scope.
 Can be used by programmer : 
    To access data member and methods.
    To determine if two objects are the same
-   Can be dereferenced through *this to yied current object address.
+   Can be dereferenced through *this to yield current object address.
 
 ---------------------------Using const with classes-----------------------------------
 
@@ -925,20 +926,8 @@ Definition :     Returntype Type::operatorOp() const          //  Where Op can b
 
                  return type;
                  }
-
-
-Example 1 : Number Number::operator-() const;     // This method is associated with a const object on which we are applying - operation.
-            Number Number::operator++();          // pre-increment
-            Number Number::operator++(int);       // post-increment
-            bool Number::operator!() const;          
-    
-        Number n1 {100};
-        Number n2 = -n1;
-        n2 = ++n1;
-        n2 = n1++;
-
-
-Example 2 : Mystring operator- make lowercase
+                 
+Example 1 : Mystring operator- make lowercase
             
             Mystring larry1{"LARRY"};     
             Mystring larry2;
@@ -965,6 +954,66 @@ Operator method definition :
            return temp;          // returning object.
            }
        
+---------------------------------Pre Increment & Post Increment Operator Member Methods-------------------------------------------
+
+// For ++a
+Pre Increment Operator Method Declaration Syntax : Class_Name & operator++(Class_Name &a);  or  Class_Name & operator++();
+
+
+Pre Increment Operator Member Method Definition :     // Pre Increment Operator
+ 						      Class_Name & Class_Name ::operator++()
+						      {
+  						       num=num+1;
+   						       return *this;
+						      }
+
+// For a++
+Post Increment Operator Member Method Declaration Syntax : Class_Name operator++(Class_Name &a,int); or Class_Name operator++(int); 
+
+
+Post Increment Operator Method Definition :     Class_Name  Class_Name:: operator++(int)
+                                                {
+                                                Class_Name temp = *this;
+						operator++();          // This statement is calling pre increment operator
+						return temp;
+						} 
+
+Note : Pre-increment and pre-decrement operators increments or decrements the value of the object and returns a reference to the result.
+
+Note : Post-increment and post-decrement creates a copy of the object, increments or decrements the value of the object and returns the copy from before the increment or decrement.
+
+
+Example 1 : Number Number::operator-() const;     // This method is associated with a const object on which we are applying - operation.
+            Number Number::operator++();          // pre-increment
+            Number Number::operator++(int);       // post-increment
+            bool Number::operator!() const;          
+    
+            Number n1 {100};
+            Number n2 = -n1;
+            n2 = ++n1;    // n1.operator++() , pre increment
+            n2 = n1++;    // n1.operator++(int), post increment
+
+// Pre Increment Operator
+Mystring & Mystring ::operator++()
+{
+    num=num+1;
+   return *this;
+}
+
+// Post Increment Operator ++
+Number  Number:: operator++(int)
+{
+Number temp = *this;
+operator++();
+return temp;
+}
+
+
+
+
+
+
+
 -------------------Binary Operatos(+,-,==,!=,>,< etc) As Member Methods----------------
 
 Binary operators (+,-,==,!=,>,< etc) are used to perform operation on two operands in our case they are two objects.
@@ -1037,7 +1086,7 @@ Implementation of concatenation operator for our class Mystring
 ------------------------Operator Overloading Using Global Functions---------------------------
 
 The global functions based operators perform the same functionality of member methods on objects.
-These global functions are declared as friends of a class instead as a member.
+These global functions are declared as friends of a class instead as a member. If not declared as friend of class then need to use getter and setter methods for accessing certian class object attributes.
 
 
  ----------Unary Global Operators---------------
@@ -1131,6 +1180,71 @@ Implementation of concatenation operator for our class Mystring
                return temp;             // returning the object.
                
                }
+
+--------------------Stream Insertion & Extraction Operators Overloading---------------------------
+
+In stream insertion & extraction operators overloading we define and implement operations using insertion operator through cin>> and through extraction operator cout<<.
+Basically we try to perform similar operations on objects by cin , cout statements using insertion >> and extraction operator <<.
+
+Examples : Mystring larry;
+           cin>> larry;       // here larry is a object, so we need to implement the functionlaity in our non member method where we are reading data into our object.
+           
+           Player hero;
+           cin>>hero ;        // here hero is a object, so we need to implement the functionlaity in our non member method where we are reading data into our object.
+
+Whenever we overload a operator the left had side of the object should be of the class to the rhs of object which in following case is not true i.e.
+
+Mystring larry
+larry<<cout;      // we need to implement this functionality in method definition
+
+Player hero 
+hero<<cout;      // we need to implement this functionality in method definition
+
+----------stream insertion operator (<<)-----------
+
+Used when we want to output data firectly from our object by cout<< statement.
+
+Declaration Syntax : std::ostream & operator<<(std::ostream &os, const Class_Name &obj) 
+          // When method is friend of class : friend std::ostream & operator<<(std::ostream &os, const Class_Name &obj); 
+
+
+Definition : std::ostream & operator<<(std::ostream &os, const Class_Name &obj){
+             os<<obj.str;          // if this method is a friend function of class, where str is a member variable of class.
+             
+             // os<<obj.get_str();  // if this method is not a friend function of class, where str is a member variable of class.
+             
+             return os;             // Returning the reference to ostream so we can keep inserting data into output stream i.e. display object data to console through cout<<
+                                    // Don´t return ostream by value!    
+               } 
+
+--------stream extraction operator (>>)----------
+
+Used when we wwant to insert data directly into our object by cin>> statement.
+
+Declaration Syntax : std::ostream & operator<<(std::ostream &os, const Class_Name &obj) // When method is global and not a friend of class.
+                   // When method is friend of class : friend std::ostream & operator<<(std::ostream &os, const Class_Name &obj);   
+
+Definition : std::istream &operator>>(std::istream &is, Class_Name &obj) 
+            {
+            
+  	    char *buff = new char [1000];
+            is>>buff;
+            obj=Class_Name{buff};
+            delete [] buff;
+            return is;          // Returning a reference to istream so we can keep inserting.
+                                // Update the object passed in.
+            }
+
+
+
+
+
+
+
+
+
+
+
 
 
 

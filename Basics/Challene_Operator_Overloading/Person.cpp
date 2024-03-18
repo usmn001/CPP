@@ -59,8 +59,8 @@ cout<<"Constructor Called";
 
 Person::Person(int h,int w,char *s):str{nullptr},height{h},waist{w}
 {
-heap_ptr = new int;    
-*heap_ptr = h;
+/*heap_ptr = new int;    
+*heap_ptr = h;*/
 
 str = new char ( strlen(s) +1 );
 strcpy(str,s);
@@ -179,7 +179,8 @@ delete[] buff;
 return temp;
 }
 
-/********Binary Operators Definitions******** */
+
+/********Binary Operators Definitions As Member Methods Of Class ******** */
 
 
 
@@ -209,6 +210,48 @@ return true;
 else
 return false;
 }
+
+
+bool Person::operator!=(const Person &rhs)
+{
+
+if ( (strcmp(this->str,rhs.str)!=0) && (this->height!=rhs.height) && (this->waist!=rhs.waist)  )
+{
+return true;
+}
+else
+return false;
+}
+
+// Binary Operator > Member Method 
+bool Person::operator>(const Person &rhs)
+{
+
+if ( (strcmp(this->str,rhs.str)>0) && (this->height>rhs.height) && (this->waist>rhs.waist)  )
+{
+return true;
+}
+else
+return false;
+}
+
+
+// Binary Operator < Member Method 
+bool Person::operator<(const Person &rhs)
+{
+
+if ( (strcmp(this->str,rhs.str)<0) && (this->height<rhs.height) && (this->waist<rhs.waist)  )
+{
+return true;
+}
+else
+return false;
+}
+
+
+
+
+
 
 
 /*********************Global Operators*********************/
@@ -278,11 +321,12 @@ else
 return false;
 }
 
-
+/***********Stream Insertion & Extraction Operator Methods Definitions************/
 
 std::ostream & operator<<(std::ostream &os,const Person &obj)
 {
-os<<"\nHeight Of Person : "<<obj.height<<"\n";
+os<<"Name Of Person : "<<obj.str<<"\n";  
+os<<"Height Of Person : "<<obj.height<<"\n";
 os<<"Waist Of Person : "<<obj.waist<<"\n";
 return os;
 }
