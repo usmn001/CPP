@@ -186,6 +186,7 @@ Mystring_G & Mystring_G::operator=(const Mystring_G &src)
   {
     return *this;
   }
+ 
 this->str = new char[strlen(src.str)+1];
 strcpy(this->str,src.str);
 delete[] src.str;
@@ -219,5 +220,7 @@ return os;
 // Destructor
 Mystring_G::~Mystring_G(){
 cout<<"\n Destructor Called : "<<&this->str<<"\n";
+if(this->str!=nullptr){
 delete[] this->str;
+}
 }

@@ -818,7 +818,7 @@ In class declaration file :                class Class_Name
                                             private: int age;
                                             };
                       
-----------------------------------------------Section : Operator Overloading--------------------------------------------------
+----------------------------------------------Section 14 : Operator Overloading--------------------------------------------------
 
 
 Operator Overloading allows us to use operators such as +,-,=,* to user defined types i.e. Class Objects.
@@ -1007,12 +1007,6 @@ Number temp = *this;
 operator++();
 return temp;
 }
-
-
-
-
-
-
 
 -------------------Binary Operatos(+,-,==,!=,>,< etc) As Member Methods----------------
 
@@ -1237,37 +1231,165 @@ Definition : std::istream &operator>>(std::istream &is, Class_Name &obj)
 
 
 
+----------------------------------------------------------Section 15 : Inheritance----------------------------------------------------------
+
+Inheritance has following features : 
+
+Provides a method for creating new classes from existing classes.
+New class contains data and behaviors of existing class.
+Allows for reuse of existing classes.
+Allows us to focus on common attributes among set of classes.
+
+Allows new classes to modify behaviors of exisitng classes to make it unique.
+      Without actually modifying original class.
+
+
+
+---------------------------------Terminology and Notation---------------------------------
+
+Single Inheritance : A new class is creaed from existing classes , reuse mechanism.
+Multiple Inheritance : A new class is created from two or more classes. 
+
+The class derived from base class is called child class or sub class inherits attributes and operations from base class.
+
+
+                    Base Class
+                        ^
+                        |
+                    Derived Class 
+
+
+Inheritance is transitive.
+
+
+
+------------------Public Inheitance vs Composition--------------------
+
+Both inheritance and composition allows reuse of existing classes.
+
+Public Inheritance : 
+    is-a relationship for e.g. 
+    Employee is a Person.               Where Employee is a class derived from base class Person.
+    Checking Account is a Account       Where Checking Account is a class derived from base class Account.
+    Circle is a Shape.                  Where Circle is a class derived from base class Shape.
+ 
+Composition : 
+  has a relationship
+      Person has a Account.            Where Person a class is using class Account however Person is not inherited from Account instead Person class has Account class code provided by inclusion of
+                                       class Account header file in it i.e. #include<Account.h>
+      Player has a special attack.     Where Player a class is using class special attack however Player is not inherited from Special Attack class.
+      Circle has a location.           Where Circle a class is using class location however Circle is not derived from location class.
+
+
+To make sure inheritance is perfectly suitable before applying inheritance step back and look at design and make sure itś suitable to be applied as inheritance adds more complexity in our code design.
+
+Composition Example : 
+
+#include "Account.h"
+class Person{
+std:: string name;       // has -a name
+Account account;         // has-a account
+};
+
+------------------Deriving Classes from existing classes-------------------
+
+
+C++ derivation syntax : 
+
+Base Class In Class declaration file : Class Base {
+
+
+				         };
+
+Derived Class In Class Derivation File : Class Derived : access-specifier Base_Class {
+
+
+                                          } 
+
+Access specifier can be : public,private or protected. If no access specifier is provided then private inheritance is used.
+
+
+Derived Class can have methods of the same name which are present in parent or base class.
+
+
+------Types of inheritance in C++---------
+
+
+
+public : Most common
+         Establishes is-a relationship between derived and base classes.
+         
+private and protected : Establishes derived class has a base class relationship.
+                        Is implemented in terms of relationship.
+                        Different from composition.         
 
 
 
 
+------------------Protected Mmbers and Class Access---------------------
+
+Class Members (attributes, methods) declared with access specifier protected are : Accessible from the base class itself.
+                                                                                   Accessible from classes derived from base.
+                                                                                   Not Accessible by objects of Base or derived.
+C++ derivation syntax : 
+
+Base Class In Class declaration file : Class Base {
+
+                                       protected:                     // Where access specifier can be private or protected.   
+                                          
+				         };
+
+Derived Class In Class Derivation File : Class Derived : protected Base_Class {      // Where private or protected.
+
+
+                                          } 
+When we inherit a derived class from base class using access specifier protected then base class public members(attributes,methods) also get access specifier as protected.
+Private members of base class are not accessible in derived class.
 
 
 
+When we inherit a derived class from base class using access specifier private then base class public and protected members(attributes,methods) also get access specifier as private.
+The private members of a base class cannot be accessed outside of base class.
+
+
+----------------Constructors and Destructors-------------
+
+Base part of derived object must be initialized first.
+When a derived object is created then : 
+    				Base class constructor executes then.
+   				Derived class constructor executes.
+
+------Constructors and Class Initialization----------
+
+                                 Output
+Base base;                       Base constructor Invoked     
+
+Derived derived;                 Base constructor Invoked 
+                                 Derived class object constructor invoked.
+-----------Destructors----------
+
+Class destructors are invoked in the reverse order as opposed to constructors in the case of inheritance.
+
+Dervied class constructor is invoked first and then base class constructor is invoked.
+
+Each destructor should free resources relevant to itś own class constructor.
 
 
 
+A derived class does not inherit : 
+
+  Base class constructors.
+  Base class destructor.
+  Base class overloaded assignment operators.
+  Base class friend functions.
+  
+However the derived class constructors,destructors and overloaded assignment operators can invoke base class versions.
+
+C++11 allows explicit inheritance of base non special constructors with : using Base::Base; anywhere in the derived class declaration.
+Lots of rules involved, often better to define constructors overselves.  
 
 
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
+---------------------Passing Arguments To Base Class Constructors----------------------
 
 
 
