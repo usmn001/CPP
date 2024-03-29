@@ -1343,9 +1343,14 @@ Derived Class In Class Derivation File : Class Derived : protected Base_Class { 
 
 
                                           } 
-When we inherit a derived class from base class using access specifier protected then base class public members(attributes,methods) also get access specifier as protected.
-Private members of base class are not accessible in derived class.
 
+
+When we inherit a derived class from base class using access specifier protected then base class public members(attributes,methods) also get access specifier as protected.
+Private members of base class are not accessible in derived class. Protected members are accessible only in Derived class. 
+
+Protected memebrs of a base class are :  Accessible from the base class itself.
+                                         Accessible from classes derived from base.
+                                         Not accessible by objects of base or derived.
 
 
 When we inherit a derived class from base class using access specifier private then base class public and protected members(attributes,methods) also get access specifier as private.
@@ -1391,23 +1396,138 @@ Lots of rules involved, often better to define constructors overselves.
 
 ---------------------Passing Arguments To Base Class Constructors----------------------
 
+We can invoke any base class constructor we want in the initialization list of Derived class.
+
+Syntax For Initializing Base Class Constructor : 
+
+class Base {             Base Class
+
+public : 
+ Base();
+ Base(int);
+ .....
+};
+
+Derived::Derived(int x):Base(x),{optional initializers for derived}  // Here we are calling base class constructor first and then initializing derived class constructor attributes.
+{
+//Code                  // This code executes after both derived and base class constructors are invoked.
+
+}  
+
+------------------Copy/Move Constructors and Operator = with Derived Classes------------------
+
+Often we don´t need to provide copy, move constructors and overloaded operator =
+If we do not define them in derived class then the compiler will create them automatically and call the base class version.
+If we do provide derived versions of copy, move constructors and of overloaded operator then we must invoke the base versions explicity ourselves.
+We need to be careful about raw pointers in case base and derived clases have raw pointers. We need to provide them deep copy semantics.
+
+Whenever we assign a derived object to another derived object then l-value derived class object copy assignment or move assignment operator is called and that copy assignment or move assignment operator calls first base class copy or move assignment operator and then performs the relevant operations in the copy assignment or move assignment operator method as shown below 
 
 
+Example : In the following example we have not defined prototypes for class constructors,copy assignment operators, copy constructors. 
+
+class Derived:public Base
+{
+
+private : 
+
+int double_value;
+
+public : 
+
+Derived() : Base()    // Here base class no-args constructor is called
+
+{ 
+cout<<"Derived no-args constructor \n";
+}
+
+Derived(int x) : Base(x),double_value(x*2) // Here base class copy constructor is called
+{ 
+cout<<"int derived constructor \n";
+}
+
+Derived(const Derived &other) : Base(other),double_value(other.double_value) // Here base class copy assignment operator is called , compiler does the slicing i.e. separates base object from passed
+                                                                             // derived object.
+{ 
+cout<<"Derived copy constructor \n";
+}
+
+Derived & operator=(const Derived &rhs)   // Derived class copy assignment operator
+{ 
+cout<<"Derived operator = \n";
+if(this==&rhs)
+return *this;
+Base::operator=(rhs);             // Here we are invoking base class copy assignment operator
+double_value = rhs.double_value;
+}
+
+~Derived();
+
+}
+
+-------------------Object Slicing C++--------------------------
+
+When a derived class object is assigned to a base class object in C++, the derived class object’s extra attributes are sliced off (not considered) to generate the base class object; and this whole process is termed object slicing. In simple words, when extra components of a derived class are sliced or not used and the priority is given to the base class’s object this is termed object slicing. 
 
 
+--------------------------------------Redefining Base Class Methods----------------------------------------------
+
+Derived class can directly invoke base class methods.
+Derived class can override or redefine base class methods.
+
+Example : 
+class Base
+{
+private :
+double balance;
+public :
+
+void deposit(double amount) 
+{
+balance+=amount;
+}
+
+};
 
 
+class Derived:public Base
+{
+public : 
+void deposit(double amount)     // Redefining Base class method  
+{
+amount += some_interest;      
+Base::deposit(amount);          // Invoking base class deposit method.    
+
+}
 
 
+};
 
 
+To call a base class method and pass a argument to it just write this is in any derived class object : Base_Class_Name::Base_Method(argument);
 
 
+Binding in C++ means what compiler understands at compile time i.e. how interprets the redefinition of base class methods in derived class and how it understands invoking of base class methods from 
+derived class. It means which method version will be call´dby a relevant class object as when we redefine base class method in derived class then weǘe two methods with same name. 
+
+The default bining for C++ is static.
+Derived class objects will use Derived::deposit.
+But we can explicitly invoke Base::deposit from Derived::deposit.
+
+Dynamic binding is more powerful than static binding.
 
 
+-----------Multiple Inheritance-------------
+
+By multiple inheritance we mean that a derived class is derived from two or more base classes and we can do it as : 
+
+Class Derived:public base1, public base2
+{
+
+// Derived class statements.
 
 
-
+}
 
 
 
