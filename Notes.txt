@@ -1529,6 +1529,350 @@ Class Derived:public base1, public base2
 
 }
 
+----------------------------------------------------------Section 15 : Polymorphism----------------------------------------------------------
+
+There are two types of polymorphism : 
+
+Compile-Time/Early Binding/ Static Binding :  
+Function Overloading, Operator Overloading which we previously did and base class methods redefinition are forms of compile time or static polymorphism.
+Static binding in C++ means that compiler matches a function call with correct defintion when we have a function with the same name but different parameters.
+
+
+Run-Time Polymorphism : Enables us to assign different meanings to same function at run time.
+Run time polymorphsim allows us to program more abstractly, Let C++ figure out which function to call at run time.
+
+Run time polymorphism is achieven through : Inheritance, 
+                                            Base class pointers or references, 
+                                            virutal functions.
+
+For dynamic polymorphism we must have : 
+  Inheritance.
+  Base Class pointer or base class reference.
+  Virtual Functions. 
+  
+Example : Non Polymorphic In this example C++is doing static binding.
+
+void display(const Account &acc)                       
+{
+acc.display();             // This line will always result in the call of base class display method 
+}
+
+
+Account a;                 // Account is our base class          
+display_account(a);
+
+
+Savings_Account b;         // Savings_Account is a derived from base class Account
+display_account(b);        // Passing derived object to display method will result in function call of display method of base class account always, this is what static binding is
+                           
+
+
+Checking c;
+display_account(c);
+
+
+Trust d;
+display_account(d);
+
+Example : Polymorphic 
+
+Account a;                 // Account is our base class          
+display_account(a);
+
+
+Savings_Account b;         // Savings_Account is a derived from base class Account
+display_account(b);        // Passing derived object to display method will result in function call of display method of base class account always, this is what static binding is
+                           
+
+
+Checking c;
+display_account(c);
+
+
+Trust d;
+display_account(d);
+
+Account *p = new Trust;        // Here pointer p is pointing to a derived class trust object.
+p->withdraw(1000);             // Now compiler will resolve it into trust::withdraw() , where withdraw is virtual in account.
+
+-----Smart Pointers--------
+Smart Pointer Declaration Syntax : std::unique_ptr<Type> pointer_name = std::make_unique<Type> ;
+                                   pointer_name->method;
+                                   
+Example :                          std::unique_ptr<Base> ptr1 = std::make_unique<Derived>(); Where base and derived are our classes
+                                   ptr1->say_hello(); 
+     
+Smart pointers don´t need to be deleted by delete statement.
+
+
+----------------------------------------------------------Virtual Functions------------------------------------------------------------------
+
+Virtual functions are : Redefined functions bound statically.
+                        Overriden functions are bound dynamically.
+                        Virtual functions are overridden.
+                        Allows us to treat all objects generally as objects of the base class. 
+
+
+-----------------------Declaring Virtual functions----------------------------
+
+----------Declaration & Definition In Base Class-----------
+
+Declare the function we want to override as virtual in the base class.
+Virtual functions are virtual all the way down their hierarchy from this point.
+Dynamic polymorphism is only possible through base claas pointer or reference.
+
+
+We can also provide defintion of methods both virtual and non virutal in one source code file src.cpp
+
+class Base_Name
+{
+public : 
+virtual ret_type func_name(type parameters);
+};
+
+Definition : 
+#include "Base_Name"
+
+virtual ret_type func_name(type parameters)
+{
+
+}
+
+
+---------Declaration & Definition In Derived class------------
+
+Override the virtual function in derived class.
+Function signatute and return type must match EXACTLY.
+virtual keyword not required but is best practice.
+if we don´t provide an overridden version it is inherited from itś base class then compiler will do static binding.
+
+class Derived_Name : public Base_Name
+{
+public :
+ret_type func_name(type parameters)
+};
+
+Definition : 
+
+#include "Derived_Name"
+
+virtual ret_type func_name(type parameters)
+{
+
+}
+
+-------------------------------Virtual Destructors----------------------
+
+If we have a derived class containing virtual function, itś object is destroyed by deleting itś storage via the base class pointer and the class has a non virtual destructor. Then the
+behavior is undefined in C++ standard.
+
+Derived objects must be destroyed in the correct order starting at the correct destructor.
+
+To solve this problem we just provide a virtual destructor in our base class containing a virtual function, now all derived classes destructors become virtual too.
+This virtual keyword needs to be mentioned with methods or functions at the time of declaration only if we are doing defintions in another source file, however when doing
+defintion and declaration in one file then just mention virtual one time with defitnion of method which is also the declaration.
+
+
+
+--------Declaration--------
+
+class Base_Name {
+public : 
+virtual return_type func_name(type param);
+virtual ~Base_Name();   // Virtual class destructor.
+};
+
+
+class Derived_Name : public Base_Name
+{
+public :
+ret_type func_name(type parameters);
+virtual ~Derived_Name();   // Virtual Derived class destructor.
+};
+
+
+
+-------Defintion---------
+
+#include "Base_Name"
+
+virtual ret_type Base_Name::func_name(type parameters)
+{
+
+}
+
+
+virtual Base_Name::~Base_Name()             // Virtual Destructor for base class.
+{
+
+}
+
+
+#include "Derived_Name"
+
+virtual ret_type Derived_Name::func_name(type parameters)
+{
+
+}
+
+
+virtual Derived_Name::~Derived_Name()             // Virtual Destructor for base class.
+{
+
+}
+
+
+We cannot have virtual constructors.
+
+-------------------Using the C++11 Override Specifier-------------------
+
+We already redefine base class virtual functions in our derived classes however keeping in mind that the function signature should be same, otherwise it will be statically bound
+and compiler will consider it as function redefinition.
+C++11 standard provides override specifier allows us to override base class virtual functions by changing there function signature slightly.
+Overriding is dynamically bound.
+override specifier needs to be mentioned with virtual methods or functions at the time of declaration only if we are doing defintions in another source file, however when doing
+defintion and declaration in one file then just mention override as postfix one time with defitnion of method which is also the declaration.
+
+
+
+Example : Declaring and Defining Functions For both base and derived class in one source file
+
+class Base_Name {
+public : 
+virtual return_type func_name(type param) const
+{
+cout<<" I am base class method";
+}
+
+virtual ~Base_Name{};   // Virtual class destructor.
+
+};
+
+
+class Derived_Name : public Base_Name
+{
+public :
+
+virtual ret_type func_name(type parameters) const override
+{
+cout<<"I am derived class";
+
+}
+
+virtual ~Derived_Name{};   // Virtual Derived class destructor.
+
+
+};
+
+
+In main.c file : 
+
+Base *ptr1 = new Base();
+ptr1->Base_method();         // Result in "I am base class method"
+
+
+Base *ptr2 = new Derived();
+ptr2->Derived_method();      // Result in "I am derived class method"
+
+
+
+-------------------Using the C++11 Final Specifier-------------------
+
+
+The final specifier like the override specifier is also provided by C++11 standard. 
+
+When final specifier used with a class then it prevents that class from being derived i.e. we cannot derive sub classes from a class.
+
+When final specifier is used at method or function level then it prevents that method from being overriden in derived classes.
+
+
+Example : When used with a class.
+ 
+class My_class final    // Now we cannot have sub classes of this class.
+{
+..
+
+};
+
+class Derived final : public Base {     // Now this derived class cannot be further derived.
+
+
+};
+
+
+Example : When used with a virtual function 
+
+class A final    // Now we cannot have sub classes of this class.
+{
+public : 
+virtual void_do_something();
+};
+
+class B final : public A 
+{                                  
+virtual void_do_something() final;   // Prevent from being further overridden.
+
+};
+
+class C : public B 
+{
+
+virtual void_do_something();                // This statement will produce a compiler error as this class as earlier specified by final specifier cannot be further derived.
+
+
+};
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 
