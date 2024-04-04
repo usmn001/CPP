@@ -1822,38 +1822,175 @@ virtual void_do_something();                // This statement will produce a com
 
 };
 
+------------------------------Polymorphism Using Base Class References-------------------------------
+
+
+We can also use base class references for dynamic polymorphsim provided our base class methods are  : 
+                                         
+                                         Declared with keyword virtual and Derived class methods are declared with override specifier.
+
+Useful when we pass objects to functions that expect a base class reference.
+ 
+Example 1 :
+ 
+Account a;
+Account &ref1;
+ref2.withdraw(1000);    // Account::withdraw, dynamic binding.
+
+Trust t;
+Account &ref2 = t;
+ref1.withdraw(1000);   // Trust::withdraw, dynamic binding.
 
 
 
+Note : Every compiler vendoris indepednent to implement dynamic polymorphism using virtual functions independently according to their design.
 
 
 
+---------------------------------------------Pure Virtual Functions and Abstract Classes------------------------------------------------------
+
+
+Abstract class : The class that cannot be instantiated through objects.
+                 Only used as base class in inheritance hierarchies.
+                 
+
+
+                 The virtual functions of a base class should be declared in class declaration file as : virtual ret_type func_name(passed_arguments) = 0;
+                 
+                 class Base             // Abstract Base class
+                 {
+                 public : 
+                 virtual ret_type func_name(passed_arguments) = 0;  // Pure virtual function.
+                 }  
+                  
+                 The abstract class virtual functions don´t have any implementation but are implemented in concrete classes i.e. classes derived from abstract class.                 
+                 
+Concrete class :  The concrete class is derived from abstract class and can be instantiated from objects and also contains defintions for virutal functions previously 
+                  decalred in base class.
+                   
+                  class Derived 
+                  {
+                  
+                  public :
+                  virtual ret_type func_name(passed_arguments) override  
+                  {
+                    cout<<"Drawing_Line"; 
+                  };                  
+                  
+                  }
+
+In our main source file : 
+
+int main()
+{
+ 
+                Base &ref;
+                Derived d;
+                ref = d;
+                d.func_name();
+
+}      
+     
+
+        
+In the above scenario we have decalred and defined classes in one source .c file thatś why didn´t removed virtual and override keywords with function definitions. 
 
 
 
+------------------------------------Abstract Classes as Interfaces-----------------------------------------
+
+An abstract class has only pure virtual functions.
+These functions provide a general set of services to the user of the class.
+This class is inherited as public.
+Each subclass is free to implement these services as needed.
+Every service (method) must be implemented.
+The service type information is strictly enforeced.
 
 
+C++ does not provide true interfaces.
+We use abstract classes and pure virtual functions to achieve it.
+
+Note : Abstract class derived from interface class can have simple implementations of the pure virtual functions later needed to be overriden in derived classes and this abstract class 
+       should also have it+s own constructor which will be called from derived class constructor however this abstract class cannot be instantiated.
+      
+       The abstract class derived from interface class cannot override the virtual methods of the interface class unlike the sub classes derived from it.
+
+Example : 
+
+I_Tv.h file :   class I_Tv            // Where I_Tv is our Abstract Interface Class
+		{
+		friend ostream & operator<<(ostream &os,const I_Tv &ref);
+		
+		public : 
+		virtual return_type method_name() = 0;                    // Pure Virtual Function
+		virtual return_type method_name(ostream &os) const = 0 ;  // Pure Virtual Function
+                };
+
+I_Tv.cpp :     #include "I_Tv.h"
+
+		ostream & operator<<(ostream &os,const I_Tv &ref)
+		{
+		ref.print(os);
+		return os;
+		}
+
+Tv.h file :     class Tv : public I_Tv                                   // Derived Class which is our abstract class for other sub classes, This abstract class can have simple implementations
+                {                                                        // Of virtual functions but they then need to be overriden in derived classes . This abstract class need to also have
+                                                                         // itś own constructor as it will be initialized through derived class constructor however it cannot be instantiated  
+                public :                                                 // through objets.
+                return_type mtehod_name(ostream &os) const override;
+                virtual bool method_name() override;
+                virtual ~Tv();
+                }
+
+Tv.cpp file :   #include "Tv.h"
+
+		return_type Tv::method_name(ostream &os) const 
+		{
+		os<<"Hello In Tv Class \n";
+		}
+
+		return_type Tv::method_name()
+		{
+		cout<<"Volume Increased \n";
+		return true;
+		}
 
 
+Lcd.h file :    #include "Tv.h"
+                class Tv : public Tv                                   // Derived class inheriing both Abstract Tv and Interface class I_Tv 
+                {       
 
+                public :
+                virtual return_type mthod_name(ostream &os) const override;
+                virtual bool method_name()override;
+                virtual ~Lcd();
+                }
 
+Lcd.cpp file :   #include "Lcd.h"
 
+		return_type Tv::method_name(ostream &os) const 
+		{
+		os<<"Hello In LCD Derived Class \n";
+		}
 
+		return_type Tv::method_name()
+		{
+		cout<<"LCD Volume Increased \n";
+		return true;
+		}
 
+main.c file :
 
+Lcd l1;                       // creating a lcd derived class object named l1  
+I_Tv *lcd_ptr = &l1;          // Creating a Base Interface class I_Tv pointer and copying address of derived class object l1. 
+lcd_ptr->method_name();       // Outputs to "LCD Volume Increased"
+cout<<*ptr;                   // Outputs to "Hello In LCD Derived Class"; 
 
-
-
-
-
-
-
-
-
-
-
-
-
+Tv tv1;
+I_Tv *tv_ptr = &tv1;          // Creating a Base Interface class I_Tv pointer and copying address of derived class object l1. 
+tv_ptr->method_name();        // Outputs to "TV Volume Increased"
+cout<<*tv_ptr;                // Outputs to "Hello In TV Derived Class"; 
 
 
 
