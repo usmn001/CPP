@@ -1994,27 +1994,120 @@ cout<<*tv_ptr;                // Outputs to "Hello In TV Derived Class";
 
 
 
+------------------------------------Chapter 17 : Smart Pointers----------------------------------
 
 
+Some Potential Issues With Raw Pointers : 
+
+Uninitialized (wild) Pointers : Pointer not initialized to NULL and then used in program.
+Memory Leaks : Heap Memory Pointer lost in a local function or program block and thus we fail to deallocate heap memory.
+Dangling Pointers : Pointer pointing to a storage thinking itś valid but itś been deallocated. This issue will occur when we use double pointers ( pointer containing address of another pointer)
+                    i.e **ptr.
+Not Exception Safe.
 
 
+C++ Smart Pointers are  : Objects.
+                          They can only point to heap allocated memory.
+                          Automatically call delete when no longer needed.
+                          Adhere to RAII (Resource Acquisition Initialization) Principles. 
 
+Types of C++ Smart Pointers are : Unique Pointers (unique_ptr).
+                                  Shared Pointers (shared_ptr). 
+                                  Weak Pointers   (weak_ptr). 
+                                  Auto Pointers   (auto_ptr).    Deprecated.
 
+Smart Pointers are provided in memory header file containing smart pointer classes and functions so we need to include it in our source file i.e. : #include <memory>
 
+C++ smart pointers are  : Defined by class templates.
+                          Wrapped around a raw pointer.
+                          Support Overloaded Operators i.e. Dereference *, Member selection ->  
+                          Don´t support pointer arithmetic.
+                          Can have custom deleters.
 
+Syntax of declaring a smart pointer is : std::smart_pointer<Smart_Pointer_Class> ptr_name = memory_addres; 
+     
+                                          // Where Smart Pointer Class can be : 
+                                                                           shared_ptr, 
+                                                                           unique_ptr,
+                                                                           weak_ptr.
 
+---------------RAII - RESOURCE ACQUISITION IS INITIALIZATION------------------------------
 
+RAII is a common idion or pattern used in software design based on container object lifetime.
 
+RAII objects are allocated on stack.
 
+   .Resource Acquisition Can Be : Open a file,  
+                                  Allocation Of Memory.
+                                  Acquires a lock.
+   .Is initialization :   Resource is acquired in a constructor.   
+ 
+   .Resource relinquishing  :  Happens in destructor for e.g. close the file, deallocating memory, release lock.
 
+So it means smart pointers which are actually objects have methods, constructors and destructors for acquistion,initialization and deinitialization/relinquishing purposes.
+                                       
 
+---------C++11 Smart Pointer : unique_ptr----------
 
+unique_ptr smart pointers cannot be shared i.e. every unique_ptr smart pointer is unique . itś similar to restrict type qualifier case when used with C.
 
+Example 1 : Creating, intializing and using
 
+          { 
+             std::unique_ptr<int> ptr1 {new int{100} };
+             cout<<*ptr1 ;
+             *ptr1=200;
+             cout<<*ptr1;
+         }
 
+unique_ptr - useful methods
+        
+         
+        {
+            std::unique_ptr<int> ptr {new int {100} };  
+            cout<<ptr.get();    // this statement will print the address of smart pointer which is basically the address of underlying associated raw pointer 
+            ptr.reset();        // now ptr is initialized to nullptr
+            
+            if(ptr)             // checking is pointer ptr is not null
+        }  // ptr automatically deleted   
 
+ We can also compare smart unique pointers.
+ 
+ Example 2 : 
+            {
+             std::unique_ptr<Account> ptr {new Account {"Larry"}};   // Here our unique pointer is pointing to an object of type Account class.
+             std::cout<<*ptr.      // operator overloaded method will be called for object     
+             ptr->deposit(1000);   // Accessing object methods.
+             ptr->withdraw(500);
+ 
+ 
+            }
+ 
+Example 3 : unique_ptr - vectors and move 
+                 {
+             
+             vector<unique_ptr<int>> vec;  // vector is created containing unique_ptr pointing to integers.
+             unique_ptr<int> ptr;
+             vec.push_back(ptr)   ;        // this statement will result into error
+             
+             vec.push_back(move(ptr);      // this statement will move the smart unique pointer to vector as ptr object gives up the ownership of pointer
+                                           // the vector then owns the pointer and initializes the pointer to null. this is just like a object.    
+            }
+ 
+ --------unique_ptr -make_unique (C++14)------------
 
+C++14 provides us make_unique keyword for initializing and creating a type T and assign it to the unique_ptr in one step. The unique_ptr actually replaces the new keyword.
+ 
+Syntax : std::unique_ptr<type> ptr_name = make_unique<type> (initialization_value);
 
+Example 4: 
+        {
+             unique_ptr<int> p1 = make_unique<int>(100);
+             unique_ptr<Account> p2 = make_unique<Account>("Curly",5000);                
+             auto p3 = make_unique<Player>("Hero",100,100);  // creating an object of class player type, providing initialization values to constructor.
+                                                             // compiler is automatically deducing the type for pointer p3 so we don´t need to define the type of it.
+                                                             // like unique_ptr<type> ptr_name = address or unique_ptr<type> ptr_name {new Type {initialization value} }; 
+        }
 
 
 

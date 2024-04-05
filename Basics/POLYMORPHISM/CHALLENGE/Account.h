@@ -16,9 +16,9 @@ protected:
     double balance;
 public:
     Account(string name=def_name,double balance=def_balance);
-    virtual bool deposit(double amount) = 0;
-    virtual bool withdraw(double amount) = 0;
-    virtual string test() = 0;
+    virtual bool deposit(double amount) = 0;   // Simple virtual method  defined in our abstract class.
+    virtual bool withdraw(double amount) = 0;  // Simple virtual method  defined in our abstract class.
+    virtual string test() = 0;                 // Simple virtual method  defined in our abstract class.
     virtual ~Account() = default;
 
 
