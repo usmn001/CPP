@@ -12,17 +12,39 @@ int main(){
 
 // Example 1 :
 
+
+int arr[] = {1,2,3};
 vector <int> number {0,1,2,3};
 vector<float> temp  { 0.1, 0.2};
 
-for(auto a :number)   // Iterating over vector number using modern range based for loop
+
+number.pop_back();
+
+cout<<number.size()<<"\n";
+
+for(auto a : number)   // Iterating over vector number using modern range based for loop
+{   
+cout<<a<<"\n";
+}
+
+
+/* For understanding
+
+for(int i = 0;i<<sizeof(arr);i++){
+cout<<arr[i];    
+}*/
+
+ 
+
+for(auto a : number)   // Iterating over vector number using modern range based for loop
 {
 cout<<a<<"\n";
-
 }
+
 
 cin>>temp.at(0);         // Accessing 0 index element of vector object temp.
 cout<<temp.at(0);       //  Accessing 0 index element of vector object temp.
+
 
 
 // Example 2 : Vector inside a vector
@@ -35,10 +57,16 @@ vector<vector<float>> result
 
 };
 
+
+
 cout<<"\n student 1 result of 1st subject : "<<result.at(0).at(0)<<"\n";
 cout<<"\n student 1 result of 2nd subject : "<<result.at(0).at(1)<<"\n";
+
+
+
 cout<<"\n student 2 result of 1st subject : "<<result.at(1).at(0)<<"\n";
 cout<<"\n student 2 result of 2nd subject : "<<result.at(1).at(1)<<"\n";
+
 
 
 
@@ -103,20 +131,6 @@ cout<<vector1.at(0)<< "   "<<vector1.at(1)<<"\n";
      count = count +1;
      }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 return 0;    

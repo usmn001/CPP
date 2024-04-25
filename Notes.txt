@@ -2542,83 +2542,531 @@ catch (const IllegalBalanceException &ex)
 std::cerr<<ex.what()<<std::endl;
 }
 
+-----------------------------------------------------------------------Section 19 : I/O and Streams-------------------------------------------------------------------------
 
+C++ uses streams as an interfact between the program and input and output devices.
+streams are independent of actual device.
+streams send and receive sequence of bytes.
+Input streams provides data to program.
+Output stream receives data to the program.
 
 
+The header files such as iostream , fstream, iomainp contains classes (ios,ifstream,ofstream,fstream,stringstream) 
+that we can use in our C++ program for file I/O Operations. Description of each header file is : 
 
+iostream : provides defintions for formatted input and output from/to streams .
+fstream  : provides defintions for formatted input and output from/to file streams .
+imanip   : provides defintions for mainpulators used to format stream I/O .
 
 
+--------------------------File Streams and I/O-----------------------------
 
+Global Stream Objects  : 
 
+cin  : standard input stream, instance of istream class, default connetected to standard input device (console), buffered .
 
+cout : standard output stream, instance of ostream, default connetected to standard output device (console), buffered .
 
+cerr : standard error stream, instance of ostream class (unbuffered), default connetected to standard error device (console) . 
 
+clog : standard log stream,instance of ostream class (unbuffered), default connetected to standard log device (console). 
 
 
+These global objects are initialized before main executes.
+Best practice is to use cerr for error messages and clog for log messages.
 
 
 
+----------------------------Stream Manipulators----------------------------
 
+To use stream manipulators don´t forget to include iomanio file i.e. #include<iomanip>
 
 
+These stream manipulators are similar to output specifiers of C used with printf,scanf, getline and other statements.
 
 
+Streams have useful member functions to control formatting.
+Stream member functions Can be used on input and output streams.
+The time of effect on stream values.
+Can be used as member functions or as a manipulator.
 
 
+Example : cout.width(10);   // stream manipulation using member function
+          cout<<setw(10);   // manipulator.
 
+Common stream manipulators are :
 
+Boolean : boolalpha,noboolalpha.
 
+integer : dec,hex,oct,showbase,noshowbase,noshowpos,uppercase,nouppercase.
 
+floating point : fixed,scientific,setprecision,showpoint,noshowpoint,showpos,noshowpos.
 
+filed width,justification and fill : setw,left,right,internal,setfill.
 
+others : endl,flush,skipws,noskipws,ws.
 
 
+-----------Stream Manipulators : Boolean-----------------
 
 
+if we are making a comparison of two types primitive or user defined such as objects using output stream cout such as : 
 
+cout<<(10==20)<<"\n"; this statement will output 1 or 0; 
 
+We can define the format of the output of this cout stream either 1 , 0 or true , false by using boolaplha or noboolalhpa stream manipulators such as : 
 
+cout<<boolalpha;    // true or false. 
 
+cout<<noboolalpha   // 1 or 0.
 
+We can also achieve same functionality by setting the flags of output stream cout such as : cout.setf(ios::boolalpha);
+                                                                                            cout.setf(ios::noboolalpha);     
 
+To reset to default output of cout stream we can do cout<<resetiosflags(ios::boolalpha);
 
+------------------Stream Manipulators - Integers-------------------
 
+We can format the integers to be displayed as hexadecimal, ocatal , binary by using the format specifiers :
 
+dec : for decimal format i.e. base 10.
+noshowbase : for showing hexadecimal or octal.
+nouppercase : for displaying prefix and hex values.
+noshowpos - "+" is displayed for all positive numbers.
 
 
+Example :    
 
+using std::showbase;
+using std::cout;
 
+int num{255};
 
+cout<<showbase;   // now number system base indication i.e. x for hexadecimal and 0 for octal will br printed with out put stream statements.
 
 
+cout<<dec<<num;   // display 255
+cout<<hex<<num;   // display 0xff
+cout<<oct<<num;   // display 0377
 
 
+cout<<showbase<<uppercase;
+cout<<hex<<num;   // display 0Xff
+           
 
+Example 2 : 
+using std::showbase;
+using std::cout;
 
+int num1{255};
+int num2{-255};
 
+cout<<showpos;
 
+cout<<num1;   // outputs +255;
+cout<<num2    // outputs -255;
 
 
+--------------------------Stream Manipulators - Floating Point-----------------------------
 
+Floating Point number manipulators : 
 
+setprecision : number of digits to be displayed inclduing before and after decimal point (default is 6).  When defining precision without fixed more digits before decimal point will be displayed.
+fixed : not fixed to a specific number of digits after decimal point  by default number of digits displayed after decimal point are 6. 
+noshowpoint : trailing zeros are not displayed.
+nouppercase : displaying scientifc notation.
+noshowpos : + is displayed for positive numbers.
 
+Example :  
 
+double num {1234.5678} ;
+cout<<num<<"\n";   // output : 1234.56
 
+double num {123456789.987654321} ;
+cout<<num<<"\n";   // output : 1.23457e+008
 
+cout<<setprecision(9);
+cout<<num<<"\n";   // output : 123456790
 
+cout<<fixed;
+cout<<num<<"\n";   // output : 123456789.987654              
 
+cout<<setprecision(3)<<fixed;
+cout<<num<<"\n";   // output : 123456789.988
 
 
+cout<<setprecision(3)<<scientific;
+cout<<num<<"\n";   // output : 1.23e+008
 
+cout<<setprecision(3)<<scientific<<uppercase;
+cout<<num<<"\n";   // output : 1.23E+008
 
+cout<<setprecision(3)<<scientific<<fixed<<showpos;
+cout<<num<<"\n";   // output : +123456789.988
 
+double num2 {12.34};
 
+cout<<showpoint<<num;         // Output : 12.3400
 
+------------------Stream Manipulators : Align and Fill--------------------------
 
 
+The field width determines the minimum number of characters to be written in some output representations. If the standard width of the representation is shorter than the field width, the representation is padded with fill characters at a point determined by the format flag adjustfield (one of left, right or internal).
 
 
+We can control the field width of output stream cout by using setw:
 
+Example :         double num{1234.5678}; 
+                  string hello{"Hello"};
+                  cout<<setw(10)<<num<<hello;   // Here we are making field with of 10 for num
+
+we can use setfill() only when setw() is used.  setfill() fills empty spaces with a character defined in brackets i.e. setfill('filled_char');
+                    
+
+----------------------------Files,Streams and I/O--------------------------------
+
+File operations in C++ are similar to file operations in C except that we need to include fstream or ifstream header file. The steps to interface with a file are : 
+
+#include<fstream>
+Declare an fstream or ifstream object similar to FILE *fptr in C;
+Connect to file on your file system by opening it for reading or writing similar to fopen("FILE PATH",permissions); 
+Read data from the file via the stream similar to fread of C.
+Close the stream similar to fclose of c.
+
+
+-----Syntax : Opening a file for reading with fstream
+
+std::fstream in_file {"file_name.ext",std::ios::in}; // where in_file is fstream object, parameter std::ios::in specifies that we have opened this file for reading.
+
+To open same file for reading in binary we do : 
+std::fstream in_file {"file_name.ext",std::ios::in | std::ios::binary }; // where in_file is fstream object, parameter std::ios::in specifies that we have opened this file for reading.
+                                                                         //  parameter std::ios::binary specifies that we have opened this file for reading in binary mode.
+-----Syntax : Opening a file for reading with ifstream class.
+ 
+If we want to open a file only in read only mode then we can also use ifstream class i.e.
+
+std::ifstream in_file {"file_name.ext",std::ios::in}; // where in_file is ifstream object, parameter std::ios::in specifies that we have opened this file for reading.
+                                                      // std::ios::in is optional in this case as we are opening file using ifstream used for only reading.
+
+std::fstream in_file {"file_name.ext",std::ios::binary };
+
+------Syntax : Opening a file for reading with open
+
+std::ifstream in_file;
+
+std::string file_name;
+
+cin>>file_name ; // get the file name from user
+
+in_file.open(file_name);  // similar to fopen("file_name",permission);
+
+in_file.open(file_name,std::ios::binary); // opened file in binary mode.
+
+
+-------Syntax : Checking file opened successfully 
+
+if(in_file.is_open()){   // here is_open returns true file opened successfully, false file not opened successfully    
+
+
+}
+
+Similarly we can also do : 
+
+if(in_file){   // here we are checking the stream object in_file if itś false then file not opened.
+
+
+}
+
+
+To close file object in_file we do : in_file.close(); // We always need to close any open files to flush out any unwritten data
+
+--------Syntax : Reading file Object using extraction operator >> similar to cin
+
+
+int num{};
+double total{};
+
+std::string name{};
+
+in_file >> num;
+
+in_file>>total>>name;    // here we are reading a file data and putting it into total and name variables.
+
+
+---------Syntax : Reading an entire line from a file using getline
+
+string line{};
+
+getline(in_file,line};   // here we are reading a entire line from file in_file and putting that line into line string variable.
+
+To Keep on reading a text file until itś end we can check for end of file condition similar to feof in c used with a file descriptor .
+
+-----------Example : Reading an entire file 
+std::ifstream in_file {"..../file_name.txt"};
+std::string line{};
+
+if(!in_file) 
+{
+cerr<<"File open error"<<"\n";
+return 1;
+}
+
+while(!in_file.eof())            // If file has not reached itś end
+{
+getline(in_file,line);           // read the file line.  
+cout<<line<<"\n";                // display the file line.
+
+}
+
+
+in_file.close();
+
+------------Example : Reading an entire file
+
+std::ifstream in_file {"..../file_name.txt"};
+std::string line{};
+
+if(!in_file) 
+{
+cerr<<"File open error"<<"\n";
+return 1;
+}
+
+while(getline(in_file,line))     // If the file is read successfully and we have not reached end of file, this condition is true
+{  
+cout<<line<<"\n";                // display the file line.
+
+}
+
+in_file.close();
+
+------------Reading Text file one character at a tile using get
+
+
+std::ifstream in_file {"..../file_name.txt"};    // in this way using ellipses we don´t need to specify exact path for file as IDE automatically find itś path.
+char c;
+
+if(!in_file) 
+{
+cerr<<"File open error"<<"\n";
+return 1;
+}
+
+while(in_file.get(c))    // Reading one character from file in unformatted mode specified by stream object in_file, 
+                         // this condition of while loop stands true if file is read successfully and we have not reached itś end
+{  
+cout<<line<<"\n";                // display the file line.
+
+}
+
+in_file.close();
+
+
+
+------------------Writing To a Text file------------------
+
+fstream and ofstream are commonly used for output files, similar to reading a text file. The main steps are :
+
+1. #include <fstream>
+2. Declare an fstream or ofstream object.
+3. Connect it to a file on your system (opens it for writing).
+4. Write data to the file via the stream.
+5. Close the stream.
+
+
+
+The above operations are similar to file operations we have in C language i.e. using fopen, fread, fwrite and e.t.c.
+
+Just like C in C++ : Output files will be created if they don´t exist.
+                     Output files will be overwritten(truncated) by default.
+                     Can be opened so that new writes append.
+                     Can be open in text or binary modes. 
+
+
+
+-----Syntax : Opening a file for writing with ofstream
+
+std::ofstream out_file {"file_name.ext",std::ios::out}; // where out_file is fstream object, parameter std::ios::in specifies that we have opened this file for reading.
+
+To open same file for writing in binary we do : 
+std::fstream out_file {"file_name.ext",std::ios::out | std::ios::binary }; // where out_file is fstream object, parameter std::ios::out specifies that we have opened this file for writing.
+                                                                         //  parameter std::ios::binary specifies that we have opened this file for writing in binary mode.
+
+-----Syntax : Opening a file for reading with ofstream class
+ 
+If we want to open a file only in read only mode then we can also use ifstream class i.e.
+
+std::ofstream out_file {"file_name.ext",std::ios::out}; // where in_file is ifstream object, parameter std::ios::in specifies that we have opened this file for reading.
+                                                      // std::ios::out is optional in this case as we are opening file using ifstream used for only reading.
+
+std::ofstream in_file {"file_name.ext",std::ios::binary };
+
+
+
+-------------Syntax : Append, Truncate, Seek On File---------------
+
+//truncate (discard contents ) when opening     , this is the default mode in which a file will be opened for write.
+
+std::ofstream out_file {"../myfile.txt",std::ios::trunc};
+
+//append on each write
+
+std::ofstream out_file {"../myfile.txt",std::ios::app};
+
+//seek to end of stream when opening
+
+std::ofstream out_file {"../myfile.txt",std::ios::ate};
+
+
+
+------Syntax : Opening a file for reading with open----------------
+
+std::ofstream out_file;
+
+std::string file_name;
+
+cin>>file_name ; // get the file name from user
+
+out_file.open(file_name);  // similar to fopen("file_name",permission);
+
+out_file.open(file_name,std::ios::binary); // opened file in binary mode.
+
+
+-------Syntax : Checking file opened successfully 
+
+if(out_file.is_open())    // here is_open returns true file opened successfully, false file not opened successfully 
+{                                  
+//read file
+
+} 
+
+Similarly we can also do : 
+
+if(out_file){   // here we are checking the stream object out_file if itś false then file not opened.
+
+
+}
+
+
+To close file object in_file we do : out_file.close(); // We always need to close any open files to flush out any unwritten data
+
+
+--------Syntax : Writing file Object using extraction operator << similar to cout
+
+
+int num{};
+double total{};
+
+std::string name{};
+
+out_file << num;
+
+out_file<<total<<name;    // here we are writing a file data and putting it into total and name variables.
+
+
+-------------------Syntax : Copying a text file one line at a time---------------------------
+
+
+
+std::ifstream in_file{"myfile.txt"};
+std::ofstream out_file{"copy.txt"};
+
+if(!in_file) 
+{
+cerr<<"File open error"<<"\n";
+return 1;
+}
+if(!out_file)
+{
+cerr<<"File create error"<<"\n";
+return 1;
+}
+
+// Copying an entire file one line at a time
+
+std::string line{};
+
+while(getline(in_file,line))     // If the file is read successfully and we have not reached end of file, this condition is true
+{  
+out_file<<line<<endl;            // Here we are writing on out_file object the data read in line string variable.
+}
+
+in_file.close();
+out_file.close()
+
+
+// Copying a text file one character at a time using get/put
+
+char c;
+while(in_file.get(c))   // Here we are reading one character from input file
+ out_file.put(c);       // Here we are writing one character read from input file to output text file.
+ 
+ in_file.close();
+ out_file.close();
+
+
+
+---------------------------------------Using String Streams---------------------------
+
+
+String Streams :     Allows read and write operations to/from strings in memory much similar to reading and writing to files. 
+                     Very powerful and useful for data validation.
+
+We can use the classes stringstream  : for reading and writing to stringstreams.   
+                       istingstream  : for reading string streams.
+                       ostringstream : for writing string streams.
+
+The steps are similar to reading and writing files using streams i.e.
+
+1.#include <sstream>
+2. Declare stringstream,istingstream, ostringstream  object.
+3: Connect it to a std::string.
+4. Read or write data from/to string stream using formatted I/O.
+
+
+----------Syntax : Reading String Streams--
+
+
+std::int num{};
+std::double total{};
+std::string name{};
+std::string info{"Moe 100 1234.5"};
+
+std::istringstream iss{info};      // Here we have created istring stream object iss and connected it to string info
+iss>>name>>num>>total;             // Here we are outputting,reading data values stored in string stream to name,num,total variables.
+
+
+
+----------Syntax : Writing String Streams-----
+
+
+std::int num{100};
+std::double total{1234.5};
+std::string name{"Moe};
+
+std::ostringstream oss{};                    // Here we have created ostring stream object oss
+oss<<name<<" "<<num<<" "<<total;             // Here we are outputting,reading data values stored in string stream to name,num,total variables.
+std::cout<<oss.str()<<std::endl;             // Outputting data written to string stream , string stream class has itś own internal output buffer.
+
+
+-------Example Data Validation----
+
+
+int value {};
+string input{};
+cout<<"Enter an integer";
+cin>>input;
+
+stringstream ss{input};
+
+if(ss >> value}          // Here we are reading from string stream object ss and outputting read data to variable value, if the extraction of data from string stream is successfull then we have 
+                         // successfully read data otherwise itś false.
+{
+std::cout<< "An integer was created";
+}
+else
+std::cout<<"An integer was not created";
+std::cin.ignore(std::numeric_limits<std::streamsize>::max(),'\n');   // Here we are ignoring data in the string stream besides integer as string stream is connected to input.
 
 
 
