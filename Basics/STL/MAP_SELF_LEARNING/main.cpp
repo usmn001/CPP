@@ -1,5 +1,5 @@
 // Section 20
-// Challenge 3 - Solution 
+// Challenge 3  
 // Maps and Sets
 
 #include <iostream>
@@ -13,8 +13,6 @@
 // Used for Part1
 // Display the word and count from the 
 // std::map<std::string, int>
-
-
 
 void display_words(const std::map<std::string, int> &words) {
     std::cout << std::setw(12) << std::left << "\nWord"
@@ -63,16 +61,22 @@ void part1() {
     std::map<std::string, int> words;
     std::string line;       
     std::string word;   
-    std::ifstream in_file {"/home/musman/Desktop/CPP/Basics/STL/Resources/Challenge_3_Solution/words.txt"};
+    std::ifstream in_file {"/home/musman/Desktop/CPP/Basics/STL/Challenge_3/words.txt"};
+    
     if (in_file) {
-        while (std::getline(in_file, line)) {
-            //std::cout << line;
-            std::stringstream ss(line);
-            while (ss >> word) {
-                word = clean_string(word);
-                words[word]++;      // increment the count for the word in the map
-            }
-        }
+        
+        // You implement this code
+   
+      while(std::getline(in_file,line))
+      {
+        std::istringstream ss{line};
+        while(ss >> word)
+        {
+        word=clean_string(word);
+        words[word]++;
+        }         
+      } 
+       
         in_file.close();
         display_words(words);
     } else {
@@ -80,24 +84,32 @@ void part1() {
     }
 }
     
-// Part1 process the file and builds a map of words and a 
+// Part2 process the file and builds a map of words and a 
 // set of line numbers in which the word appears
 void part2() {
     std::map<std::string, std::set<int>> words;
     std::string line;
     std::string word;
-    std::ifstream in_file {"/home/musman/Desktop/CPP/Basics/STL/Resources/Challenge_3_Solution/words.txt"};
+    std::ifstream in_file {"/home/musman/Desktop/CPP/Basics/STL/Challenge_3/words.txt"};
+     std::istringstream ss{line};
+     int cnt{};
     if (in_file) {
-        int line_number = 0;
-        while (std::getline(in_file, line)) {
-            //std::cout << line;
-            line_number++;
-            std::stringstream ss(line);
-            while (ss >> word) {
-               word = clean_string(word);
-               words[word].insert(line_number);
-            }  
-        }
+     
+        // You implement this code
+       while(getline(in_file,line))
+      {
+        std::istringstream ss{line};
+        cnt+=1;     
+
+       if(ss >> word)
+        {
+        word=clean_string(word);
+        cnt+=1;
+        words[word].insert(cnt);
+        }         
+
+
+      }
         in_file.close();
         display_words(words);
     } else {
