@@ -45,7 +45,7 @@ void display_words(const std::map<std::string, std::set<int>> &words)
 // a string and returns the clean version
 std::string clean_string(const std::string &s) {
     std::string result;
-    for (char c: s) {
+    for (const char &c: s) {
         if (c == '.' || c == ',' || c == ';' || c == ':')
             continue;
         else
@@ -61,11 +61,12 @@ void part1() {
     std::map<std::string, int> words;
     std::string line;       
     std::string word;   
-    std::ifstream in_file {"/home/musman/Desktop/CPP/Basics/STL/Challenge_3/words.txt"};
+    std::ifstream in_file {"/home/musman/Desktop/CPP/CPP_UDEMY/STL/MAP_Challenge/words.txt"};
     
-    if (in_file) {
+    if (in_file.is_open()) {
         
         // You implement this code
+        std::cout<<"File opened Successfully";
    
       while(std::getline(in_file,line))
       {
@@ -79,7 +80,9 @@ void part1() {
        
         in_file.close();
         display_words(words);
-    } else {
+        std::cout<<"\n";
+    } 
+    else if (in_file.is_open()==false){
         std::cerr << "Error opening input file" << std::endl;
     }
 }
@@ -87,21 +90,22 @@ void part1() {
 // Part2 process the file and builds a map of words and a 
 // set of line numbers in which the word appears
 void part2() {
-    std::map<std::string, std::set<int>> words;
+    std::map<std::string, std::set<int>> words; /*Here we are creating associative container map named words containing string*/
     std::string line;
     std::string word;
-    std::ifstream in_file {"/home/musman/Desktop/CPP/Basics/STL/Challenge_3/words.txt"};
+    std::ifstream in_file {"/home/musman/Desktop/CPP/CPP_UDEMY/STL/MAP_Challenge/words.txt"}; /*Here we are associating a file stream with a file*/
      std::istringstream ss{line};
      int cnt{};
-    if (in_file) {
-     
+    if (in_file.is_open()) 
+    {
+         std::cout<<"File opened Successfully";
         // You implement this code
-       while(getline(in_file,line))
+       while(getline(in_file,line)) /* Reading a line till end of it from file descriptor in_file and putting it in string type line*/
       {
         std::istringstream ss{line};
         cnt+=1;     
 
-       if(ss >> word)
+       if(ss >> word) /*  word read from*/
         {
         word=clean_string(word);
         cnt+=1;
@@ -112,7 +116,9 @@ void part2() {
       }
         in_file.close();
         display_words(words);
-    } else {
+    } 
+    else if (in_file.is_open()==false)
+    {
         std::cerr << "Error opening input file" << std::endl;
     }
 }
