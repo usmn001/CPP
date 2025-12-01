@@ -1,0 +1,255 @@
+-----------------------------------------------------------------------Section 18 : Exception Handling--------------------------------------------------------------
+
+Exception Handling should be used only for synchronous code not for asynchronous code.
+
+
+Exception handling is : Dealing with extraordinary situations.
+                        Indicates that an extraordinary situation has been detected or has occurred. 
+                        Program can deal with extraordinary situations in a suitable manner.
+
+Causes Of Exceptions : Insufficient Resources.
+                       Missing resources. 
+                       Invalid Operations.  
+                       Range Violations.    
+                       Underflows and Overflow.
+                       Illegal data and others. 
+
+Exception Safe : When our code handles exceptions ( very difficult in C++).
+
+
+---------------------Exception Handling------------------------
+
+C++ Syntax Of Exception Handling : 
+
+throw  : throws an exception 
+         followed by an argument.
+         
+try{ code that may throw an exception }         
+         we place code that may throw an exception in a try block.
+         if the code throws an exception the try block is exited.
+         the thrown exception is handled by a catch handler.
+         if no catch handler exists the program terminates.
+
+catch(Exception ex)      {code to handle the exception}
+         code that handles exception.
+         can have multiple catch handlers.
+         may or may not cause programs to terminate. 
+
+Exception Handling Example :
+           
+        double average {};      
+        try
+        {
+        
+        if(exception_condtion=value);
+        {
+             throw exception_value;
+        }
+         average = sum/total;              // This statement will execute only when no exception occurs.         
+        }
+
+        catch(type &ex)                    // Eception Handler Code.
+        {
+          cerr<<" can´t divide by zero "<<"\n";
+        }
+           
+
+Any function which can throw a function is placed in try block for e.g. i.e.
+
+Example : Throwing Exception From Function
+
+double calculate_avg(int sum,int total) 
+{
+   if(total==0)
+     throw 0;                                       // Here C++ will be unwinding the stack looking for the function containing the catch handler and if no handler is found then program terminates
+                                                    // in a un predictable way.
+   return static_cast<double>(sum)/total;  
+}
+
+double average{};
+
+try
+{
+average = calculate_avg(sum,total);
+cout<<average<<"\n";
+}
+catch(int &ex)   
+{
+cerr<<"You can´t divide by zero"<<"\n";
+}
+cout<<"Bye"<<"\n";
+
+
+-----------------------------Handling Multiple Exceptions------------------------------------
+
+We can throw multiple exceptions from a function.
+
+To throw multiple exceptions we just need to have multiple catch handlers i.e. exception handlers according to the thrown value.
+
+
+Example : Catching multiple exceptions from a function
+
+double miles_per_gallon{};
+
+double calculate_mpg(int miles, int gallons)
+{
+
+if(gallons == 0)
+ throw 0;
+
+if(miles < 0 || gallons < 0 )
+ throw std::string {"Negative value error"};
+
+return static_cast<double> (miles)/gallons;
+}
+
+try
+{
+
+miles_per_gallon = calculate_mpg(miles,gallon);  // Call´d function throwing exceptions
+cout<<miles_prer_gallon<<"\n";
+
+} 
+
+catch(int &ex)
+{
+cerr<<"You can´t divide by zero";<<"\n";
+}
+
+catch(string &ex)
+{
+cerr<<ex;<<"\n";
+}
+
+
+catch(...)                   // This is a general purpose catch handler where we can throw all types and values, but we don´t have access to exception type.
+{ 
+cerr<<"Unknown Exception"; 
+}
+
+
+
+cout<<"Bye"<<"\n";
+
+
+------------------------Stack Unwinding------------------------------
+
+Stack unwinding is a process occurs when a exception is thrown but not handled in the current scope then C++ tracks and finds relevant exception handler while traversing through all the functions relvant to the call stack.
+In Stack unwinding function in which exception was not caught terminates and is removed from the call stack.
+If a try block was used to then catch blocks are checked for a match.
+If no try block was used or the catch handler doesn´t match stack unwinding occurs again.
+If the stack is unwounded back to main and no catch handler handles the exception the program terminates.
+
+
+
+-----------------------Creating User-Defined Exception Classes-----------------..
+
+We can create exception classes and throw instances of those classes.
+
+When we have exception classes then : Best practice is to throw an object not a primitive type.
+                                      Throw an object by value.   
+                                      Catch an object by reference (or const reference).
+
+
+
+Example : 
+
+class DivideByZeroException
+{
+
+
+};
+
+class NegativeValueException
+{
+
+
+};
+
+
+double calculate_mpg(int miles,int gallons) 
+{
+
+if (gallons == 0) 
+  throw DivideByZeroException();              // Here we are throwing user defined exception class, In our case we are using default constructor. 
+
+if (miles < 0 || gallons < 0) 
+  throw DivideByZeroException();              // Here we are throwing user defined exception class, In our case we are using default constructor. .
+
+return static_cast<double>(miles)/gallons;
+  
+
+
+}
+
+
+so catch block can catch an object by vale and also by reference and address ( when we use pointer).
+
+
+
+-----------------------------------Class Level Exceptions-------------------------------------
+  
+Exceptions can also be thrown from within a class.
+
+Method      :    These work the same way as they do for functions as weǘe seen.
+
+Constructor :    Constructors may fail ( Heap alllocation fails, file cannot be opened or some other resource allocation, initialization, condition check)
+                 Constructors do not return any value.   
+                 Throw an exception in the constructor if you cannot initialize an object.
+
+Destructor :     Do not throw exceptions from your destructor.     
+ 
+
+---------------------------Exception Class Hierarchy----------------------------------------
+
+C++ provides a class hierarchy of excpetion classes.
+   std::exception is the base class.
+   all subclasses implement the what() virtual function.
+   we can create our own user defined exception subclasses.
+
+virtual const char *what() const noexcept;   // This function returns a C-Style string with a description of the exception that has occurred.
+ 
+
+Example : Deriving our class from std::exception
+
+
+The following class is declared and defined in the same file.
+
+class IllegalBalanceException: public std::exception                   
+{
+public : 
+IllegalBalanceException() noexcept = default;    // The keyword noexcept means that no exception will occur in the method, default means that default construcotr is provided.
+~ĨllegalBalanceException() = default;
+
+virtual const char* what() const noexcept       // The keyword noexcept means that no exception will occur in the method.   
+{
+return "Illegal balance exception";
+}
+
+
+};
+
+
+
+Account Class Modified Constructor :
+
+Accout::Account (std::string name,double balance) : name{name}, balance{balance} 
+{
+if(balance < 0.0 )
+ throw IllegalBalanceException{};     // Here we are throwing object
+}
+
+
+Creating an Account Object : 
+
+
+try 
+{
+std::unique_ptr<Account> moes_account = std::make_unique<Checking_Account>("Moe",-100.0);
+std::cout<<"Use moes_account"<<std::endl;
+}
+
+catch (const IllegalBalanceException &ex)
+{
+std::cerr<<ex.what()<<std::endl;
+}

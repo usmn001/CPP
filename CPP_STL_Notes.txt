@@ -1,0 +1,1383 @@
+
+--------------------------------------------------------------------Section 20 : Standard Template Library------------------------------------------------------------------------------
+
+
+
+STL is a : Powerful Library collection of reusable,adaptable,generic classes and functions.
+           Implemented using C++ templates.
+           Implements common data structures and algorithms.
+           developed in 1994.
+
+STL  :     Assortment of commonly used containers.
+           Known time and size complexity.
+           Tried and tested-Reusability.
+           Consistent,fast and typesafe.
+           Extensible.
+
+Elements Of the STL are : Containers collection of objects or primitive types (array,vector,deque,stack,set,map,etc)
+                          Algorithms functions for processing sequences of elements from containers(find,max,count,accumulate,sort,etc).
+                          Iterators Generate sequences of elements from containers( forward,reverse,by value, by reference,constant, etc).
+
+
+Example :             #include<algorithm>         //allows us to work with stl algorithms
+                      #include<vector>
+                      
+                      int main()
+                      {
+                      
+                      
+                      std::vector<int> v {1,5,3}; 
+
+                    
+                      // STL sort function : Sorts the elements in the vector similar to qsort macro we use sort function of stl:
+                      
+                      std::sort(v.begin(),v.end()); // Where v.begin() and v.end() are iterators pointing to where 1st and last element of vector
+
+
+                      // STL reverse function : Sorts the elements in reverse order of the vector we do :
+                      
+                      std::reverse(v.begin(),v.end()); // Where v.begin() and v.end() are iterators pointing to where 1st and last element of vector
+                      
+
+                      // STL Accumulate function : for summing the elements of vector
+
+                      int sum{};  
+                         
+                      sum=std::accumulate(v.begin(),v.end(),0 )   // Where v.begin() and v.end() are iterators pointing to 1st and last element of vector, third parameter is for starting running sum
+
+                       return 0;
+                       }
+
+
+Types of containers in STL are : Sequence containers : array,vector,list,forward_list,deque.
+                                 
+                                 Associative containers : set,multi set,map, multi map.     Enables us to insert element in a order or in any order.
+                                 
+                                 Container adapters : stack,queue,priority queue.
+
+
+There are about 60 algorithms in STL they can either modify or not modify a sequence they act upon.
+
+
+
+------------------Generic Programming With Macros------------------------
+
+
+Generic Programming : Writing code that works with a variety of types as arguments as long as those argument types meet specific syntatic and semantic requirements.
+
+C++ Macros are exactly C Macros defined with #define  name    value
+
+
+As with C in C++ macros are also subsituted where they are invoked by preprocessor hence there is no type checking by C++ compiler.
+
+--------------------Generic Programming With Function Templates----------------------------
+
+
+C++ Template is : A Blueprint
+                  There are function and class templates.
+                  Allows plugging in any data type.
+                  Compiler generates appropriate function/class from blueprint 
+
+
+----------Example : Defining function with template
+
+template <typename T>      // We can also write it as template <class T>, here we have used class instead of typename
+
+T max(T a, T b) 
+{
+
+return (a>b)? a:b;
+
+}
+
+The above code will be compiled by C++ compiler but it won´t generate any code as we need to provide information for the types.
+
+
+To use the above function we need to provide typename at the time of function invoking i.e. max<int>(a,b);
+
+Sometimes we don´t even need to specify the typename as compiler automatically figures out the type by looking into the passed parameters types i.e. max(a,b).
+
+
+The above template function supports all the types provided that specific type supports the operator > as with our defined classes we need to provide this operator overloaded definition.
+
+
+-----------------Example : Function With different template types
+
+We can also have multiple template parameters with different types i.e
+
+template<typename T1, typename T2>
+void func(T1 a, T2 b) 
+{
+cout<<a<<" "<<b;
+}
+
+To use the above function we need to provide typename at the time of function invoking i.e. max<int,double>(a,b);
+
+Sometimes we don´t even need to specify the typename as compiler automatically figures out the type by looking into the passed parameters types i.e. max('A',12.4).
+
+
+-------------------------------------Generic Programming With Class Templates----------------------------
+
+
+C++ Class Templat : Similar to function template but at class level.
+                    Allows plugging in any data type.
+                    Compiler generates appropriate class from blueprint.
+
+
+----------------Example : Class Templates---
+
+// Class declaration & definition Without templates
+
+
+class Item
+{
+
+private :   std::string name;
+            int value;
+            
+public : Item(std::string name, int value) : name{name}, value{value} {}            
+         std:string get_name () const 
+         {
+         return name;
+         }
+        
+         int get_value () const 
+         {
+         return value;
+         }
+
+};
+
+
+// Class declaration & definition With templates
+
+
+template<typename T>;
+class Item
+{
+
+private :   std::string name;
+            T value;
+            
+public : Item(std::string name, T value) : name{name}, value{value} {}            
+         std:string get_name () const 
+         {
+         return name;
+         }
+        
+         T get_value () const 
+         {
+         return value;
+         }
+
+};
+
+
+Now we can have several instances of above class with different types as : 
+
+Item<int>    item1 {"Larry",1};
+
+Item<double> item2 {"House",1000.0};
+
+ITEM<std::string> item3 {"Frank","Boss"};
+
+std::vector<Item<int>> vec;   // Creating a vector of item class objects with int type. 
+
+
+
+Similar to the case of a function we can have class templates with different types.
+
+
+We can also template "structures" in C++ as well and we can create instances of these with different types similar to C :). 
+
+
+--------Example : Struct Templates
+
+
+
+template<typename T1,typename T2>
+
+struct My_Pair {
+
+  T1 first;
+  T2 second;
+}; 
+
+Now to have struct instances with varying types we do : 
+
+My_pair <std::string,int> p1 {"Frank",100};
+My_pair <int,double> p2 {124,13.6};
+std::vector<My_Pair<int,double>> vec;
+
+
+Note : Above my pair class is already defined for us in utility header file so we just need to include it to use it .
+
+#include <utility>
+
+std::pair<std::string,int> p1 {"Frank",100}; 
+
+cout<<p1.first;
+cout<<p2.second;
+
+
+-----------------Example : Nested Classes --------------
+
+
+template<typename T>;
+class Item
+{
+
+private :   std::string name;
+            T value;
+            
+public : Item(std::string name, T value) : name{name}, value{value} {}            
+         std:string get_name () const 
+         {
+         return name;
+         }
+        
+         T get_value () const 
+         {
+         return value;
+         }
+
+};
+
+
+Now we can have several instances of above class with different types as : 
+
+Item<Item<std::string>> item3 {"Frank", {"C++","Professor"} };     // Here item3 object has : first attribute name with value Frank
+                                                                   //                         second attribute value with another item with fiels of name and value filled as
+                                                                   //                                                name : C++
+                                                                   //                                                value : Professor            
+                        
+
+
+We can also pass a parameter into a class by using template as : template<typename,int var_name>  now compiler will replace the value of var_name with value passed at the time of class instance creation.
+
+
+
+
+-----------Introduction to STL Containers-------------------------
+
+
+STL Containers are data structures that can store object of almost any type.
+   template-based classes.
+
+Each container has member functions either specific or general for all other containers.
+
+Each STL Container has an associated header file needed to be included with our cource code i.e. #include<container_type>
+
+All container classes makes copies of objects they store.
+
+Note : When we are using containers with own defined types i.e. objects then we must make sure that our objects are : 
+                    Copyable and assignable i.e. their should be default or custom copy constructor and copy assignment operator.
+                    Moveable for efficiency i.e. we shoud provide their move constructor and move assignment operator
+                    
+       The containers must be comparable to to other elements for that we need to provide our own overloaded operator methods i.e. operator< ,operator==             
+                              
+
+
+-------------------------Introduction To STL Containers------------------------------
+
+
+Iterators are objects just like pointers , they allow us to iterate and traversed over a container.
+
+Declaration Syntax : container_type::iterator iterator_name;
+
+Examples :          vector<int>::iterator it1;
+                    list<string>::iterator it2;
+                    map<string,string>::iterator it3;
+                    set<char>::iterator it4; 
+
+Example :      vector<int> vec{1,2,3};           
+               
+               vec.end() ; // returns an iterator object pointing to memory location after last vector element.
+               
+               vec.begin(); // returns an iterator object pointing to memory location to first vector element.
+
+               vector<int>::iterator it = vec.begin()  // Initializing & declaring
+               
+               or
+    
+               auto it = vec.begin();
+
+              while(it !=vec.end()){
+              cout<<*it<<" ";
+              ++it;
+              }
+                
+//we can also do it through for loop i.e.
+
+for(auto it=vec.begin(); it!=vec.end();it++)
+{
+cout<<*it<<" ";
+}
+
+
+// Reverse iterator allowing us to start from last element and then end at 1st element of containter.
+
+
+vector<int>::reverse_iterator it = vec.rbegin()  // Initializing & declaring
+
+while(it !=vec.rend())
+           {
+              cout<<*it<<" ";
+              ++it;
+              }
+                
+
+
+When we dereference an iterator using * then we get the element of container,
+When we use -> operator with iterator then we can point to objects methods in the container , itś similar to a pointer.  
+
+
+
+Example : maps where map is a complex data structure.
+
+include<map>
+
+map<string,string> favorites {  {"Frank","C++"} , {"Bill","Java"} , {"James", "Haskel"} };
+
+auto it3 = favorites.begin()
+
+while(it3 !=favorites.end()) 
+{
+
+cout<<it3->first<< ":"<<it3->second<<"\n";    // will print Frank : C++ and so on.
+it3++;
+
+}
+
+
+----------------------------------------------Introduction To STL Algorithms--------------------------------------------------------
+
+
+STL algorithms work on sequence  of container elements provided by an iterator.
+
+Many algorithms require extra information to work i.e. Functions(function objects), function pointers, lambda expressions(C++11). 
+In modern C++ we use lamda expressions.
+
+#include<algorithm> for using stl algoś.
+
+All STL algorithms expect iterators as arguments as iterators determine sequence obtained from the container.
+
+For user defined types in containers we need to provide overloaded methods for comparison operations available in STL Algorithms.
+
+https://en.cppreference.com/w/cpp/algorithm
+
+Note : We need to add overloaded constructor and overloaded operators mostly < and == with return type depending upon our requirement when we are going to use our own classes with the STL.
+
+Example 1 : find algorithm
+
+vector<int> vec{1,2,3};
+
+auto loc = find(vec.begin(),vec.end(),3);   // Where loc is a iterator
+
+if( loc!=vec.end() )
+{
+cout<<*loc<<"\n";
+}
+
+
+
+Example 2: for_each using function object
+
+struct Square_function
+{
+
+void operator() (int x)    // overload operator
+{
+cout<<x*x<<" ";
+}
+
+};
+
+Square_functor square;     // Function object
+
+vector<int> vec{1,2,3};
+
+for_each(vec.begin(),vec.end(),square);       // Outputs : 1,4,9
+
+
+Example 3 :for_each function ointer
+
+
+void osquare(int x) 
+{
+cout<<x*x<<" ";
+}
+
+vector<int> vec{1,2,3};
+
+for_each(vec.begin(),vec.end(),square);       // Outputs : 1,4,9
+
+
+Example 4  :for_each using lambda expression
+
+vector<int> vec{1,2,3};
+
+for_each( vec.begin(),vec.end(),  [] int(x)   {   cout<<x*x<<" ";  }    )       // Outputs : 1,4,9
+
+Example 5 : Using count algorithm 
+
+     std::vector<int> vec {1,2,3,4,5,1,2,1};
+     
+     int num = std::count(vec.begin(), vec.end(), 1);
+     std::cout << num << " occurrences found" << std::endl;      // Outputs : 3
+
+
+Example 6 : Using count if algorithm
+
+    std::vector<int> vec {1,2,3,4,5,1,2,1,100};
+    
+    int num = std::count_if(vec.begin(), vec.end(), [](int x) { return x %2 == 0; });
+    
+    std::cout << num << " even numbers found" << std::endl;                 // Outputs :4                    
+    
+    num = std::count_if(vec.begin(), vec.end(), [](int x) { return x %2 != 0; });
+    std::cout << num << " odd numbers found" << std::endl;                        // Outputs : 5
+    
+    // how can we determine how many elements in vec are >= 5?
+    num = std::count_if(vec.begin(), vec.end(), [](int x) { return x>=5;   });
+    std::cout << num << "  numbers are >= 5" << std::endl;                  // Outputs : 2        
+
+
+Example 7 : Using Replace algorithm 
+
+     std::vector<int> vec {1,2,3,4,5,1,2,1};
+     for (auto i: vec) {
+         std::cout << i << " ";
+     }
+     std::cout << std::endl;
+     
+    std::replace(vec.begin(), vec.end(), 1, 100);   //  Will be replacing every occurence of 1 in the vector from 100
+    for (auto i: vec) {
+         std::cout << i << " ";            // Outputs : 100,2,3,4,5,100,2,100
+     }
+
+Example 8 : Using all of algorithm
+
+     std::vector<int> vec1 {1,3,5,7,9,1,3,13,19,5};
+    if (std::all_of(vec1.begin(), vec1.end(), [](int x) { return x > 10; }))
+        std::cout << "All the elements are > 10" << std::endl;                       // Outputs this condition if all elements of vector are greater than 10
+    else    
+        std::cout << "Not all the elements are > 10" << std::endl;
+    
+    if (std::all_of(vec1.begin(), vec1.end(), [](int x) { return x < 20; }))
+        std::cout << "All the elements are < 20" << std::endl;                      // Outputs this condition if all elements of vector are lesser than 10   
+    else    
+        std::cout << "Not all the elements are < 20" << std::endl;   
+
+In the same way we can apply algorithms mentioned here https://en.cppreference.com/w/cpp/algorithm on list, linked lists, sets , maps and on other stl containers.
+
+
+
+-----------------------------------Sequence Container Array------------------------------
+
+https://en.cppreference.com/w/cpp/container/array
+
+C++11 introduced array container std::array in STL.
+
+To use stl array include the header file as #include <array>
+
+This array size is fixed.
+Direct element access.
+All iterators are available.
+ 
+Unlike raw arrays we can have stl array of different types including user defined types i.e. class objects
+
+We should use stl arrays instead of raw arrays.
+
+
+In C++14 we just declare a STL array like this : std::array<std::string,3> stooges { std::string("Larry"), "Moe", string("Curly") }
+                                
+                                we can also declare stl array like this : std::array<std::type,num> array_name;  //where num is number of elements in container 
+                                                                          array_name = {2,4,6,8,10};                  
+
+
+Example 1 : 
+
+    std::cout << "\nTest1 =========================" << std::endl;
+    std::array<int, 5> arr1 {1,2,3,4,5};     // double {{ }} if C++ 11
+    std::array<int, 5> arr2;
+    
+    display(arr1);
+    display(arr2);          // Elements are not initialized (contain 'garbage')
+        
+    arr2  = {10,20,30,40,50};
+
+    display(arr1);
+    display(arr2);
+    
+    std::cout << "Size of arr1 is: " << arr1.size() << std::endl;       //5 
+    std::cout << "Size of arr2 is: " << arr2.size() << std::endl;       //5
+    
+    arr1[0] = 1000;
+    arr1.at(1) = 2000;
+    display(arr1);
+
+    std::cout << "Front of arr2: " << arr2.front() << std::endl;        // 10
+    std::cout << "Back of arr2: " << arr2.back() << std::endl;          // 50
+
+
+
+Example 2 : 
+
+    std::cout << "\nTest2 =========================" << std::endl;
+    std::array<int, 5> arr1 {1,2,3,4,5};     // double {{ }} is C++ 11
+    std::array<int, 5> arr2 {10,20,30,40,50};
+    
+    display(arr1);
+    display(arr2);
+    
+    arr1.fill(0);
+    
+    display(arr1);
+    display(arr2);
+    
+    arr1.swap(arr2);
+    
+    display(arr1);
+    display(arr2);
+
+
+Example 3 : 
+
+     std::array<int, 5> arr1 {2,1,4,5,3};     // double {{ }} is C++ 11
+     display(arr1);
+    
+     std::sort(arr1.begin(), arr1.end());
+     display(arr1);
+
+Example 4 : 
+
+     std::array<int, 5> arr1 {2,1,3,3,5};     // double {{ }} is C++ 11
+     
+     auto adjacent = std::adjacent_find(arr1.begin(), arr1.end());
+    
+    if (adjacent != arr1.end()) 
+        std::cout << "Adjacent element found with value: " << *adjacent << std::endl;
+    else 
+        std::cout << "No adjacent elements found" << std::endl;
+
+Example 5 : 
+
+    //accumulate is from #include <numeric>
+    std::array<int, 5> arr1 {1,2,3,4,5};     // double {{ }} is C++ 11
+
+    int sum = std::accumulate(arr1.begin(), arr1.end(), 0);
+    std::cout << "Sum of the elements in arr1 is: " << sum << std::endl;
+
+Example 6 : 
+
+    std::array<int, 10> arr1 {1, 2, 3, 50, 60, 70, 80, 200, 300 ,400};
+    // find how many numbers are between 10 and 200 ->  50,60,70,80
+    
+    int count = std::count_if(arr1.begin(), arr1.end(), 
+                                            [](int x) { return x>10 && x<200; });
+                                            
+    std::cout << "Found  " << count << " matches" << std::endl;
+
+
+
+
+----------------------------------------------Sequence Container-Vector----------------------------------------
+
+https://en.cppreference.com/w/cpp/container/vector
+
+vector container : Rapid insertion and deletion at back (constant time).
+                   Insertion or removal of elements (linear time).
+
+
+Common Method :           // template function to display any vector
+			 template <typename T>
+			void display(const std::vector<T> &vec) {
+    			std::cout << "[ ";
+    			for (const auto &elem: vec)
+        		std::cout << elem << " ";
+    			std::cout <<  "]"<< std::endl;
+			}
+
+Example 1:		Person p1 {"Larry",18};
+          		std::vector<Person> vec;
+          		vec.push_back(p1);
+          		vec.pop_back();
+          		vec.emplace_back("Larry",18) ; // This method emplace creates object using itś constructor with attributes "Larry" and 18 and pushes it to the back of vector , super efficient  
+
+
+Example 2 : 
+            		std::vector<int> vec {1,2,3,4,5};
+            		std::vector<int> vec1 (10, 100);    // ten 100s in the vector
+
+Example 3 : 
+
+            		std::vector<int> vec {1,2,3,4,5};
+    	    		display(vec);
+            		std::cout << "\nvec size: " << vec.size() << std::endl;
+            		std::cout << "vec max size: " << vec.max_size() << std::endl;
+            		std::cout << "vec capacity: " << vec.capacity() << std::endl;
+    
+            		vec.push_back(6);
+            		display(vec);
+            		std::cout << "\nvec size: " << vec.size() << std::endl;
+            		std::cout << "vec max size: " << vec.max_size() << std::endl;
+            		std::cout << "vec capacity: " << vec.capacity() << std::endl;
+    
+            		vec.shrink_to_fit();    // C++11
+            		display(vec);
+            		std::cout << "\nvec size: " << vec.size() << std::endl;
+            		std::cout << "vec max size: " << vec.max_size() << std::endl;
+            		std::cout << "vec capacity: " << vec.capacity() << std::endl;
+    
+            		vec.reserve(100);
+            		display(vec);
+            		std::cout << "\nvec size: " << vec.size() << std::endl;
+            		std::cout << "vec max size: " << vec.max_size() << std::endl;
+            		std::cout << "vec capacity: " << vec.capacity() << std::endl;
+
+
+Example 4 :             
+                            // std::back_inserter contructs a back-insert iterator that inserts new elements 
+ 
+			    // at the end of the container it applied to. It's a special output iterator
+			    // It's awesome!!!!   and  very efficient
+			    // There is also a front_inserter we can use with deques and lists
+			    // Copy one list to another using an iterator and back_inserter
+			    
+			    std::cout << "\nTest9  =========================" << std::endl;
+			    
+			    std::vector<int> vec1 {1,2,3,4,5};   
+			    std::vector<int> vec2 {10,20};
+			    
+			    display(vec1); 
+			    display(vec2);
+			    std::cout << std::endl;
+
+			    std::copy(vec1.begin(), vec1.end(), std::back_inserter(vec2));
+			    display(vec1);
+			    display(vec2);
+			    std::cout << std::endl;
+
+			    
+			    // Copy_if the element is even
+			    
+			    vec1 = {1,2,3,4,5,6,7,8,9,10};
+			    vec2 = {10,20};
+			    
+			    display(vec1);
+			    display(vec2);
+			    std::cout << std::endl;
+			    
+			    std::copy_if(vec1.begin(), vec1.end(), std::back_inserter(vec2),
+				    [](int x) { return x%2 == 0; });
+			    display(vec1);
+			    display(vec2);
+
+Example 5 :                   
+                            std::cout << "\nTest10  =========================" << std::endl;
+			    // transform over 2 ranges
+			    
+			    std::vector<int> vec1 {1,2,3,4,5};   
+			    std::vector<int> vec2 {10,20,30,40,50};
+			    std::vector<int> vec3;
+			    
+			    
+			    // 1*10, 2*20, 3*30, 4*40, 5*50 and store the results in vec3
+			    std::transform(vec1.begin(), vec1.end(), vec2.begin(),
+				std::back_inserter(vec3),
+				[](int x, int y) { return x * y;});
+				
+			    display(vec3);
+			    
+			    
+			    
+----------------------------------------------Sequence Container-Deque----------------------------------------			    
+			    
+https://en.cppreference.com/w/cpp/container/deque
+			    
+Header file to include in the code : #include<deque>
+
+Deque like vector container is dynamic in size but elements are not stored in continous memory in fact they are a block of memory linked together.
+
+Deque size is handled automatically.
+
+Deque allows direct element access (constant time).
+
+Deque has rapid insertion and deletion at the front and back (constant time).	
+
+Insertion and removal of elements in deque is of linear time.
+
+All iterators are available but become invalid when deque changes size.		    
+			    
+			    
+Deque syntax : std::deque<type> deque_name{val1,val2,val3};			    
+			    
+			    
+Examples : deque<int> d{1,2,3,4,5,6};			    
+	   deque<int> d1{10,100};
+           deque<string> stooges { string{"Larry"}, "Moe", string{"Curly"} };  	    
+			    
+			    
+			    
+Common Methods : 
+
+Person p1{"Larry",18};
+
+d.push_back(p1);			    
+d.pop_back();
+
+d.push_front (Person{"Larry",18});			    
+d.pop_front();
+
+d.emplace_back("Larry",18);    // add object to back of deque efficiently
+d.emplace_front("Moe",24);     // add object to front of deque efficiently
+
+
+Example 2 :  
+    std::vector<int> vec {1,2,3,4,5,6,7,8,9,10};
+    std::deque<int> d;
+    
+    std::copy(vec.begin(), vec.end(), std::front_inserter(d));        // Here we are copying elements of vector starting from beginining to end to deque.
+    display(d);                            // Output : 10,9,8,7,6,5,4,3,2,1
+    
+    d.clear();
+    
+    std::copy(vec.begin(), vec.end(), std::back_inserter(d));
+    display(d);                            // Output : 1,2,3,4,5,6,7,8,9,10
+
+
+
+---------------------------------Sequence Containers -Lists -----------------------------
+
+https://en.cppreference.com/w/cpp/container/list
+
+STL list : STL List is a doubly linked list,
+           Available to us in the namespace of std as std::list , can be traversed in both directions.
+           Sequence Of Containers 
+           Non contingous in memory.
+           No direct access to elements.
+           Efficient for inserting and removal of elements once element is found.
+           All iterators are available and invalidate when list element is deleted. 
+           
+
+To find an element in the list we use find method.
+
+List is a good choice when we don´t need direct access to elements and we can remove and insert elements from anywhere.
+
+
+List Declaration and initialization syntax : list<type> list_name {val1,val2};
+
+Examples : list<int> l {1,2,3,4,5};
+           list<int> l1 (10,100); // Here we are creating a list with ten 100 values.
+           list<string> stooges { string{"Larry"}, "Moe", string{"Curly"} };  	  
+  	   l={2,4,6,8,10};		    
+			    
+			    
+			    
+As lists don´t allow direct access to elements therefore we cannot use .at method and subscript operator[].			    
+		
+
+Common Methods : 
+list<int> l {1,2,3,4,5};
+
+cout<<l.size();
+
+cout<<l.max_size()
+
+cout<<l.front();
+
+cout<<l.back();
+
+auto it = std::find(l.begin(),l.end(),3)    // Here we are getting iterator pointing to position of element 3 in list.
+
+cout<<*it;   // Outputs 3 
+
+
+	    
+			    
+Common Methods : 
+
+Person p1{"Larry",18};
+list<Person> l;
+
+
+l.push_back(p1);			    
+l.pop_back();
+
+l.push_front (Person{"Larry",18});			    
+l.pop_front();
+
+l.emplace_back("Larry",18);    // add object to back of list efficiently.
+l.emplace_front("Moe",24);     // add object to front.			    
+			    
+---------------------------------Sequence Containers - Forward List-----------------------------			    
+			    
+STL forward list : #include<forward_list>,  std::forward_list;
+
+                   Singly linked list,
+                   Available to us in the namespace of std as std::forward_list , can be traversed in one direction.
+                   Sequence Of Containers 
+                   Non contingous in memory.
+                   No direct access to elements.
+                   Rapid insertion and deletion of elements  anywhere in the container (constant time).
+                   less overhead than stl list.
+                   Reverse iterators are not available. Iterators invalidate when corresponding element is deleted.		    
+			    
+			    
+Declaration Syntax : forward_list<Type> list_name {val1,val2};			    
+			    
+
+Common Methods Available : 
+
+list_name.max_size();
+
+list_name.front();
+
+
+Person p1{"Larry",18};
+
+forward_list<Person> list_name;
+
+list_name.push_front(p1);
+list_name.pop_front()
+
+list_name.emplace_front("Moe",24);    // adds a object person to front of list.
+
+
+forward_list<int> l{1,2,3,4,5};
+
+auto it = find(l.begin(),l.end(),3);
+
+l.insert_after(it,10);   	      // Outputs : 1 2 3 10 4 5
+l.emplace_after(it,100); 	      // Outputs : 1 2 3 100 10 4 5
+
+l.erase_after(it);                    // erases the 100, 1 2 3 10 4 5
+
+l.resize(2);                          // 1 2 , Resizes our current list to a size of 2
+
+l.resize(5);                          // Outputs :  1 2 0 0 0
+
+
+
+Example : 
+#include <iostream>
+#include <list>
+#include <algorithm>
+#include <iterator> // for std::advance
+
+class Person {
+    friend std::ostream &operator<<(std::ostream &os, const Person &p);
+    std::string name;
+    int age;
+public:
+    Person() : name{"Unknown"}, age{0} {}
+    Person(std::string name, int age) 
+        : name{name}, age{age}  {}
+    bool operator<(const Person &rhs) const {
+        return this->age < rhs.age;
+    }
+    bool operator==(const Person &rhs) const {
+        return (this->name == rhs.name && this->age == rhs.age);
+    }
+};
+
+std::ostream &operator<<(std::ostream &os, const Person &p) {
+    os << p.name << ":" << p.age;
+    return os;
+}
+
+
+template <typename T>
+void display(const std::list<T> &l) {
+    std::cout << "[ ";
+    for (const auto &elem: l) {
+        std::cout << elem << " ";
+    }
+    std::cout << "]" << std::endl;
+}
+
+   std::list<int> l {1,2,3,4,5,6,7,8,9,10};
+    display(l);
+    
+    l.resize(5);
+    display(l);
+    
+    l.resize(10);
+    display(l);
+    
+    std::list<Person> persons;
+    persons.resize(5);             // uses the Person default constructor
+    display(persons);              // displays default values for all created objects as default constructor is called each time an object is invoked.
+    
+
+
+
+    std::list<Person>  stooges {
+        {"Larry", 18},
+        {"Moe", 25},
+        {"Curly", 17}
+    };
+    
+    display(stooges);
+    std::string name;
+    int age{};
+    std::cout << "\nEnter the name of the next stooge: ";
+    getline(std::cin, name);
+    std::cout << "Enter their age: ";
+    std::cin >> age;
+    
+    stooges.emplace_back(name, age);
+    display(stooges);
+    
+    // Insert Frank before Moe
+    auto it = std::find(stooges.begin(), stooges.end(), Person{"Moe", 25});   // This find method will be using operator== as we have defined in our class definition for comparing the objects
+    if (it != stooges.end())
+        stooges.emplace(it, "Frank", 18);
+    display(stooges); 
+
+
+
+  std::list<int> l {1,2,3,4,5,6,7,8,9,10};
+    display(l);
+    auto it = std::find(l.begin(), l.end(), 5);
+    if (it != l.end()) {
+        l.insert(it, 100);
+    }
+    display(l);
+    
+    std::list<int> l2 {1000,2000,3000};
+    l.insert(it, l2.begin(), l2.end());
+    display(l);
+    
+    std::advance(it, -4);       // point to the 100
+    std::cout << *it << std::endl;
+    
+    l.erase(it);                    // remove the 100 - iterator becomes invalid
+    display(l);
+
+
+
+Note : We need to add overloaded constructor and overloaded operators mostly < and == with return type depending upon our requirement when we are going to use our own classes with the STL.
+
+
+
+----------------------------------------------Associative Containers - Sets-----------------------------------------------
+
+https://en.cppreference.com/w/cpp/container/set
+
+STL Set is : Similar to a mathematical set.
+             Ordered by key.
+             No duplicate elements.
+             All iterators available and invalidate when corresponding element is deleted. 
+
+We need to provide overloaded methods such as < for our custom defined types like we do with other STL containers.
+
+set container uses operator < to sort the elements so itś custom definition will be required when we have our own class objects as set will be using this method defintion to sort
+the objects.
+
+
+
+Example 1 : std::set<int> s{4,1,1,3,3,2,5};                   // 1 2 3 4 5 as set only stores unique elements not repeated elements.
+
+           std::set<type> set_name {val1,val2,val3,val4};   
+                    
+           std::set<std::string> stooges { std::string{"Larry"}, "Moe", std::string{"Curly"} }; 
+                              
+           std::cout<<s.size();                             // 5 
+ 
+           std::cout<<s.max_size();                         // a very large number 
+                              
+           Person p1 {"Larry",18};
+           Person p2 {"Moe", 25};
+
+           std::set<Person> stooges;
+                                                            // set container uses overloaded operator < to determine whether an element exists in the set or not.
+                                                            
+           stooges.insert(p1) ;                             // adds p1 to the set.                                
+
+           auto result = stooges.insert(p2)                 // adds p2 to the set.    returns a std::pair<iterator, bool> 
+                                						        .first returned value is an iterator to the inserted element or to the duplicate in the set.
+                                						        .second returned value is a boolean indicating success or failure.  
+          
+Example 2: 
+           std::set<int> s {1,2,3,4,5};
+            
+           s.erase(3)                                      // Outputs : 1 2 4 5            
+           auto it = s.find(5);                            // Returns iterator  pointing to set element
+           if( it!=s.end() )           
+           s.erase(it);                                    // erase the 5 : 1 2 3 4       
+
+           std::set<int> s {1,2,3,4,5};
+           
+           int num = s.count(1);                          // returns 0 if element does not exist in the set,
+                                                                     1 if element exists in the set.
+                                                          // returns number showing number of occurrences of a element in cas of multiset.                   
+
+           s.clear();                                     // removes all elements from the set.
+           
+           s.empty();                                     // returns true or false depending upon set condition, 
+
+
+
+-------Multi set class--------
+
+Multiset class is also a part of stl, similar to a set however it allows duplicate elements to be present in the set.
+
+std::multi_set
+
+Need to include :  #include<set>
+
+Sorted by key.
+
+All iterators are available.
+
+
+--------Unordered Set-----------
+
+
+Also a part of STL library  as std::unordered_set.
+
+Need to include : #include<unordered_set>
+
+Elements are unordered.
+
+No duplicate elements are allowed.
+
+Elements cannot be modified.
+      Must be erased and new element added.
+
+No reversed iterators are allowed.
+
+
+---------Unordered Multiset-----
+
+STL Unordered multiset is available in namespace : std::unordered_multiset
+
+Need to include : #include<unordered_set>
+
+Elements are unordered.
+
+Allow duplicate elements.
+
+No reverse iterators are allowed.
+
+
+
+-------------------------------------------------------Associative Containers - Maps---------------------------------------------------------
+
+https://en.cppreference.com/w/cpp/container/map
+
+STL Map containers
+
+STL Maps are also like other associative containers . As we know all stl containers are data structures storing data.
+
+STL Maps : Collection of objects allowing fast retrieval using a key.
+           STL provides sets and maps.
+           Usually implemented as a balanced binary tree or hashsets.
+           Most operations are very efficient.
+
+Just like STL sets we have different kinds of map containers with variations available to us in the std namespace as :
+
+ 		std::map;
+                std::unordered_map;            // Similar to unordered set
+                std::multimap;                 // Similar to multiset
+                std::unordered_multimap;       // Similar to unordered multiset
+
+Maps are like dictionaries where we have akey and that key has a associative value with it.
+
+Need to include : #include<map>
+
+Elements are stored as (key,value) pais (std::pair).
+
+Map Elements are ordered by key.
+
+In map there are no duplicate elements (keys are unique).
+
+We can directly access a map element using the key.
+
+All iterators are available to us in map and invalidate when corresponding map element is deleted. 
+
+Declaration Syntax : 
+
+std::map<std::key_type,std::value_type> map_name {                
+
+
+};
+  
+Example 1 : std::map - Initialization and Assignment
+
+std::map<std::string,int> m1 {
+
+  {"Larry",18},
+  {"Moe",25}
+
+}; 
+
+Example 2 : Common Methods.
+
+std::map<std::string,std::string> m2 
+{
+
+{"Bob" , "Butcher" },
+
+{"Anne", "Baker" },
+
+{"George" , "Candlestick maker" }
+
+};
+
+cout<<m2.size();                 // 3
+cout<<m2.max_size();             // A Very Large Number 
+
+// No concept of front and back.
+
+std::pair<std::string , std::string> p1 {"James" , "Mechanic" };  // Created a pair object.
+
+m2.insert(p1);
+
+m2.insert(std::make_pair("Roger", "Ranger") );
+
+
+
+Example 3 : Common Methods.
+
+std::map<std::string, std::string> m 
+{
+
+{"Bob" , "Butcher" },
+
+{"Anne" , "Baker" },
+
+{"George" , "Candlestick maker"} 
+
+};
+
+
+m["Frank"] = "Teacher";                    // insert key Frank with value Teacher
+
+m["Frank"] = "Instructor";                 // insert key Frank with value Instructor
+
+m.at("Frank") = "Professor";               // insert key Frank with value Professor
+
+
+
+
+Example 4 : 
+
+
+std::map<std::string, std::string> m 
+{
+
+{"Bob" , "Butcher" },
+
+{"Anne" , "Baker" },
+
+{"George" , "Candlestick maker"} 
+
+};
+
+
+m.erase("Anne");                             // Erasing key value Anne from map
+     
+if( m.find("Bob") != m.end() )           
+        std::cout<< "Found Bob ! ";          // find bob      
+
+auto it = m.find("George");                  // count method behaves similar to set count method
+
+if (it != m.end() ) 
+      
+     m.erase(it);                            // erase George     
+
+
+m.clear()                                    // remove all pair elements from map , similar to set clear method.
+
+
+m.empty()                                    // returns true or false depending upon map condition.   
+
+
+-------Multi map --------
+
+https://en.cppreference.com/w/cpp/container/multimap
+
+std::multi_map
+
+#include <map>
+
+Ordered by key
+
+Allows duplicate elements.
+
+All iterators are available.
+
+
+
+-------Unordered map --------
+
+https://en.cppreference.com/w/cpp/container/unordered_map
+
+std::unordered_map
+
+#include <unordered_map>
+
+Elements are unordered.
+
+No duplicate elements are allowed.
+
+No reverse iterators allowed.
+
+
+
+-------Unordered Multi Map --------
+
+https://en.cppreference.com/w/cpp/container/unordered_multimap
+
+std::unordered_map
+
+#include <unordered_map>
+
+Elements are unordered.
+
+No duplicate elements are allowed.
+
+No reverse iterators allowed.
+
+
+---------------------Container Adaptors - Stack----------------------
+
+STL Container adaptor stack is equal to C style (LIFO structure) stack however we don´t need to define and implement a stack using arrays or linked list . 
+STL provides its implementation of stack through vector,list or deque itś upto us what we choose from(vector,list,deque).
+Deque is the default implementation of container adaptor stack.
+All operations (PUSH,POP,SIZE) made available as built in methods saving a lot of effort.
+Not iterators are supported for stack container as all operations occur on top of stack.
+
+stack is known as container adaptor because it can be adapted and implemented through different STL Containers vector,list,deque 
+deque is default implementation of stack.
+
+---------Stack Initialization--------------
+To use stack in our code just do this : #include <stack>
+
+std::stack<int> s;
+
+std::stack<int,std::vector<int> >s1; // stack implementation using vector container
+
+std::stack<int,std::list<int>> s2;   // stack implementation using list  container 
+
+std::stack<int,std::deque<int>> s3;  // stack implementation using deque container 
+
+
+Example : 
+#include <iostream>
+#include <stack>
+#include <vector>
+#include <list>
+
+template <typename T>
+void display(std::stack<T> s)
+{
+std::cout<<"[";
+while(!s.empty())
+{
+T elem =s.top();
+s.pop();
+std::cout<<elem<<" ";
+}
+std::cout<<"]"<<std::endl;
+}
+
+int main()
+{
+std::stack<int> s; 
+std::stack<int,std::vector<int> > s1;    
+std::stack<int,std::list<int> >  s2;     
+std::stack<int,std::deque<int> >  s3;
+
+for(int i:{1,2,3,4,5})  // Ranged base for loop iterating over an array
+s.push(i);            // Pushes the element at end
+display(s);
+
+s.push(100);
+display(s);
+
+s.pop();              // Pops the element from front i.e. top of stack  
+s.pop();
+display(s);
+std::cout<<"size"<<s.size()<<std::endl;
+
+s.push(10);
+display(s);
+
+s.top() = 100;
+display(s);
+return 0;
+}
+
+---------------------Container Adaptors - queue----------------------
+
+Just like stack , queue is also an adaptor container.
+
+First in First Out (FIFO) data structure.
+Similar to stack , queue is also an adaptor contianer that can be implemented either through list or deque.
+Elements are pushed at the back and popped from front.
+No iterators are supported.
+
+---------Queue Initialization--------------
+
+std::queue<int> q;              	// deque
+std::queue<int,std::list<int>> q2;      // list
+std::queue<int,std::deque<int>> q3;     //deque
+
+
+
+Example : 
+#include <iostream>
+#include <queue>
+#include <list>
+
+template <typename T>
+void display(std::queue<T> s)
+{
+std::cout<<"[";
+while(!s.empty())
+{
+T elem =s.top();
+s.pop();
+std::cout<<elem<<" ";
+}
+std::cout<<"]"<<std::endl;
+}
+
+int main()
+{
+std::queue<int> s;    
+std::queue<int,std::list<int> >  s2;     
+std::queue<int,std::deque<int> >  s3;
+
+for(int i:{1,2,3,4,5})  // Ranged base for loop iterating over an array
+s.push(i);              // Pushes the element at end
+display(s);
+
+s.push(100);
+display(s);
+
+s.pop();                // Pops the element from end
+s.pop();
+display(s);
+std::cout<<"size"<<s.size()<<std::endl;
+
+s.push(10);
+display(s);
+
+s.top() = 100;
+display(s);
+return 0;
+}
+
+
+
+
+
+
+
+
+
