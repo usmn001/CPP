@@ -1242,3 +1242,142 @@ No duplicate elements are allowed.
 
 No reverse iterators allowed.
 
+
+---------------------Container Adaptors - Stack----------------------
+
+STL Container adaptor stack is equal to C style (LIFO structure) stack however we don´t need to define and implement a stack using arrays or linked list . 
+STL provides its implementation of stack through vector,list or deque itś upto us what we choose from(vector,list,deque).
+Deque is the default implementation of container adaptor stack.
+All operations (PUSH,POP,SIZE) made available as built in methods saving a lot of effort.
+Not iterators are supported for stack container as all operations occur on top of stack.
+
+stack is known as container adaptor because it can be adapted and implemented through different STL Containers vector,list,deque 
+deque is default implementation of stack.
+
+---------Stack Initialization--------------
+To use stack in our code just do this : #include <stack>
+
+std::stack<int> s;
+
+std::stack<int,std::vector<int> >s1; // stack implementation using vector container
+
+std::stack<int,std::list<int>> s2;   // stack implementation using list  container 
+
+std::stack<int,std::deque<int>> s3;  // stack implementation using deque container 
+
+
+Example : 
+#include <iostream>
+#include <stack>
+#include <vector>
+#include <list>
+
+template <typename T>
+void display(std::stack<T> s)
+{
+std::cout<<"[";
+while(!s.empty())
+{
+T elem =s.top();
+s.pop();
+std::cout<<elem<<" ";
+}
+std::cout<<"]"<<std::endl;
+}
+
+int main()
+{
+std::stack<int> s; 
+std::stack<int,std::vector<int> > s1;    
+std::stack<int,std::list<int> >  s2;     
+std::stack<int,std::deque<int> >  s3;
+
+for(int i:{1,2,3,4,5})  // Ranged base for loop iterating over an array
+s.push(i);            // Pushes the element at end
+display(s);
+
+s.push(100);
+display(s);
+
+s.pop();              // Pops the element from front i.e. top of stack  
+s.pop();
+display(s);
+std::cout<<"size"<<s.size()<<std::endl;
+
+s.push(10);
+display(s);
+
+s.top() = 100;
+display(s);
+return 0;
+}
+
+---------------------Container Adaptors - queue----------------------
+
+Just like stack , queue is also an adaptor container.
+
+First in First Out (FIFO) data structure.
+Similar to stack , queue is also an adaptor contianer that can be implemented either through list or deque.
+Elements are pushed at the back and popped from front.
+No iterators are supported.
+
+---------Queue Initialization--------------
+
+std::queue<int> q;              	// deque
+std::queue<int,std::list<int>> q2;      // list
+std::queue<int,std::deque<int>> q3;     //deque
+
+
+
+Example : 
+#include <iostream>
+#include <queue>
+#include <list>
+
+template <typename T>
+void display(std::queue<T> s)
+{
+std::cout<<"[";
+while(!s.empty())
+{
+T elem =s.top();
+s.pop();
+std::cout<<elem<<" ";
+}
+std::cout<<"]"<<std::endl;
+}
+
+int main()
+{
+std::queue<int> s;    
+std::queue<int,std::list<int> >  s2;     
+std::queue<int,std::deque<int> >  s3;
+
+for(int i:{1,2,3,4,5})  // Ranged base for loop iterating over an array
+s.push(i);              // Pushes the element at end
+display(s);
+
+s.push(100);
+display(s);
+
+s.pop();                // Pops the element from end
+s.pop();
+display(s);
+std::cout<<"size"<<s.size()<<std::endl;
+
+s.push(10);
+display(s);
+
+s.top() = 100;
+display(s);
+return 0;
+}
+
+
+
+
+
+
+
+
+
