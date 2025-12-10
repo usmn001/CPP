@@ -1,0 +1,483 @@
+--------------------------------------------------------Section 21 : Lambda Expressions---------------------------------------------------------
+
+C++11 introduced Lambda expressions.
+Prior to C++11 we had : Function Objects (Classes containing functions) , 
+                        Function Pointers.
+
+Problem  : Function objects and function pointers is that compiler cannot inline these functions for efficiency.
+           These function objects and function pointers cannot be tested because they are defined far away from where they are used.
+           Every function object has a overloaded operator function : void operator()(int x)
+                                                                       { 
+            								
+            							       }
+
+The compiler generates unnamed function objects from lamda expressions.
+
+Example of function object : 
+
+Class Player 
+{
+private : int num{};
+public : 
+Player(int n) : num{n} 
+{
+
+}
+
+int operator() (int n) const    // Overloaded function operator
+{
+return num*n;
+}
+
+};
+
+In the main .c code : 
+vector<int> vec{1,2,3,4};
+Player mult{10};
+
+std::transform(vec.begin(),vec,end(),vec.begin(), mult);   // Another version of this line std::transform(vec.begin(),vec,end(),vec.begin(), Player(10);	
+         						   // We can have another variant with template type T
+                                                           // vec now contains 10,20,30,40
+                                                           
+https://en.cppreference.com/w/cpp/algorithm/transform.html
+
+
+
+
+                      
+Example of Lambda Expression Based Upon Previous scenario : 
+
+std::vector<int> vec {1,2,3,4};
+std::transform(vec.begin(), vec.end(),vec.begin(),[](int x){return x*10});
+
+So a lambda expression syntax : [](type variable){operation to perform};                         
+                            Where : [] is capture list, what kind of elements we want to capture
+                                    () parameters passed to function 
+                                    {} code performing some operation 
+                                    
+-----------------------Structure of A Lambda Expression-------------------------
+
+[] () -> return_type specifiers {}
+
+Where : "[]" 		Capture list, what kind of elements we want to capture.
+        "()"            Parameters passed to function.
+        "return_type"   Just like a function return type can be skipped and compiler will try to deduce it.
+        "specifiers"    Optional specifiers can be mutable and constexpr
+        "{}"            Code performing some operation. 
+
+-------Stateless Lambda Expressions---------
+
+Stateless lambda expressions have empty capture list i.e with parameter []
+
+Example 1 : [] () {std::cout<<"Hi";};
+
+Example 2 : [] () {std::cout<<"Hi";}();  // Here this lambda expression is calling function object as discussed previously.
+
+Example 3 : [] (int x, int y) {std::cout<<x+y;};
+
+Example 4 : auto l = [] (int x) {std::cout<<x;};    // Assigning lambda expression to a variable.
+           l(10);   // displays 10   ,Just like function object, we are calling lambding expression.
+           l(100);  // displays 100  ,Just like function object, we are calling lambding expression.
+
+Example 5 :  int x {10};                         // This variable value will not be used as our lambda has empty capture list
+             [] (int x) {std::cout<<x;}(100);    // Displays 100 as we are initializing variable x by value 100 just like function object.
+
+-----------We can use containers and objects with lambda expressions--------------------
+
+Example 6 : std::vector<int> scores {93,10,20,30};
+            
+            auto bonus = [] (std::vector<int> &scores,int bonus_points) {
+            for(auto &scores : scores)
+                    score +=bonus_points;
+            };        
+
+           bonus(test_scores,5);    // Passing : vector by reference and value 5 as second param to lambda expression
+           cout<<test_score[0];     // Display 93
+           
+           ..and so on.
+           
+           
+---------------------Passing Lambda Expressions As Function Parameters------------------------
+
+#include<functional>
+
+auto l = [](auto x){cout<<x;};   // Our Lambda Expression
+
+Option 1 C++14 : void foo(std::function<void>(int) > l) 
+                 {
+                 l(10);          // Calling lambda expression with value 10
+                 }
+
+Where  param : void is return type of lambda expression
+               int is passed parameters type
+           
+
+Option 2 C++14 : Passing Lambda function through function parameters
+            
+void foo(void (*l) (int) )
+{
+l(10);     // Calling associated lambda expression with value 10 
+}
+
+Where  param : void is return type of lambda expression
+               *l is function pointer
+
+Option 3 C++20 : Most efficient One
+
+                void (auto l)
+                {
+                l(10); // Calling associated lambda expression with value 10
+                }
+
+---------------------Returning Lambda Expressions From Functions------------------------
+
+#include<functional>
+
+auto l = [](int x)
+
+Option 1 C++14 : std::function<void>(int) > l()) 
+                 {
+                 return [] (int x) {std::cout<<x;};
+                 }
+
+Where  param : void is return type of lambda expression
+               int is passed parameters type
+           
+
+Option 2 C++14 :         
+void (*foo())(int) 
+{
+return [] (int x) {std::cout<<x;};
+}
+
+Option 3 C++20 : Most efficient One
+
+                auto foo()
+                {
+                return [] (int x) {std::cout<<x;};
+                }
+
+
+---------------Using Lambda Expressions As Function Parameters--------------
+
+Option 1 int foo([] (int x) {cout<<x;};
+
+Option 2 : auto l = [] (int x) {std::cout<<x;};
+           foo(l);   // Passling lambda expression associated with variable l to function foo.
+
+
+
+------------Using Lambda Expressions As Predicates----------------------
+
+
+void print_if(std::vector<int> nums, bool (*predicate)(int) ) 
+{
+
+for(int i : nums)
+    if(predicate(i))
+      std::cout<<i;
+      
+}
+
+int main() 
+{
+
+std::vector<int> nums {1,2,3};
+print_if(nums,[] (auto x) {return x%2 == 0;} );   // Display Evens
+print_if(nums,[] (auto x) {return x%2 != 0;} );   // Display Odd
+
+// Same print_if function is used t print two different outputs depending  upon the lambda expression passed to it.
+
+
+exit(EXIT_SUCCESS);
+}
+
+
+---------------------------------------------Stateless Lambda Expressions (No Capture List)-------------------------------
+
+Example 7 : 
+
+#include <iostream>
+#include <string>
+#include <vector>
+#include <functional>   // for std::function
+#include <algorithm>
+
+class Person {
+    friend std::ostream &operator<<(std::ostream &os, const Person &rhs);
+private:
+    std::string name;
+    int age;
+public:
+    Person(std::string name, int age) : name{name}, age{age} {};
+    Person(const Person &p): name{p.name}, age{p.age} { }
+    ~Person() = default;
+    std::string get_name() const { return name; }
+    void set_name(std::string name) {this->name = name; };
+    int get_age() const {return age; }
+    void set_age(int age) {this->age = age; }
+};
+
+std::ostream &operator<<(std::ostream &os, const Person &rhs) {
+    os << "[Person: " <<rhs.name << " : " <<rhs.age << "]";
+    return os;
+}
+
+void test7() {
+      std::cout << "\n---Test7 --------------------------" << std::endl;
+
+    std::vector<Person> stooges {
+        {"Larry", 18},
+        {"Moe", 30},
+        {"Curly", 25}
+    };
+
+    // Here in the following line we are using lambda expression with STL Library sort algorithm, similar qsort function of C
+    std::sort(begin(stooges), end(stooges), [](const Person &p1, const Person &p2) {
+        return p1.get_name() < p2.get_name();  // Based upon result of this lambda expression elements of vector will be sorted lexicographically
+    });
+    
+    std::for_each(begin(stooges), end(stooges), [](const Person &p) {
+        std::cout << p << std::endl;
+    });
+    
+    std::cout << std::endl;
+     
+     // Here in the following line we are using lambda expression with STL Library sort algorithm, similar qsort function of C
+     std::sort(begin(stooges), end(stooges), [](const Person &p1, const Person &p2) {
+        return p1.get_age()< p2.get_age(); // Based upon this result the elements of vector will be sorted lexicographically
+    });
+    
+    std::for_each(begin(stooges), end(stooges), [](const Person &p) {
+        std::cout << p << std::endl;
+    });
+}
+		
+int main()
+{
+    test7();    
+    std::cout << std::endl;
+    return 0;
+}
+
+
+-------------------------------------------Stateful Lambda Expressions------------------------------
+
+In stateful lambda expressions the capture list brackets[] are not empty and contain the environment parameter we want to pass on as shown below :
+
+
+Stateful Lambda Expression            -------------------------->           Compiler Generated Code Behind The Scenes
+
+int y{10};
+auto l = [y] (int x) {std:cout<<x+y}                                        class CompilerGeneratedName 
+                 							    {
+                 							    private : 
+								            int y;
+								            public : 
+								            CompilerGeneratedName(int y) : y{y} {};  // Constructor taking parameter y from left lambda expression
+										                                     // Copying itś value to class member variable y
+									    
+									    void operator() (int x) const        // Function implementing logic of left side lambda expression
+									    {
+									    std::cout<<x+y;
+									    }
+									    
+                 							    }
+
+A type captured by value in lamda expression is not modifiable within lamda due to const in the compiler generated code as shown above.
+
+---------------------mutable keyowrd-------------------------------
+
+If we want to modify a capture  type in lambda expression then we can use mutable keyword in lambda expression as : 
+
+Example 8 : 
+
+       int x {100};
+
+        auto l = [x] () mutable {             // Now we can modify local variable copy, local variable outside of lambda expression block will retain itś original value of 100
+                x += 100;
+                std::cout << x << std::endl;     // Displays 200
+        };
+        
+       l();            // Displays 200
+       cout<<x;        // Displays 100
+
+Example 9 : We can also pass the type by reference as : 
+
+ int x {100};
+
+        auto l = [&x] () {                // l is an object
+                x += 100;                
+        };
+        
+       cout<<x;        // Displays 200
+
+
+--------------Capturing all elements without mentioning them in capture parameters list-----------------------
+
+[=]     // Default Capture all types by value
+[&]     // Default Capture by reference
+[this]  // Default Capture this object by reference
+
+Example : 
+
+        int x {100};
+	int y {200};
+	int z {300};  // Note that z is not captured in the lambda since it is not used.
+                      // This should produce an 'unused variable' warning when compiling.
+	
+	auto l = [=] () mutable {
+		x += 100;
+		y += 100;
+		std::cout << x << std::endl;
+		std::cout << y << std::endl;
+	};
+	l();
+
+
+
+-------------Using Default And Explicit Captures-------------
+
+
+
+
+[=,&x]     // Capture all types by value
+[&,y]      // Default Capture by reference
+[this,z]   // Default Capture this object by reference,preference is given to "this" from C++20 and onwards as above two capture operators =, & are deprecated.
+
+
+------------------------------STL_Lambda_Expressions-----------------------------------
+
+Example 1 : Using for_each STL Algorithm  
+template< class InputIt, class UnaryFunc >
+UnaryFunc for_each( InputIt first, InputIt last, UnaryFunc f );
+
+Reference : 
+https://en.cppreference.com/w/cpp/algorithm/for_each.html
+
+
+void test1()
+{
+	std::cout << "\n---Test1 --------------------------" << std::endl;
+	
+	std::vector<int> nums {10,20,30,40,50};
+	
+	std::for_each(nums.begin(), nums.end(), [] (int num) // Here by using iterators of vector copying all elements of it to nums parameter of lambda expression 
+	{                                                                         
+        std::cout << num << " ";                             // displaying all elements of container one by one , here the elements are copied by value so we cannot modify them.
+        });
+}
+
+Example 2 : Using STL Algorithm is_permutation
+template< class ForwardIt1, class ForwardIt2, class BinaryPredicate >
+bool is_permutation( ForwardIt1 first1, ForwardIt1 last1, ForwardIt2 first2, BinaryPredicate p );
+https://en.cppreference.com/w/cpp/algorithm/is_permutation.html
+
+	struct Point
+	{
+		int x;
+		int y;
+	};
+	
+	Point pt1{1,2};
+	Point pt2{4,3};
+	Point pt3{3,5};
+	Point pt4{3,1};
+	
+	std::vector<Point> triangle1 {pt1,pt2,pt3};
+	std::vector<Point> triangle2 {pt2,pt3,pt1};
+	std::vector<Point> triangle3 {pt1,pt2,pt4};
+	
+	// Test whether triangle1 and triangle2 are equivalent
+	if (std::is_permutation(triangle1.begin(), triangle1.end(), triangle2.begin(), [] (Point lhs, Point rhs)   // lhs side corresponds to triangle 1, rhs for triangle 2
+	{     
+        return lhs.x == rhs.x && lhs.y == rhs.y;
+        })
+    )
+		std::cout << "Triangle1 and Triangle2 are equivalent!" << std::endl;
+	else
+		std::cout << "Triangle1 and Triangle2 are not equivalent!" << std::endl;
+
+Example 3 :
+https://en.cppreference.com/w/cpp/algorithm/none_of.html
+
+template< class InputIt, class UnaryPred >
+bool all_of( InputIt first, InputIt last, UnaryPred p );
+
+
+bool in_between(const std::vector<int> &nums, int start_value, int end_value) {
+    bool result {false};
+    result = std::all_of(nums.begin(), nums.end(), [start_value, end_value](int value) {
+        return value >= start_value && value <= end_value;
+    });
+    return result;
+}
+
+void test6() {
+    	std::cout << "\n---Test6 --------------------------" << std::endl;
+        std::cout << std::boolalpha;
+
+        std::vector<int> nums(10);                        // Creating vector with 10 elements as specified in ()
+        std::iota(nums.begin(), nums.end(), 1);           // Filling the vector with 10 elements starting from 1 to 10 using vectors.
+        
+        for (int num : nums)
+            std::cout << num << " ";
+            
+        std::cout << std::endl;
+        
+        std::cout << in_between(nums, 50, 60) << std::endl;
+        std::cout << in_between(nums, 1, 10) << std::endl;
+        std::cout << in_between(nums, 5, 7) << std::endl;
+}
+
+
+
+
+
+Example 4 : 
+
+class Password_Validator2 {
+private:
+	std::vector<char> restricted_symbols {'!','$','+'};
+public:
+	bool is_valid(std::string password) 
+	{
+		return std::all_of(password.begin(), password.end(), [this] (char character)      // 1st algorithm method
+		{
+			return std::none_of(restricted_symbols.begin(), restricted_symbols.end(), [character] (char symbol)      // 2nd algorithm method 
+			{
+				return character == symbol;
+			});
+		});
+	}
+};
+
+In the above code we are using nested algorithms both returning values by using lambda expressions.
+
+void test7()
+{
+Password_Validator2 pv2;
+	
+	// Test whether password is valid
+	if (pv2.is_valid(password))
+		std::cout << "The password " << password << " is valid!" << std::endl;
+	else
+		std::cout << "The password " << password << " is not valid!" << std::endl;
+		
+	// Test whether new password is valid
+	password = "CPlusPlusRocks!";
+	if (pv2.is_valid(password))
+		std::cout << "The password " << password << " is valid!" << std::endl;
+	else
+		std::cout << "The password " << password << " is not valid!" << std::endl;
+		
+	// Test whether new password is valid
+	password = "CPlusPlusRocks";
+	if (pv2.is_valid(password))
+		std::cout << "The password " << password << " is valid!" << std::endl;
+	else
+		std::cout << "The password " << password << " is not valid!" << std::endl;
+}
+
+
+
