@@ -1373,11 +1373,32 @@ display(s);
 return 0;
 }
 
+-----------------------Container Adaptor : Priority Queue-------------------
+
+https://en.cppreference.com/w/cpp/container/priority_queue.html
+
+std::priority_queue       // It is just like stack and queue container adaptors
+
+Allows insertion and removal of elements in order from the front of container.
+
+Elements are stored internally as a vector by default. (A data strucure heap is used behind the scenes different from heap (new,delete) and malloc(),free()
+
+Elements are inserted in priority order (largest value will always be at the front)
+
+No iterators are supported.
+
+top : accesses the top element
+
+push : inserts element and sorts the underlying container
+
+pop : removes the top element i.e. pop the largest element as it has highest priority.
+
+empty : checks whether the container adaptor is empty
+
+size : returns the number of elements
 
 
 
-
-
-
-
-
+           
+           
+           
