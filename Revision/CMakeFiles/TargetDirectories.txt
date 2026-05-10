@@ -1,0 +1,3 @@
+/home/musman/Desktop/CPP/Revision/CMakeFiles/MyProject.dir
+/home/musman/Desktop/CPP/Revision/CMakeFiles/edit_cache.dir
+/home/musman/Desktop/CPP/Revision/CMakeFiles/rebuild_cache.dir

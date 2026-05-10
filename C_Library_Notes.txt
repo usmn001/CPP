@@ -1,0 +1,13 @@
+
+Numerical Library
+https://en.cppreference.com/w/c/numeric/math.html
+
+Algorithms Library
+https://en.cppreference.com/w/c/algorithm/qsort.html
+
+Text Processing, Null Terminated Byte String Library
+https://en.cppreference.com/w/cpp/string/byte.html    (memset,memcpy,memmove)
+
+https://en.cppreference.com/w/c/string/byte/strcmp.html (strcmp)
+
+

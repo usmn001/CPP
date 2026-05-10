@@ -1,0 +1,1 @@
+g++  -Wall -Werror -O2 -g -fstack-usage CMakeFiles/MyProject.dir/src/Program.cpp.o -o MyProject 

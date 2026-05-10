@@ -1,0 +1,297 @@
+----------------------------------------------------------Section 15 : Inheritance----------------------------------------------------------
+
+Inheritance has following features : 
+
+Provides a method for creating new classes from existing classes.
+New class contains data and behaviors of existing class.
+Allows for reuse of existing classes.
+Allows us to focus on common attributes among set of classes.
+
+Allows new classes to modify behaviors of exisitng classes to make it unique.
+      Without actually modifying original class.
+
+
+
+---------------------------------Terminology and Notation---------------------------------
+
+Single Inheritance : A new class is creaed from existing classes , reuse mechanism.
+Multiple Inheritance : A new class is created from two or more classes. 
+
+The class derived from base class is called child class or sub class inherits attributes and operations from base class.
+
+
+                    Base Class
+                        ^
+                        |
+                    Derived Class 
+
+
+Inheritance is transitive.
+
+
+
+------------------Public Inheitance vs Composition--------------------
+
+Both inheritance and composition allows reuse of existing classes.
+
+Public Inheritance : 
+    is-a relationship for e.g. 
+    Employee is a Person.               Where Employee is a class derived from base class Person.
+    Checking Account is a Account       Where Checking Account is a class derived from base class Account.
+    Circle is a Shape.                  Where Circle is a class derived from base class Shape.
+ 
+Composition : 
+  has a relationship
+      Person has a Account.            Where Person a class is using class Account however Person is not inherited from Account instead Person class has Account class code provided by inclusion of
+                                       class Account header file in it i.e. #include<Account.h>
+      Player has a special attack.     Where Player a class is using class special attack however Player is not inherited from Special Attack class.
+      Circle has a location.           Where Circle a class is using class location however Circle is not derived from location class.
+
+
+To make sure inheritance is perfectly suitable before applying inheritance step back and look at design and make sure itś suitable to be applied as inheritance adds more complexity in our code design.
+
+Composition Example : 
+
+#include "Account.h"
+class Person{
+std:: string name;       // has -a name
+Account account;         // has-a account
+};
+
+------------------Deriving Classes from existing classes-------------------
+
+
+C++ derivation syntax : 
+
+Base Class In Class declaration file : Class Base {
+
+
+				         };
+
+Derived Class In Class Derivation File : Class Derived : access-specifier Base_Class {
+
+
+                                          } 
+
+Access specifier can be : public,private or protected. If no access specifier is provided then private inheritance is used.
+
+
+Derived Class can have methods of the same name which are present in parent or base class.
+
+
+------Types of inheritance in C++---------
+
+
+
+public : Most common
+         Establishes is-a relationship between derived and base classes.
+         
+private and protected : Establishes derived class has a base class relationship.
+                        Is implemented in terms of relationship.
+                        Different from composition.         
+
+
+
+
+------------------Protected Mmbers and Class Access---------------------
+
+Class Members (attributes, methods) declared with access specifier protected are : Accessible from the base class itself.
+                                                                                   Accessible from classes derived from base.
+                                                                                   Not Accessible by objects of Base or derived.
+C++ derivation syntax : 
+
+Base Class In Class declaration file : Class Base {
+
+                                       protected:                     // Where access specifier can be private or protected.   
+                                          
+				         };
+
+Derived Class In Class Derivation File : Class Derived : protected Base_Class {      // Where private or protected.
+
+
+                                          } 
+
+
+When we inherit a derived class from base class using access specifier protected then base class public members(attributes,methods) also get access specifier as protected.
+Private members of base class are not accessible in derived class. Protected members are accessible only in Derived class. 
+
+Protected members of a base class are :  Accessible from the base class itself.
+                                         Accessible from classes derived from base.
+                                         Not accessible by objects of base or derived.
+
+
+When we inherit a derived class from base class using access specifier private then base class public and protected members(attributes,methods) also get access specifier as private.
+The private members of a base class cannot be accessed outside of base class.
+
+
+----------------Constructors and Destructors-------------
+
+Base part of derived object must be initialized first.
+When a derived object is created then : 
+    				Base class constructor executes then.
+   				Derived class constructor executes.
+
+------Constructors and Class Initialization----------
+
+                                 Output
+Base base;                       Base constructor Invoked     
+
+Derived derived;                 Base constructor Invoked 
+                                 Derived class object constructor invoked.
+-----------Destructors----------
+
+Class destructors are invoked in the reverse order as opposed to constructors in the case of inheritance.
+
+Dervied class constructor is invoked first and then base class constructor is invoked.
+
+Each destructor should free resources relevant to itś own class constructor.
+
+
+
+A derived class does not inherit : 
+
+  Base class constructors.
+  Base class destructor.
+  Base class overloaded assignment operators.
+  Base class friend functions.
+  
+However the derived class constructors,destructors and overloaded assignment operators can invoke base class versions.
+
+C++11 allows explicit inheritance of base non special constructors with : using Base::Base; anywhere in the derived class declaration.
+Lots of rules involved, often better to define constructors overselves.  
+
+
+---------------------Passing Arguments To Base Class Constructors----------------------
+
+We can invoke any base class constructor we want in the initialization list of Derived class.
+
+Syntax For Initializing Base Class Constructor : 
+
+class Base {             Base Class
+
+public : 
+ Base();
+ Base(int);
+ .....
+};
+
+Derived::Derived(int x):Base(x),{optional initializers for derived}  // Here we are calling base class constructor first and then initializing derived class constructor attributes.
+{
+//Code                  // This code executes after both derived and base class constructors are invoked.
+
+}  
+
+------------------Copy/Move Constructors and Operator = with Derived Classes------------------
+
+Often we don´t need to provide copy, move constructors and overloaded operator =
+If we do not define them in derived class then the compiler will create them automatically and call the base class version.
+If we do provide derived versions of copy, move constructors and of overloaded operator then we must invoke the base versions explicity ourselves.
+We need to be careful about raw pointers in case base and derived clases have raw pointers. We need to provide them deep copy semantics.
+
+Whenever we assign a derived object to another derived object then l-value derived class object copy assignment or move assignment operator is called and that copy assignment or move assignment operator calls first base class copy or move assignment operator and then performs the relevant operations in the copy assignment or move assignment operator method as shown below 
+
+
+Example : In the following example we have not defined prototypes for class constructors,copy assignment operators, copy constructors. 
+
+class Derived:public Base
+{
+
+private : 
+
+int double_value;
+
+public : 
+
+Derived() : Base()    // Here base class no-args constructor is called
+
+{ 
+cout<<"Derived no-args constructor \n";
+}
+
+Derived(int x) : Base(x),double_value(x*2) // Here base class copy constructor is called
+{ 
+cout<<"int derived constructor \n";
+}
+
+Derived(const Derived &other) : Base(other),double_value(other.double_value) // Here base class copy assignment operator is called , compiler does the slicing i.e. separates base object from passed
+                                                                             // derived object.
+{ 
+cout<<"Derived copy constructor \n";
+}
+
+Derived & operator=(const Derived &rhs)   // Derived class copy assignment operator
+{ 
+cout<<"Derived operator = \n";
+if(this==&rhs)
+return *this;
+Base::operator=(rhs);             // Here we are invoking base class copy assignment operator
+double_value = rhs.double_value;
+}
+
+~Derived();
+
+}
+
+-------------------Object Slicing C++--------------------------
+
+When a derived class object is assigned to a base class object in C++, the derived class object’s extra attributes are sliced off (not considered) to generate the base class object; and this whole process is termed object slicing. In simple words, when extra components of a derived class are sliced or not used and the priority is given to the base class’s object this is termed object slicing. 
+
+
+--------------------------------------Redefining Base Class Methods----------------------------------------------
+
+Derived class can directly invoke base class methods.
+Derived class can override or redefine base class methods.
+
+Example : 
+class Base
+{
+private :
+double balance;
+public :
+
+void deposit(double amount) 
+{
+balance+=amount;
+}
+
+};
+
+
+class Derived:public Base
+{
+public : 
+void deposit(double amount)     // Redefining Base class method  
+{
+amount += some_interest;      
+Base::deposit(amount);          // Invoking base class deposit method.    
+
+}
+
+
+};
+
+
+To call a base class method and pass a argument to it just write this is in any derived class object : Base_Class_Name::Base_Method(argument);
+
+
+Binding in C++ means what compiler understands at compile time i.e. how interprets the redefinition of base class methods in derived class and how it understands invoking of base class methods from 
+derived class. It means which method version will be call´dby a relevant class object as when we redefine base class method in derived class then weǘe two methods with same name. 
+
+The default bining for C++ is static.
+Derived class objects will use Derived::deposit.
+But we can explicitly invoke Base::deposit from Derived::deposit.
+
+Dynamic binding is more powerful than static binding.
+
+
+-----------Multiple Inheritance-------------
+
+By multiple inheritance we mean that a derived class is derived from two or more base classes and we can do it as : 
+
+Class Derived:public base1, public base2
+{
+
+// Derived class statements.
+
+
+}

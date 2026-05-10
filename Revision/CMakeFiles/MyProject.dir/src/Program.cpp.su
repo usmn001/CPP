@@ -1,0 +1,5 @@
+/usr/include/c++/13/bits/basic_string.tcc:221:7:void std::__cxx11::basic_string<_CharT, _Traits, _Alloc>::_M_construct(_InIterator, _InIterator, std::forward_iterator_tag) [with _FwdIterator = char*; _CharT = char; _Traits = std::char_traits<char>; _Alloc = std::allocator<char>]	48	static
+/usr/include/c++/13/bits/stl_vector.h:733:7:std::vector<_Tp, _Alloc>::~vector() [with _Tp = Person; _Alloc = std::allocator<Person>]	32	static
+/usr/include/c++/13/bits/vector.tcc:445:7:) [with _Args = {const Person&}; _Tp = Person; _Alloc = std::allocator<Person>]	80	static
+/usr/include/c++/13/bits/stl_vector.h:1281:7:void std::vector<_Tp, _Alloc>::push_back(const value_type&) [with _Tp = Person; _Alloc = std::allocator<Person>]	16	static
+/home/musman/Desktop/CPP/Revision/src/Program.cpp:23:5:int main()	288	static
